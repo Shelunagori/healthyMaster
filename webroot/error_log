@@ -1,0 +1,1 @@
+[06-Mar-2019 10:35:37 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 268435456 bytes exhausted (tried to allocate 17459279 bytes) in /home/wwwarmslife/public_html/old/vendor/cakephp/cakephp/src/Database/ValueBinder.php on line 53

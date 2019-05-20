@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)http://app.jainthela.in/items/edit/85 -->
+<html lang="en"><!--<![endif]--><!-- BEGIN HEAD --><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+		<link href="http://app.jainthela.in/img/favicon.png" type="image/x-icon" rel="icon"><link href="http://app.jainthela.in/img/favicon.png" type="image/x-icon" rel="shortcut icon">		<title>Items</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="width=device-width, initial-scale=1.0" name="viewport">
+		
+		<meta content="" name="description">
+		<meta content="" name="author">
+		<!-- BEGIN GLOBAL MANDATORY STYLES -->
+		<link href="./Kashmir apple_files/css" rel="stylesheet">
+		<script src="./Kashmir apple_files/pace.min.js.download"></script>		<link rel="stylesheet" href="./Kashmir apple_files/pace-theme-flash.css">				<link rel="stylesheet" href="./Kashmir apple_files/font-awesome.min.css">		<link rel="stylesheet" href="./Kashmir apple_files/simple-line-icons.min.css">		<link rel="stylesheet" href="./Kashmir apple_files/bootstrap.min.css">		<link rel="stylesheet" href="./Kashmir apple_files/uniform.default.css">		<link rel="stylesheet" href="./Kashmir apple_files/bootstrap-switch.min.css">		<!-- END GLOBAL MANDATORY STYLES -->
+		<!-- BEGIN PAGE LEVEL STYLES -->
+		<link rel="stylesheet" href="./Kashmir apple_files/toastr.min.css">		<link rel="stylesheet" href="./Kashmir apple_files/select2.css">		<link rel="stylesheet" href="./Kashmir apple_files/bootstrap-select.min.css">		<link rel="stylesheet" href="./Kashmir apple_files/multi-select.css">		<link rel="stylesheet" href="./Kashmir apple_files/datepicker3.css">		<link rel="stylesheet" href="./Kashmir apple_files/bootstrap-timepicker.min.css">		<link rel="stylesheet" href="./Kashmir apple_files/bootstrap-datetimepicker.min.css">		<!-- BEGIN THEME STYLES -->
+		<!-- BEGIN THEME STYLES -->
+		<link rel="stylesheet" href="./Kashmir apple_files/components.css">		<link rel="stylesheet" href="./Kashmir apple_files/plugins.css">		<link rel="stylesheet" href="./Kashmir apple_files/layout.css">		<link rel="stylesheet" href="./Kashmir apple_files/default.css">		<link rel="stylesheet" href="./Kashmir apple_files/custom.css">
+			<!-- END PAGE LEVEL STYLES -->
+		<style media="print">
+			.hide_at_print {
+				display:none !important;
+			}
+		</style>
+		<style>
+			.error-message {
+				color: red;
+				font-style: inherit;
+			}
+			.help-block-error{
+				color: #a94442;
+				font-size: 10px;
+			}
+		</style>
+		<style>
+			.self-table > tbody > tr > td, .self-table > tr > td
+			{
+				border-top:none !important;
+			}
+			.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+			 
+				vertical-align:middle !important;
+			}
+			option 
+			{
+				border-top:1px solid #CACACA;
+				padding:4px;
+				cursor:pointer;
+			}
+			select 
+			{
+				cursor:pointer;
+			}
+			.myshortlogo
+			{
+				font: 15px "Open Sans",sans-serif;
+				text-transform: uppercase !important;
+				box-sizing:border-box;
+			}
+			.toast_success_notify{
+				margin: 0px 0px 6px;
+				border-radius: 3px;
+				background-position: 15px center;
+				background-repeat: no-repeat;
+				box-shadow: 0px 0px 12px ;
+				color: #FFF;
+				opacity: 0.8;
+				background-color: #42893D;
+			}
+			.tost_edit_notify{
+				margin: 0px 0px 6px;
+				border-radius: 3px;
+				background-position: 15px center;
+				background-repeat: no-repeat;
+				box-shadow: 0px 0px 12px #999;
+				color: #FFF;
+				opacity: 0.8;
+				background-color: #B0B343;	
+			}
+			.tost_delete_notify{
+				margin: 0px 0px 6px;
+				border-radius: 3px;
+				background-position: 15px center;
+				background-repeat: no-repeat;
+				box-shadow: 0px 0px 12px #999;
+				color: #FFF;
+				opacity: 0.8;
+				background-color: #D75C48;
+			}
+		</style>
+		<!-- END THEME STYLES -->
+		<!--<link rel="shortcut icon" href="/img/favicon.png"/>
+	</head>
+	<!-- END HEAD -->
+	<!-- BEGIN BODY -->
+	<!-- DOC: Apply "page-header-fixed-mobile" and "page-footer-fixed-mobile" class to body element to force fixed header or footer in mobile devices -->
+	<!-- DOC: Apply "page-sidebar-closed" class to the body and "page-sidebar-menu-closed" class to the sidebar menu element to hide the sidebar by default -->
+	<!-- DOC: Apply "page-sidebar-hide" class to the body to make the sidebar completely hidden on toggle -->
+	<!-- DOC: Apply "page-sidebar-closed-hide-logo" class to the body element to make the logo hidden on sidebar toggle -->
+	<!-- DOC: Apply "page-sidebar-hide" class to body element to completely hide the sidebar on sidebar toggle -->
+	<!-- DOC: Apply "page-sidebar-fixed" class to have fixed sidebar -->
+	<!-- DOC: Apply "page-footer-fixed" class to the body element to have fixed footer -->
+	<!-- DOC: Apply "page-sidebar-reversed" class to put the sidebar on the right side -->
+	<!-- DOC: Apply "page-full-width" class to the body element to have full width page without the sidebar menu -->
+	</head><body class="page-header-fixed page-quick-sidebar-over-content page-style-square  pace-done"><div class="pace  pace-inactive"><div class="pace-progress" data-progress-text="100%" data-progress="99" style="width: 100%;">
+  <div class="pace-progress-inner"></div>
+</div>
+<div class="pace-activity"></div></div>
+		<!-- BEGIN HEADER -->
+		<div class="page-header navbar navbar-fixed-top">
+			<!-- BEGIN HEADER INNER -->
+			<div class="page-header-inner">
+				<!-- BEGIN LOGO -->
+				<div class="page-logo" style="padding-top:2px;padding-bottom:2px; width: auto;">
+					<img src="./Kashmir apple_files/jainthela.png" height="40px" alt="">				</div>
+				<!-- End LOGO -->
+				<div class="hor-menu hidden-sm hidden-xs">
+					<ul class="nav navbar-nav " style="margin-left:100px;">
+						<!-- DOC: Remove data-hover="dropdown" and data-close-others="true" attributes below to disable the horizontal opening on mouse hover -->
+						
+						<li class="classic-menu-dropdown">
+							<a data-toggle="dropdown" href="javascript:;" aria-expanded="false">
+							Masters &amp; Setup <i class="fa fa-angle-down"></i>
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+								<a href="http://app.jainthela.in/Customers"><i class="fa fa-user"></i> Customers</a>								</li>
+								
+								<li>
+									<a href="http://app.jainthela.in/Drivers/add"><i class="fa fa-truck"></i> Drivers</a>								</li>
+								<li>
+									<a href="http://app.jainthela.in/Vendors"><i class="fa fa-users"></i> Vendors</a>								</li>
+								<li>
+								<a href="http://app.jainthela.in/Units"><i class="fa fa-magnet"></i> Units</a>								</li>
+								<li>
+									<a href="http://app.jainthela.in/Item-Categories"><i class="fa fa-sitemap"></i> Item Categories</a>								</li>
+								<li>
+									<a href="http://app.jainthela.in/Items"><i class="fa fa-info"></i> Items</a>								</li>
+								<li>
+									<a href="http://app.jainthela.in/Items/define_sale_rate"><i class="fa fa-cubes"></i> Sales Rate Update</a>								</li>
+								
+							</ul>
+						</li>
+						<li class="classic-menu-dropdown">
+							<a data-toggle="dropdown" href="javascript:;" aria-expanded="false">
+							Reports <i class="fa fa-angle-down"></i>
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="http://app.jainthela.in/itemLedgers/report_show"><i class="fa  fa-file"></i> Stock Report</a>								</li>
+								<!-- <li>
+									<a href="/itemLedgers/driver_report"><i class="fa fa-database"></i> Product Report</a>								</li> -->
+								<li>
+									<a href="http://app.jainthela.in/CashBacks/Index"><i class="fa fa-bar-chart-o"></i> Cash Back Details</a>								</li>
+																<li>
+									<a href="http://app.jainthela.in/WalkinSales/invoiceReports?warehouse=&amp;drivers=&amp;From=04-08-2018&amp;To=04-08-2018"><i class="fa fa-book"></i> Invoice Report</a>								</li>
+								<li>
+									<a href="http://app.jainthela.in/ItemLedgers/itemIssueReport"><i class="fa fa-life-ring"></i> Issue Return Report</a>								</li>
+								<!--
+								<li>
+									<a href="/Ledgers/AccountStatements"><i class="fa fa-puzzle-piece"></i> Account Statement</a>								</li>
+								-->
+								<li>
+									<a href="http://app.jainthela.in/itemLedgers/itemSaleReports"><i class="fa fa-tag"></i> Item Wise Sales Report</a>								</li>
+								<li>
+									<a href="http://app.jainthela.in/itemLedgers/wastageReport?From=04-08-2018&amp;To=04-08-2018"><i class="fa fa-puzzle-piece"></i> Wastage Item Report</a>								</li>
+								<li>
+									<a href="http://app.jainthela.in/itemLedgers/weightVariationReport?From=04-08-2018&amp;To=04-08-2018"><i class="fa fa-globe"></i> Weight Variation Report</a>								</li>
+									<li>
+									<a href="http://app.jainthela.in/itemLedgers/orderEstimate"><i class="fa fa-info"></i> Item Indent Report</a>								</li>
+								<li>
+									<a href="http://app.jainthela.in/Drivers/driver_location"><i class="fa fa-cubes"></i> Driver Location Report</a>								</li>
+								<li>
+									<a href="http://app.jainthela.in/itemLedgers/averageReport?From=04-08-2018&amp;To=04-08-2018"><i class="fa fa-edit"></i> Consolidate Report</a>								</li>
+								<li>
+									<a href="http://app.jainthela.in/Orders/newCustomer"><i class="fa fa-trophy"></i> First Order Discount Report</a>								</li>
+								<li>
+									<a href="http://app.jainthela.in/StockReturnVouchers/"><i class="fa fa-database"></i> Stock Return Voucher Report</a>								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>				 
+				<a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+				</a>
+				<!-- END RESPONSIVE MENU TOGGLER -->
+				<!-- BEGIN TOP NAVIGATION MENU -->
+				<div class="top-menu">
+					<ul class="nav navbar-nav pull-right">
+
+						<!-- BEGIN NOTIFICATION DROPDOWN -->						 
+						<li class="dropdown dropdown-user">
+							<a href="http://app.jainthela.in/items/edit/85#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+								<!--img alt="" class="img-circle" src="../../assets/admin/layout/img/avatar3_small.jpg"/-->
+								<span class="username username-hide-on-mobile">
+																
+																
+								</span>
+								<i class="fa fa-angle-down"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-menu-default">
+								<li>									 
+									 <a href="http://app.jainthela.in/users/logout"><i class="fa fa-key"></i> Log Out</a>								</li>
+								<li>									 
+									 								</li>
+							</ul>
+						</li>
+						<!-- END USER LOGIN DROPDOWN -->						 
+					</ul>
+				</div>
+				<!-- END TOP NAVIGATION MENU -->
+			</div>
+			<!-- END HEADER INNER -->
+		</div>
+		<!-- END HEADER -->
+		<div class="clearfix">
+		</div>
+		<!-- BEGIN CONTAINER -->
+		<div class="page-container">
+				<!-- BEGIN SIDEBAR -->
+				<div class="page-sidebar-wrapper">
+					<div class="page-sidebar navbar-collapse collapse">
+						<!-- BEGIN SIDEBAR MENU -->
+						<!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
+						<!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
+						<!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
+						<!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+						<!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
+						<!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+						<ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+
+
+							<li>
+								<a href="http://app.jainthela.in/orders/dashboard"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>							</li>
+							<li>
+								<a href="http://app.jainthela.in/orders/index?status=process"><i class="fa fa-reorder"></i> <span>Manage Orders</span></a>							</li>
+							<li>
+								<a href="http://app.jainthela.in/app-notifications"><i class="fa fa-bell"></i> <span>Push Notification</span></a>							</li>
+							<li>
+								<a href="http://app.jainthela.in/feedbacks"><i class=" fa-file-text"></i> <span>Feedback</span></a>							</li>
+							<li>
+								<a href="http://app.jainthela.in/bulk-booking-leads/index/open"><i class="fa fa-chain "></i> <span>Bulk Lead</span></a>							</li>
+
+
+							<li>
+								<a href="http://app.jainthela.in/Grns"><i class="fa fa-ticket"></i> GRNs</a>							</li>
+							<li>
+								<a href="http://app.jainthela.in/PurchaseBookings"><i class="fa  fa-book"></i> Purchase Booking</a>							</li>
+							<li>
+								<a href="http://app.jainthela.in/TransferInventoryVouchers/"><i class="fa fa-puzzle-piece"></i> Transfer Inventory</a>							</li>
+
+							<li>
+								<a href="http://app.jainthela.in/PurchaseOutwards/"><i class="fa fa-gear"></i> Purchase Outward</a>							</li>
+						
+							<li>
+								<a href="http://app.jainthela.in/itemLedgers/add"><i class="fa fa-sitemap"></i> Stock Issue</a>							</li>
+							<li>
+								<a href="http://app.jainthela.in/itemLedgers/stock_return"><i class="fa fa-retweet"></i> Stock Return</a>							</li>
+							<li>
+								<a href="http://app.jainthela.in/Orders/add/Offline"><i class="fa fa-asterisk"></i> Online Order</a>							</li>
+							<li>
+								<a href="http://app.jainthela.in/Orders/add/Bulkorder"><i class="fa fa-tasks"></i> Bulk Order</a>							</li>
+							<li>
+								<a href="http://app.jainthela.in/WalkinSales/index"><i class="fa fa-life-ring"></i> Walkin Sales</a>							</li>
+							
+							<li>
+								<a href="http://app.jainthela.in/itemLedgers/wastageVouchers"><i class="fa fa-gear"></i> Wastage Vouchers</a>							</li>
+							<li>
+								<a href="http://app.jainthela.in/ComboOffers"><i class="fa fa-tree"></i> Combo Offer</a>							</li>
+
+							<li>
+								<a href="http://app.jainthela.in/Leads/index/open"><i class="fa fa-star"></i> Leads</a>							</li>
+
+							<li>
+								<a href="http://app.jainthela.in/Plans"><i class="fa fa-road"></i> Plans</a>							</li>
+							<li>
+								<a href="http://app.jainthela.in/PromoCodes"><i class="fa fa-rocket"></i> Promo Code</a>							</li>
+							
+							<li>
+								<a href="javascript:;"><i class="fa fa-puzzle-piece"></i><span class="title">Wallets</span>
+								<span class="arrow "></span>
+								</a>
+								<ul class="sub-menu">
+									<li><a href="http://app.jainthela.in/Wallets/Add"><i class="icon-home"></i> Add</a></li>									<li><a href="http://app.jainthela.in/Wallets/remove"><i class="icon-home"></i> Subtract</a></li>								</ul>
+							</li>
+							
+							
+
+						</ul>
+						<!-- END SIDEBAR MENU -->
+					</div>
+				</div>
+				<!-- END SIDEBAR -->
+			<!-- BEGIN CONTENT -->
+			<div class="page-content-wrapper">
+				<div class="page-content" style="min-height:846px">
+					<div class="page-spinner-bar hide">
+						<div class="bounce1"></div>
+						<div class="bounce2"></div>
+						<div class="bounce3"></div>
+					</div>
+					<!-- BEGIN PAGE HEADER-->					
+					<!-- END PAGE HEADER-->
+					<!-- BEGIN PAGE CONTENT-->					 
+					<div class="row">
+						<div class="col-md-12">
+							<div id="toast-container" class="toast-top-right" aria-live="polite" role="alert">
+								<!--div id="demo"></div-->
+									
+																	
+							</div>
+							<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="font-purple-intense"></i>
+					<span class="caption-subject font-purple-intense ">
+						<i class="fa fa-plus"></i> Edit Item
+					</span>
+				</div>
+				<div class="actions">
+				</div>
+			</div>
+						<div class="portlet-body">
+			<form enctype="multipart/form-data" method="post" accept-charset="utf-8" id="form_sample_3" action="http://app.jainthela.in/items/edit/85" novalidate="novalidate"><div style="display:none;"><input type="hidden" name="_method" value="PUT"></div>				<div class="row">
+					<div class="col-md-3">
+						<div class="input text required" aria-required="true"><label for="name">Name</label><input type="text" name="name" class="form-control input-sm" placeholder="Item Name" required="required" maxlength="255" id="name" value="Apple" aria-required="true"></div>					</div>
+					<div class="col-md-3">
+						<div class="input text"><label for="alias-name">Alias Name</label><input type="text" name="alias_name" class="form-control input-sm" placeholder="Alias Name" maxlength="255" id="alias-name" value="kashmiri apple (1kg)"></div>					</div>
+					
+					<div class="col-md-3">
+												 
+							<div class="input select"><label for="unit-id">Unit</label><select name="unit_id" class="attribute form-control input-sm" style="display:none" id="unit-id"><option value="">--select--</option><option value="1" unit_name="kg" selected="selected">Kg</option><option value="2" unit_name="g">g</option><option value="3" unit_name="Puli">Puli</option><option value="4" unit_name="dozon">dozon</option><option value="5" unit_name="Pcs">Pcs</option><option value="6" unit_name="Pkt">pkt</option><option value="7" unit_name="">nos</option></select></div>	
+						kg					</div>
+					<div class="col-md-3">
+						<div class="input select"><label for="item-category-id">Item Category</label><select name="item_category_id" class="form-control input-sm" required="required" id="item-category-id" aria-required="true"><option value="">--select--</option><option value="1" selected="selected">Fruits</option><option value="2">Vegetables</option><option value="3">Sweets</option><option value="4">Grocery</option></select></div>					</div>
+				</div><br>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="input number required" aria-required="true"><label for="minimum-stock">Minimum Stock</label><input type="number" name="minimum_stock" class="form-control input-sm" placeholder="Minimum Stock" required="required" id="minimum-stock" value="2" aria-required="true"></div>						<span id="msg"></span>
+					</div>
+					<div class="col-md-3 set">
+													<div class="input select"><label for="minimum-quantity-factor">Minimum Quantity Factor</label><select name="minimum_quantity_factor" class="form-control input-sm" id="minimum-quantity-factor"><option value="0.1">100 gm</option><option value="0.25">250 gm</option><option value="0.5">500 gm</option><option value="1" selected="selected">1 kg</option></select></div>					</div>
+					<div class="col-md-3">
+						<label class="control-label">Maximum Order Limit<span class="required" aria-required="true"></span></label>
+						<div class="input number"><input type="number" name="minimum_quantity_purchase" class="form-control input-sm order_limit" placeholder="Maximum Order Limit" id="minimum-quantity-purchase" value="10"></div>						<span id="msg2"></span>
+					</div>
+					<div class="col-md-3">
+						<div class="input textarea required" aria-required="true"><label for="description">Description</label><textarea name="description" class="form-control input-sm" placeholder="Description" required="required" id="description" rows="5" aria-required="true">Delicious and crunchy apple fruit is one of the popular fruits containing an impressive list of antioxidants and essential nutrients required for good health. Apples are extremely rich in important antioxidants, flavanoids, and dietary fiber.</textarea></div>					</div>
+				</div>
+				<div class="row"><br>
+					<div class="col-md-3">
+						<label class="col-md-6 control-label">Image</label>
+												<img src="./Kashmir apple_files/5968c35f36588.png" height="80px" width="120px" alt="">						<div class="input File"><input type="file" name="image" class="form-control" id="image"></div>					</div>
+					<div class="col-md-3">
+								<div class="form-group">
+									<label class="control-label">Type<span class="required" aria-required="true">*</span></label>
+									<div class="radio-list">
+										<div class="radio-inline" style="padding-left: 0px;">
+											<input type="hidden" name="is_virtual" value=""><label for="is-virtual-no"><div class="radio" id="uniform-is-virtual-no"><span class="checked"><input type="radio" name="is_virtual" value="no" class="radio-task virt" id="is-virtual-no" checked="checked"></span></div>Real</label><label for="is-virtual-yes"><div class="radio" id="uniform-is-virtual-yes"><span><input type="radio" name="is_virtual" value="yes" class="radio-task virt" id="is-virtual-yes"></span></div>Virtual</label>										</div>
+                                    </div>
+								</div>
+							</div>
+							<div class="col-md-3 set2">
+															</div>	
+				</div><br>
+			<button class="btn btn-success" type="submit">Edit item</button>			</form>			</div>
+		</div>
+	</div>
+</div>
+<script src="./Kashmir apple_files/jquery.min.js.download"></script><script>
+$(document).ready(function() {
+  //--------- FORM VALIDATION
+	var form3 = $('#form_sample_3');
+	var error3 = $('.alert-danger', form3);
+	var success3 = $('.alert-success', form3);
+	form3.validate({
+		errorElement: 'span', //default input error message container
+		errorClass: 'help-block help-block-error', // default input error message class
+		focusInvalid: true, // do not focus the last invalid input
+		rules: {
+				name:{
+					required: true,					 
+				},
+				unit_id:{
+					required: true,
+				},
+				image:{
+					required: false,
+				},
+				alias_name:{
+					required: false,
+				}
+			},
+
+		errorPlacement: function (error, element) { // render error placement for each input type
+			if (element.parent(".input-group").size() > 0) {
+				error.insertAfter(element.parent(".input-group"));
+			} else if (element.attr("data-error-container")) { 
+				error.appendTo(element.attr("data-error-container"));
+			} else if (element.parents('.radio-list').size() > 0) { 
+				error.appendTo(element.parents('.radio-list').attr("data-error-container"));
+			} else if (element.parents('.radio-inline').size() > 0) { 
+				error.appendTo(element.parents('.radio-inline').attr("data-error-container"));
+			} else if (element.parents('.checkbox-list').size() > 0) {
+				error.appendTo(element.parents('.checkbox-list').attr("data-error-container"));
+			} else if (element.parents('.checkbox-inline').size() > 0) { 
+				error.appendTo(element.parents('.checkbox-inline').attr("data-error-container"));
+			} else {
+				error.insertAfter(element); // for other inputs, just perform default behavior
+			}
+		},
+
+		invalidHandler: function (event, validator) { //display error alert on form submit   
+			success3.hide();
+			error3.show();
+		},
+
+		highlight: function (element) { // hightlight error inputs
+		   $(element)
+				.closest('.form-group').addClass('has-error'); // set error class to the control group
+		},
+
+		unhighlight: function (element) { // revert the change done by hightlight
+			$(element)
+				.closest('.form-group').removeClass('has-error'); // set error class to the control group
+		},
+
+		success: function (label) {
+			label
+				.closest('.form-group').removeClass('has-error'); // set success class to the control group
+		},
+
+		submitHandler: function (form) {
+			success3.show();
+			error3.hide();
+			form[0].submit(); // submit the form
+		}
+
+	});
+	//--	 END OF VALIDATION
+	
+	$(".attribute").die().live('change',function(){
+		var unt_attr_name = $('option:selected', this).attr('unit_name');
+			$("#msg").html('Minimum Stock in '+ unt_attr_name);
+			if(unt_attr_name=='kg'){
+				var data=$("#data_fetch").html();
+				$(".set").html(data);
+			}else{
+				var data=$("#data_fetch2").html();
+				$(".set").html(data);
+			}
+ 	});
+	
+	$(".order_limit").die().live('keyup',function(){
+	var unt_attr_name = $('.attribute option:selected').attr('unit_name');
+	var limit = $(".order_limit").val();
+		if(unt_attr_name=='kg'){
+				var quantity_factor = $(".qunt_factor option:selected").val();
+				var total = quantity_factor*limit;
+				$("#msg2").html(limit +' '+ unt_attr_name);
+			}else{
+				$("#msg2").html(limit +' '+ unt_attr_name);
+			}
+	});
+	
+	$(".virt").die().live('click',function(){
+		var virtual = $(this).val();
+			if(virtual=='yes'){
+				var data=$("#fetch").html();
+				$(".set2").html(data);
+				$('.virtual_selectbox').select2();
+			}else{
+				$(".set2").html('');
+			}
+ 	});
+});
+</script>
+<div id="data_fetch" style="display:none;">
+	<div class="input select"><label for="minimum-quantity-factor">Minimum Quantity Factor</label><select name="minimum_quantity_factor" class="form-control input-sm qunt_factor" id="minimum-quantity-factor"><option value="0.1">100 gm</option><option value="0.25">250 gm</option><option value="0.5">500 gm</option><option value="1">1 kg</option></select></div></div>
+
+<div id="data_fetch2" style="display:none;">
+	<div class="input text"><label for="minimum-quantity-factor">Minimum Quantity Factor</label><input type="text" name="minimum_quantity_factor" class="form-control input-sm qunt_factor" placeholder="Minimum Quantity Factor" id="minimum-quantity-factor"></div></div>
+
+<div id="fetch" style="display:none;">
+	<div class="input select"><label for="parent-item-id">Parent Item</label><select name="parent_item_id" class="form-control input-sm virtual_selectbox" id="parent-item-id"><option value="85">Apple</option><option value="87">Banana (Kela)</option><option value="89">Dates (PinKhajur)250gm</option><option value="90">Beetroot (Chukundar)</option><option value="92">Bitter Gourd (Karela)</option><option value="94">Bottle Gourd (Loki)</option><option value="96">Cabbage (Pattagobhi)</option><option value="97">Grapes (Angoor)</option><option value="99">Mango Kalmi (Kalmi Aam)</option><option value="100">Capsicum Green (Shimla Mirch)</option><option value="101">Papaya (Papita)</option><option value="103">Pomegranate (Anaar)</option><option value="105">Cauliflower (Phool Gobhi)</option><option value="107">Pineapple (Ananas)</option><option value="110"> Desi Corn (Desi Bhutta)</option><option value="111">Cluster Beans (Gavarfali)</option><option value="114">Sweet Lemon (Mausammi)</option><option value="115">Cucumber (Kheera)</option><option value="118">Garlic (Lahsun)</option><option value="119">Watermelon (Tarbooj)</option><option value="121">Peeled Garlic (Lahsun Chhili)</option><option value="124">Ginger (Adrak)</option><option value="127">Green chilli (Hari Mirch)</option><option value="130">Lady Finger (Bhindi)</option><option value="133">Onion (Pyaj)</option><option value="135">Potato (Aaloo)</option><option value="136">Lemon (Nimbu)</option><option value="139">Ridge Gourd (Taroi)</option><option value="141">Green Onion (Hara Pyaj)</option><option value="142">Tomato (Tamaatar)</option><option value="144">Chawla Fali</option><option value="145">Tindori</option><option value="148">Pumpkin (Kaddu)</option><option value="149">Yellow Chili (Peeli Mirch)</option><option value="152">Purple Yam (Rataalu)</option><option value="154">Raw Mango (Kacchi Keri)</option><option value="155">Taro Root (Arvi)</option><option value="160">KACCHE TOMATO</option><option value="162">Black Eyed Legume (Chawla dana)</option><option value="166">Pears (Nashpati)</option><option value="168">Pointed Gourd (Parwal)</option><option value="170">Spinach (Palak)</option><option value="172">American Sweet Corn</option><option value="173">Capsicum (Shimla Mirch Red)</option><option value="175">Capsicum (Shimla Mirch Yellow)</option><option value="177">Raw Banana (Kaccha Kela)</option><option value="178">Round Gourd (Tinsi)</option><option value="181">Brinjal (Bengan)</option><option value="184">Fenugreek Leaf (Hari Mathi)</option><option value="186">Coriander Leaf (Hara Dhaniya)	</option><option value="188">Plum (Aaloo Bukhara) </option><option value="192">Broccoli</option><option value="193">Mushroom (Button)</option><option value="198">Peppermint Leaf (Pudina)	</option><option value="199">Spiny gourd (Kikoda)</option><option value="202">Green Coconut (Hara Nariyal)</option><option value="204">Guava (Amrud)</option><option value="206">Red Potato (Laal Aaloo)</option><option value="209">Carrot (Gaajar)</option><option value="210">Red Cabbage (Laal Pattagobhi)</option><option value="211">Parsley Leaves</option><option value="213">Kiwi (3 Piece)</option><option value="216">Peas (Matar)</option><option value="219">Peeled Peas (Matar Dana)</option><option value="221">Peeled Pomegranate (Anaar Dana)</option><option value="226">Arvi patta</option><option value="230">Daikon (Mooli)</option><option value="232">Green Apple</option><option value="233">Baby Corn (200Gm)</option><option value="237">Small Onion (Chhota Pyaaj)</option><option value="238">Beans French (Beans fali)</option><option value="239">Zucchini Yellow</option><option value="241">Lettuce Green</option><option value="245">Ganeshotsav Special</option><option value="246">Zucchini Green</option><option value="250">Pineapple Slice</option><option value="253">Sponge Gourd (Gilki Taroi)</option><option value="254">Kaachri</option><option value="255">Beans (Sem Fali)</option><option value="257">Raw Turmeric (Katchi Haldi)</option><option value="259">Sweet Potato (Sakar Kand)</option><option value="260">Radish Pods (Mongre)</option><option value="262">Brinjal Big(Bengan  )</option><option value="264">Sapeda (Chiku)</option><option value="266">Custard Apple (Sitaphal)</option><option value="268">Indian Gooseberry (Amla)</option><option value="270">Green Chickpeas (Lilava Dana)</option><option value="273">Tar Kakdi </option><option value="275">Green Garlic ( Hara Lahsun)</option><option value="277">Bathuwa </option><option value="280">Orange</option><option value="283">Lilava</option><option value="284">Green Chilli Big (Hari Mirch)</option><option value="285">Nariyal (Coconut)</option><option value="286">Black Grapes</option><option value="287">Gili Red chili (Gili Lal Mirch)</option><option value="289">Mustard Greens ( Hari Sarson )</option><option value="290">Ber Fruit </option><option value="291"> Strawberry </option><option value="292">Brussels Sprouts</option><option value="293">celery</option><option value="294">Leeks</option><option value="295">Apple ber</option><option value="302">Muskmelon</option><option value="304">Turnip cabbage</option><option value="305">American apple</option><option value="310">Basil leaves</option><option value="311">Papita slice</option><option value="313">Kinu( Malta )</option><option value="316">Round Gourd(Gujarati tinsi)</option><option value="317">Frozen Peas(safal Mtr)</option><option value="318">Tamarind</option><option value="322">Badam Aam</option><option value="324">desi tamatar</option><option value="344">Cheery</option><option value="347">kesar mango</option><option value="348">Tota puri Mango</option><option value="359">Gunda( Lasode)</option><option value="361">Hapus  aam</option><option value="365">Lotus Root (Kamal Kakdi)</option><option value="366">Iceberg lettuce</option><option value="367">cheere tammatar</option><option value="370"> Kala Jamun</option><option value="374">Kachari  Kakdi</option><option value="379">Peach (Aadu)</option><option value="382">Langda Aam</option><option value="385">suran</option><option value="387">Raw Mango Pickle</option></select></div></div>							<!--here is page content--->
+						</div>
+					</div>
+						<!-- END PAGE CONTENT-->
+				</div>
+			</div>
+			<!-- END CONTENT -->
+			<!-- BEGIN QUICK SIDEBAR -->
+			<!-- END QUICK SIDEBAR -->
+		</div>
+		<!-- END CONTAINER -->
+		<!-- BEGIN FOOTER -->
+		<div class="page-footer">
+			<div class="page-footer-inner">
+				 <a href="http://phppoets.com/" target="_blank" style="color:#FFF;">2017 © PHPPOETS IT SOLUTION PVT LTD.</a>
+			</div>
+			<div class="scroll-to-top">
+				<i class="icon-arrow-up"></i>
+			</div>
+		</div>
+		<!-- END FOOTER -->
+			<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+		
+				<script src="./Kashmir apple_files/jquery-migrate.min.js.download"></script>		<!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+		<script src="./Kashmir apple_files/jquery-ui-1.10.3.custom.min.js.download"></script>		<script src="./Kashmir apple_files/bootstrap.min.js.download"></script>		<script src="./Kashmir apple_files/bootstrap-hover-dropdown.min.js.download"></script>		<script src="./Kashmir apple_files/jquery.slimscroll.min.js.download"></script>		<script src="./Kashmir apple_files/jquery.blockui.min.js.download"></script>		<script src="./Kashmir apple_files/jquery.cokie.min.js.download"></script>		<script src="./Kashmir apple_files/jquery.uniform.min.js.download"></script>		<script src="./Kashmir apple_files/bootstrap-switch.min.js.download"></script>		<!-- END CORE PLUGINS -->
+		
+		<!-- BEGIN PAGE LEVEL PLUGINS -->
+		<script src="./Kashmir apple_files/select2.min.js.download"></script>		<script src="./Kashmir apple_files/bootstrap-select.min.js.download"></script>		<script src="./Kashmir apple_files/jquery.multi-select.js.download"></script>		<script src="./Kashmir apple_files/bootstrap-datepicker.js.download"></script>		<script src="./Kashmir apple_files/bootstrap-datetimepicker.min.js.download"></script>		<script src="./Kashmir apple_files/bootstrap-timepicker.min.js.download"></script>		<script src="./Kashmir apple_files/bootstrap-datetimepicker.min.js(1).download"></script>		
+		<script src="./Kashmir apple_files/jquery.validate.min.js.download"></script>		<script src="./Kashmir apple_files/additional-methods.min.js.download"></script>		<script src="./Kashmir apple_files/form-validation.js.download"></script>		<!-- END PAGE LEVEL PLUGINS -->
+		<!-- BEGIN PAGE LEVEL SCRIPTS -->
+		<script src="./Kashmir apple_files/metronic.js.download"></script>		<script src="./Kashmir apple_files/layout.js.download"></script>		<script src="./Kashmir apple_files/quick-sidebar.js.download"></script>		<script src="./Kashmir apple_files/demo.js.download"></script>		<script src="./Kashmir apple_files/components-pickers.js.download"></script>		<!-- END PAGE LEVEL SCRIPTS -->
+		<script>
+		jQuery(document).ready(function() {    
+			Metronic.init(); // init metronic core components
+			Layout.init(); // init current layout
+			QuickSidebar.init(); // init quick sidebar
+			Demo.init(); // init demo features
+			FormValidation.init();
+			ComponentsPickers.init();
+			ComponentsDropdowns.init();
+			
+		});
+		</script>	
+		<script>
+			$("a[role='button']").live('click',function(e){
+					e.preventDefault();
+			});
+
+			$('a[role="button"]').live('click',function(e){
+				e.preventDefault();
+			});
+			$('.firstupercase').die().live('blur',function(e){
+				var str=$(this).val();
+				var str2=touppercase(str);
+				$(this).val(str2);
+			});
+			function touppercase(str){
+				str = str.replace(/\b[a-z]/g, function(letter) {
+					return letter.toUpperCase();
+				});
+				return str;
+			}
+			$(".nospace").live("keypress",function(e){
+				 if(e.which === 32) 
+				 return false;
+			})
+			
+		</script>
+		<script>
+		//300000
+		//10000
+			var myVar = setInterval(function(){ myTimer() }, 300000);
+			function myTimer() {
+				var d = new Date();
+				var t = d.toLocaleTimeString();
+				document.getElementById("toast-container").innerHTML = t;
+				var notification_id=1;
+				//$('#popup').find('div.modal-body').html('Loading...');
+				var url="/orders/alert-notification";
+				url=url+'/'+notification_id;
+				$.ajax({
+					url: url,
+					type: 'GET',
+					dataType: 'text'
+				}).done(function(response) {
+					var count = (response);
+					if(count>0){
+						$('#popup').show();
+						var inner_div=$('#push').html();
+						$('#popup').find('div.modal-body').html(inner_div);
+						$('#txt').html(count+' New Order Push on Server');
+					}
+				});
+				$('.close').die().live('click',function() {
+					$('#popup').hide();
+					update_notification();
+				});
+			}
+			
+			$('.updt').die().live('click',function() {
+				var notification_id=1;
+				var url="/orders/update-notification";
+				url=url+'/'+notification_id;
+				$.ajax({
+					url: url,
+					type: 'GET',
+					dataType: 'text'
+				});
+			});
+		</script>
+		
+		<!-- END JAVASCRIPTS -->
+	
+	<!-- END BODY -->
+
+<div class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="false" style="display: none;border:0px;" id="popup">
+<div class="modal-backdrop fade in"></div>
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content" style="border:0px;">
+			<div class="modal-body flip-scroll" style="height: auto;
+    overflow-y: auto;">
+				
+			
+			</div>
+		</div>
+	</div>
+</div>
+
+<div style="display:none;" id="push">
+<div style="border:solid 1px #c7c7c7;background-color: #FFF;padding:10px;margin-top: -10px;width: 100%;font-size:14px;" class="maindiv">	
+			<button type="button" class="close hidden-print" data-dismiss="modal" aria-hidden="true"></button>
+			<div align="center" style="color:#F98630; font-size: 16px;font-weight: bold;">ORDERS</div>
+					<div align="center">
+						<span id="txt"></span>
+						<a href="http://app.jainthela.in/orders/index?status=process" class="btn btn-xs blue updt">Click Here</a>					</div>
+					<!--button type="button" class="btn btn-xs blue updt" onclick="update();" >Order List</button-->
+					
+			</div>	
+</div></body></html>

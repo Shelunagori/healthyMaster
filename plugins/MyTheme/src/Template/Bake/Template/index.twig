@@ -1,0 +1,87 @@
+{#
+/**
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright (c) V Infotech)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @since         2.0.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+#}
+<?php
+/**
+ * @var \{{ namespace }}\View\AppView $this
+ * @var \{{ entityClass }}[]|\Cake\Collection\CollectionInterface ${{ pluralVar }}
+ */
+?>
+{% set fields = Bake.filterFields(fields, schema, modelObject, indexColumns, ['binary', 'text']) %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>
+                    <span class="caption-subject"><?= __('{{ pluralHumanName }}') ?></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
+                    <thead>
+                        <tr>
+{% for field in fields %}
+{#<th class="text-capitalize" scope="col"><?= $this->Paginator->sort('{{ field }}') ?></th>#}
+{% if field is not same as('created_by') and field is not same as('created_on') and field is not same as('edited_by') and field is not same as('edited_on') and field is not same as('is_deleted') %}
+                            <th class="text-capitalize" scope="col"><?= __('{{ field }}') ?></th>
+{% endif %}
+{% endfor %}
+                            <th scope="col" class="actions text-capitalize"><?= __('Actions') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $sr_no = @$_GET['page'] ? $_GET['page'] * 20 : 0; ?>
+                        <?php foreach (${{ pluralVar }} as $key => ${{ singularVar }}): $sr_no++;?>
+                        <tr>
+{% for field in fields %}
+{% set isKey = false %}
+{% if associations.BelongsTo %}
+{% for alias, details in associations.BelongsTo if field == details.foreignKey %}
+{% set isKey = true %}
+{#<td><?= ${{ singularVar }}->{{ details.property }}->{{ details.displayField }} ?></td>#}
+                            <td><?= ${{ singularVar }}->has('{{ details.property }}') ? h(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}) : '' ?></td>
+{% endfor %}
+{% endif %}
+{% if isKey is not same as(true) and field is not same as('created_by') and field is not same as('created_on') and field is not same as('edited_by') and field is not same as('edited_on') and field is not same as('is_deleted') %}
+{% set columnData = Bake.columnData(field, schema) %}
+{% if columnData.type not in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] %}
+                            <td><?= h(${{ singularVar }}->{{ field }}) ?></td>
+{% else %}
+                            <td><?= $this->Number->format(${{ singularVar }}->{{ field }}) ?></td>
+{% endif %}
+{% endif %}
+{% endfor %}
+{% set pk = '$' ~ singularVar ~ '->' ~ primaryKey[0] %}
+                            <td class="actions">
+                                <?= $this->Html->link(__("<i class='fa fa-pencil' ></i>"), ['action' => 'edit', {{ pk|raw }}],['class'=>'btn btn-sm btn-success','escape'=>false]) ?>
+                                <?= $this->Form->postLink(__("<i class='fa fa-trash' ></i>"), ['action' => 'delete', {{ pk|raw }}], ['confirm' => __('Are you sure you want to delete # {0}?', $sr_no),'class'=>'btn btn-sm btn-danger','escape'=>false]) ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            <div class="paginator">
+                <ul class="pagination">
+                    <?= $this->Paginator->first('<< ' . __('first')) ?>
+                    <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                    <?= $this->Paginator->numbers() ?>
+                    <?= $this->Paginator->next(__('next') . ' >') ?>
+                    <?= $this->Paginator->last(__('last') . ' >>') ?>
+                </ul>
+                <p><?= $this->Paginator->counter(['format' => __('Page {{ '{{' }}page{{ '}}' }} of {{ '{{' }}pages{{ '}}' }}, showing {{ '{{' }}current{{ '}}' }} record(s) out of {{ '{{' }}count{{ '}}' }} total')]) ?></p>
+            </div>
+        </div>
+    </div>
+</div>

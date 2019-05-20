@@ -1,0 +1,74 @@
+{#
+/**
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright (c) V Infotech)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @since         2.0.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+#}
+{% set fields = Bake.filterFields(fields, schema, modelObject) %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>
+                    <span class="caption-subject"><?= __('{{ action|humanize }} {{ singularHumanName }}') ?></span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?= $this->Form->create(${{ singularVar }}) ?>
+                    <div class="form-body">
+                        <div class="row">
+{% for field in fields if field not in primaryKey %}
+{% if field is not same as('created_by') and field is not same as('created_on') and field is not same as('edited_by') and field is not same as('edited_on') and field is not same as('is_deleted') %}
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <?= $this->Form->label('{{ field }}', null, ['class'=>'control-label']) ?>
+    {{- "\n" }}
+    {%- if keyFields[field] %}
+        {%- set fieldData = Bake.columnData(field, schema) %}
+        {%- if fieldData.null %}
+                                    <?= $this->Form->control('{{ field }}', ['label'=>false,'class'=>'form-control select2me input-sm','options' => ${{ keyFields[field] }}, 'empty' => true]); ?>
+            {{- "\n" }}
+        {%- else %}
+                                    <?= $this->Form->control('{{ field }}', ['empty'=>'--Select--','label'=>false,'class'=>'form-control select2me input-sm','options' => ${{ keyFields[field] }}]); ?>
+            {{- "\n" }}
+        {%- endif %}
+    {%- elseif field not in ['created', 'modified', 'updated'] %}
+        {%- set fieldData = Bake.columnData(field, schema) %}
+        {%- if fieldData.type in ['date', 'datetime', 'time'] and fieldData.null %}
+                                    <?= $this->Form->control('{{ field }}', ['label'=>false,'class'=>'form-control','empty' => true]); ?>
+            {{- "\n" }}
+        {%- else %}
+                                    <?= $this->Form->control('{{ field }}',['label'=>false,'class'=>'form-control']); ?>
+    {{- "\n" }}
+        {%- endif %}
+    {%- endif %}
+                                </div>
+                            </div>
+    {{- "\n" }}
+{%- endif %}
+{%- endfor %}
+
+{%- if associations.BelongsToMany %}
+    {%- for assocName, assocData in associations.BelongsToMany %}
+            <?= $this->Form->control('{{ assocData.property }}._ids', ['options' => ${{ assocData.variable }}]); ?>
+    {{- "\n" }}
+    {%- endfor %}
+{% endif %}
+                        </div>
+                    </div>
+                    <div class="form-actions text-center">
+                        <?= $this->Form->button(__('Submit'),['class'=>'btn btn-success btn-lg']) ?>
+                    </div>
+                <?= $this->Form->end() ?>
+            </div>
+        </div>
+    </div>
+</div>

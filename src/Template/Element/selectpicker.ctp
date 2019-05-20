@@ -1,0 +1,2 @@
+<?= $this->Html->css('/assets/global/plugins/select2/select2.css',['block'=>'PAGE_LEVEL_CSS']) ?>
+<?= $this->Html->script('/assets/global/plugins/select2/select2.min.js',['block'=>'PAGE_LEVEL_PLUGINS']) ?>
