@@ -13,9 +13,13 @@
 !/tmp/sessions/empty
 /tmp/tests/*
 !/tmp/tests/empty
+/tmp/debug_kit.sqlite
+/tmp/cache/myapp_cake_routes_route_collection
 
+/tmp/*
+/tests/*
 /logs/*
-!/logs/empty
+/logs/empty
 
 # CakePHP 2
 
@@ -23,3 +27,4 @@
 /app/Config/core.php
 /app/Config/database.php
 /vendors/*
+tmp/cache/myapp_cake_routes_route_collection
