@@ -32,7 +32,7 @@ class ItemsController extends AppController
 					->contain(['Units','Carts'=>function($q) use($customer_id){
 						return $q->where(['customer_id'=>$customer_id]);
 					}]);
-					$items->select(['image_url' => $items->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
+					$items->select(['image_url' => $items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
                     ->autoFields(true);
 					
 				//pr($items->toArray());	exit;
@@ -58,7 +58,7 @@ class ItemsController extends AppController
 		$item_id=$this->request->query('item_id');
 		$customer_id=$this->request->query('customer_id');
 		$item_description = $this->Items->find()
-							->select(['image_url' => $this->Items->find()->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
+							->select(['image_url' => $this->Items->find()->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
 							->where(['Items.jain_thela_admin_id'=>$jain_thela_admin_id, 'Items.id'=>$item_id])
 							->contain(['Units', 'Carts'=>function($q) use($customer_id){
 						return $q->where(['customer_id'=>$customer_id]);
@@ -83,7 +83,7 @@ $querys=$this->Items->ItemLedgers->find();
 						return $q->select(['id','longname','shortname','is_deleted','jain_thela_admin_id']);
 						}]);
 						}]);
-						$customer_also_bought->select(['image_url' => $customer_also_bought->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
+						$customer_also_bought->select(['image_url' => $customer_also_bought->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
 		
 						$cart_count = $this->Items->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
 			 
@@ -117,7 +117,7 @@ $querys=$this->Items->ItemLedgers->find();
 										->where(['customer_id'=>$customer_id]);
 						}]);
 						}]);
-						$view_items->select(['image_url' => $view_items->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
+						$view_items->select(['image_url' => $view_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
 						
 		foreach($view_items as $item){
 			if(!$item->item->cart){
@@ -143,7 +143,7 @@ $querys=$this->Items->ItemLedgers->find();
 										->where(['customer_id'=>$customer_id]);
 						}]);
 						}]);
-						$view_items->select(['image_url' => $view_items->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
+						$view_items->select(['image_url' => $view_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
 		
 		foreach($view_items as $item){
 			if(!$item->item->cart){
@@ -169,7 +169,7 @@ $querys=$this->Items->ItemLedgers->find();
 										->where(['Carts.customer_id'=>$customer_id]);
 						}]);
 						}]);
-						$view_items->select(['image_url' => $view_items->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
+						$view_items->select(['image_url' => $view_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
 		foreach($view_items as $item){
 			if(!$item->item->cart){
 				$item->item->cart=(object)[];
@@ -196,7 +196,7 @@ $querys=$this->Items->ItemLedgers->find();
 		->contain(['Units','Carts'=>function($q) use($customer_id){
 						return $q->where(['customer_id'=>$customer_id]);
 					}]);
-		$search_items->select(['image_url' => $search_items->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
+		$search_items->select(['image_url' => $search_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
                                 ->autoFields(true);
 		foreach($search_items as $item){
 			if(!$item->cart){
@@ -218,7 +218,7 @@ $querys=$this->Items->ItemLedgers->find();
 					->where($where)
 					->order(['name'=>'ASC'])
 					->contain(['Units']);
-					$fetch_items->select(['image_url' => $fetch_items->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
+					$fetch_items->select(['image_url' => $fetch_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
                     ->autoFields(true);
 		
 		

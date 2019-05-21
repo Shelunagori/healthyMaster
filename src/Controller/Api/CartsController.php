@@ -227,7 +227,7 @@ class CartsController extends AppController
 		$carts=$this->Carts->find()
 				->where(['customer_id' => $customer_id])
 				->contain(['Items'])
-				->select(['image_url' => $this->Carts->Items->find()->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
+				->select(['image_url' => $this->Carts->Items->find()->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
 				->select(['total'=>'sum(Carts.cart_count * Items.sales_rate)'])
 				->group('Carts.item_id')
 				->autoFields(true);
@@ -323,7 +323,7 @@ class CartsController extends AppController
 		$customer_id=$this->request->query('customer_id');
 		$cart_details=$this->Carts->find()->where(['customer_id' => $customer_id])
 		->contain(['Items'=>['Units']]);
-		$cart_details->select(['image_url' => $cart_details->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
+		$cart_details->select(['image_url' => $cart_details->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
                                 ->autoFields(true);
 								
 		        $out_of_stock_data=$this->Carts->find()->where(['customer_id' => $customer_id]);
