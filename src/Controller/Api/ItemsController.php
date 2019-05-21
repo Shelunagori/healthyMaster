@@ -29,9 +29,16 @@ class ItemsController extends AppController
 		$items = $this->Items->find()
 					->where($where)
 					->order(['name'=>'ASC'])
-					->contain(['Units','Carts'=>function($q) use($customer_id){
-						return $q->where(['customer_id'=>$customer_id]);
-					}]);
+					->contain(['ItemVariations'=>
+						function($q) {
+							return $q->where(['ready_to_sale' =>'Yes'])
+							->contain(['Units']);
+						}, 
+						'Carts'=>
+							function($q) use($customer_id){
+							return $q->where(['customer_id'=>$customer_id]);
+						}
+					]);
 					$items->select(['image_url' => $items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
                     ->autoFields(true);
 					
@@ -60,9 +67,16 @@ class ItemsController extends AppController
 		$item_description = $this->Items->find()
 							->select(['image_url' => $this->Items->find()->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
 							->where(['Items.jain_thela_admin_id'=>$jain_thela_admin_id, 'Items.id'=>$item_id])
-							->contain(['Units', 'Carts'=>function($q) use($customer_id){
-						return $q->where(['customer_id'=>$customer_id]);
-					}])
+							->contain(['ItemVariations'=>
+								function($q) {
+									return $q->where(['ready_to_sale' =>'Yes'])
+									->contain(['Units']);
+								}, 
+								'Carts'=>
+									function($q) use($customer_id){
+									return $q->where(['customer_id'=>$customer_id]);
+								}
+							])
 							->autoFields(true)->first();
              
 		
@@ -70,7 +84,7 @@ class ItemsController extends AppController
 				$item_description->cart=(object)[];
 			}
 		
-$querys=$this->Items->ItemLedgers->find();
+			$querys=$this->Items->ItemLedgers->find();
 				$customer_also_bought=$querys
 						->select(['total_rows' => $querys->func()->count('ItemLedgers.id'),'item_id',])
 						->where(['inventory_transfer'=>'no','status'=>'out'])
@@ -79,9 +93,15 @@ $querys=$this->Items->ItemLedgers->find();
 						->limit(5)
 						->contain(['Items'=>function($q){
 						return $q->select(['name', 'image', 'sales_rate','minimum_quantity_factor','ready_to_sale', 'out_of_stock', 'print_rate', 'print_quantity', 'discount_per','minimum_quantity_purchase'])
-						->contain(['Units'=>function($q){
-						return $q->select(['id','longname','shortname','is_deleted','jain_thela_admin_id']);
-						}]);
+						->contain(['ItemVariations' => 
+								function($q) {
+									return $q->where(['ready_to_sale' =>'Yes'])
+									->contain(['Units'=>
+									function($q){
+										return $q->select(['id','longname','shortname','is_deleted','jain_thela_admin_id']); 
+									}]);
+								}
+							])->autoFields(true);
 						}]);
 						$customer_also_bought->select(['image_url' => $customer_also_bought->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
 		
@@ -110,13 +130,23 @@ $querys=$this->Items->ItemLedgers->find();
 						->limit(1)
 						->contain(['Items'=>function($q) use($customer_id){
 							return $q->select(['name', 'image', 'sales_rate','minimum_quantity_factor','ready_to_sale', 'out_of_stock', 'print_rate', 'print_quantity', 'discount_per','minimum_quantity_purchase'])
-									->contain(['Units'=>function($q) use($customer_id){
-										return $q->select(['id','longname','shortname','is_deleted','jain_thela_admin_id']);
-									},'Carts'=>function($q) use($customer_id){
+								->contain(['ItemVariations' => 
+									function($q) {
+										return $q->where(['ready_to_sale' => 'Yes'])
+										->contain(['Units'=>
+											function($q) use($customer_id)
+											{
+												return $q->select(['id','longname','shortname','is_deleted','jain_thela_admin_id']);
+											}
+										]);
+									},
+									'Carts'=>function($q) use($customer_id)
+									{
 										return $q->select(['cart_count'])
 										->where(['customer_id'=>$customer_id]);
-						}]);
-						}]);
+									}
+								])->autoFields(true);
+							}]);
 						$view_items->select(['image_url' => $view_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
 						
 		foreach($view_items as $item){
@@ -136,12 +166,22 @@ $querys=$this->Items->ItemLedgers->find();
 						->limit(5)
 						->contain(['Items'=>function($q) use($customer_id){
 							return $q->select(['name', 'image', 'sales_rate','minimum_quantity_factor','ready_to_sale', 'out_of_stock', 'print_rate', 'print_quantity', 'discount_per','minimum_quantity_purchase'])
-							->contain(['Units'=>function($q) use($customer_id){
-								return $q->select(['id','longname','shortname','is_deleted','jain_thela_admin_id']);
-							},'Carts'=>function($q) use($customer_id){
+							->contain(['ItemVariations' => 
+									function($q) {
+										return $q->where(['ready_to_sale' => 'Yes'])
+										->contain(['Units'=>
+											function($q) use($customer_id)
+											{
+												return $q->select(['id','longname','shortname','is_deleted','jain_thela_admin_id']);
+											}
+										]);
+									},
+									'Carts'=>function($q) use($customer_id)
+									{
 										return $q->select(['cart_count'])
 										->where(['customer_id'=>$customer_id]);
-						}]);
+									}
+								])->autoFields(true);
 						}]);
 						$view_items->select(['image_url' => $view_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
 		
@@ -162,12 +202,22 @@ $querys=$this->Items->ItemLedgers->find();
 						->limit(5)
 						->contain(['Items'=>function($q) use($customer_id){
 						return $q->select(['name', 'image', 'sales_rate','minimum_quantity_factor','ready_to_sale', 'out_of_stock', 'print_rate', 'print_quantity', 'discount_per','minimum_quantity_purchase'])
-						->contain(['Units'=>function($q) use($customer_id){
-						                return $q->select(['id','longname','shortname','is_deleted','jain_thela_admin_id']);
-						},'Carts'=>function($q) use($customer_id){
+						->contain(['ItemVariations' => 
+									function($q) {
+										return $q->where(['ready_to_sale' => 'Yes'])
+										->contain(['Units'=>
+											function($q) use($customer_id)
+											{
+												return $q->select(['id','longname','shortname','is_deleted','jain_thela_admin_id']);
+											}
+										]);
+									},
+									'Carts'=>function($q) use($customer_id)
+									{
 										return $q->select(['cart_count'])
-										->where(['Carts.customer_id'=>$customer_id]);
-						}]);
+										->where(['customer_id'=>$customer_id]);
+									}
+								])->autoFields(true);
 						}]);
 						$view_items->select(['image_url' => $view_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
 		foreach($view_items as $item){
@@ -193,7 +243,11 @@ $querys=$this->Items->ItemLedgers->find();
 
         $search_items = $this->Items->find()
 		->where(['Items.is_combo'=>'no', 'Items.jain_thela_admin_id'=>$jain_thela_admin_id, 'Items.name LIKE' => '%'.$item_query.'%', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'])
-		->contain(['Units','Carts'=>function($q) use($customer_id){
+		->contain(['ItemVariations' => 
+						function($q){
+							return $q->where(['ready_to_sale' => 'Yes'])
+							->contain(['Units']);
+						},'Carts'=>function($q) use($customer_id){
 						return $q->where(['customer_id'=>$customer_id]);
 					}]);
 		$search_items->select(['image_url' => $search_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
