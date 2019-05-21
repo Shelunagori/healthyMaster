@@ -167,6 +167,25 @@ class OrdersController extends AppController
 		$this->set(compact('orders','from_date','to_date'));
         $this->set('_serialize', ['orders']);
     }
+
+    public function ajaxAutocompleted(){
+        $name=$this->request->getData('input'); 
+        $searchType=$this->request->getData('searchType');
+        if($searchType == 'item_name'){
+            $items=$this->Orders->OrderDetails->Items->find()->where(['Items.name Like'=>''.$name.'%']);
+            ?>
+                <ul id="item-list" style="width: 25% !important;">
+                    <?php foreach($items as $show){ ?>
+                        <li onClick="selectAutoCompleted('<?php echo $show->name;?>')">
+                            <?php echo $show->name?>
+                        </li>
+                    <?php } ?>
+                </ul>
+            <?php
+        }
+        
+        exit;  
+    }
 	
     public function index($status=null,$type=null)
     {

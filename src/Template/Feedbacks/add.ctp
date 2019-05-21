@@ -16,8 +16,11 @@
 				<?= $this->Form->create($feedback,['id'=>'form_sample_3']) ?>
 				<div class="row">
 					<div class="col-md-6">
-						<label class="col-md-6 control-label">Customer <span class="required" 	aria-required="true">*</span></label>
-						<?= $this->Form->input('customer_id',array('options' => $customers,'class'=>'form-control input-sm select2me','empty' => 'Select','label'=>false)) ?>
+						<label class="col-md-6 control-label">Customer <span class="required" 	aria-required="true">*</span></label><!-- 
+						<?= $this->Form->input('customer_id',array('options' => $customers,'class'=>'form-control input-sm select2me','empty' => 'Select','label'=>false)) ?> -->
+						<input type="text" name="customer_id" class="form-control input-sm selectedAutoCompleted autocompleted" valueType="item_name">
+						
+						 <div class="suggesstion-box"></div>
 					</div>
 				</div><br>
 				<div class="row">
@@ -36,6 +39,41 @@
 <?php echo $this->Html->script('/assets/global/plugins/jquery.min.js'); ?>
 <script>
 $(document).ready(function() {
+
+
+	$(document).on('blur',".autocompleted",function(){ //alert("blur");
+        $('.suggesstion-box').delay(1000).fadeOut(500);
+    }); 
+
+    $(document).on('keyup',".autocompleted",function(){// alert("keyup");
+        var searchType = $(this).attr('valueType');
+        var input=$(this).val();
+        var master = $(this); 
+        if(input.length>0){
+            var m_data = new FormData();
+            var url ="<?php echo $this->Url->build(["controller" => "Feedbacks", "action" => "ajaxAutocompleted"]); ?>";
+         //   alert(url);
+            m_data.append('input',input); 
+            m_data.append('searchType',searchType); 
+            $.ajax({
+                url: url,
+                data: m_data,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                dataType:'text',
+                success: function(data)
+                { 
+                	//alert(data);
+                    master.closest('div').find('.suggesstion-box').show();
+                    master.closest('div').find('.suggesstion-box').html(data);
+                   	master.css("background","#FFF");
+                }
+            });
+        }
+    });
+
+
 
   //--------- FORM VALIDATION
 	var form3 = $('#form_sample_3');
@@ -104,4 +142,14 @@ $(document).ready(function() {
 	});
 	//--	 END OF VALIDATION
 });
+</script>
+<script>
+	function selectAutoCompleted(value) { 
+    $('.selectedAutoCompleted').val(value);
+    $(".suggesstion-box").hide();     
+}
+function selectAutoCompleted1(value) {  
+    $('.selectedAutoCompleted1').val(value);
+    $(".suggesstion-box").hide();     
+}
 </script>

@@ -5,6 +5,11 @@
 .error{
 	color:#a94442;
 }
+#item-list{list-style:none;margin-left: 1px;padding:0;width:91%; margin-top: 10px;    position: absolute;
+z-index: 1000;
+background-color: #fff;}
+#item-list li{padding: 7px; background: #d8d4d41a ; border: 1px solid #bbb9b933;}
+#item-list li:hover{background:#d8d4d4;cursor: pointer;}
 </style>
 <div class="row"><div class="col-md-1"></div>
 	<div class="col-md-12">
@@ -195,6 +200,40 @@
 <?php echo $this->Html->script('/assets/global/plugins/jquery.min.js'); ?>
 <script>
 $(document).ready(function() {
+
+	 $(document).on('blur',".autocompleted",function(){ //alert("blur");
+        $('.suggesstion-box').delay(1000).fadeOut(500);
+    }); 
+
+    $(document).on('keyup',".autocompleted",function(){// alert("keyup");
+        var searchType = $(this).attr('valueType');
+        var input=$(this).val();
+        var master = $(this); 
+        if(input.length>0){
+            var m_data = new FormData();
+            var url ="<?php echo $this->Url->build(["controller" => "Orders", "action" => "ajaxAutocompleted"]); ?>";
+         //   alert(url);
+            m_data.append('input',input); 
+            m_data.append('searchType',searchType); 
+            $.ajax({
+                url: url,
+                data: m_data,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                dataType:'text',
+                success: function(data)
+                { 
+                	//alert(data);
+                    master.closest('div').find('.suggesstion-box').show();
+                    master.closest('div').find('.suggesstion-box').html(data);
+                   	master.css("background","#FFF");
+                }
+            });
+        }
+    });
+
+
 	
   //--------- FORM VALIDATION
 	var form3 = $('#form_sample_3');
@@ -298,6 +337,8 @@ $(document).ready(function() {
 		
 	}
 
+
+
 	function calculate_total(){
 		var total=0;
 		$("#main_table tbody#main_tbody tr.main_tr").each(function(){ 
@@ -342,7 +383,7 @@ $(document).ready(function() {
 		var i=0; 
 		$("#main_table tbody#main_tbody tr.main_tr").each(function(){ 
 			$(this).find('td:nth-child(1)').html(i+1);
-			$(this).find("td:nth-child(2) select").select2().attr({name:"order_details["+i+"][item_id]", id:"order_details-"+i+"-item_id"}).rules('add', {
+			$(this).find("td:nth-child(2) .autocompleted").attr({name:"order_details["+i+"][item_id]", id:"order_details-"+i+"-item_id"}).rules('add', {
 						required: true
 					});
 			$(this).find("td:nth-child(3) input").attr({name:"order_details["+i+"][show_quantity]", id:"order_details-"+i+"-show_quantity"}).rules('add', {
@@ -615,14 +656,25 @@ $(document).ready(function() {
 	});
 });
 </script>
+<script>
+function selectAutoCompleted(value) { 
+    $('.selectedAutoCompleted').val(value);
+    $(".suggesstion-box").hide();     
+}
+function selectAutoCompleted1(value) {  
+    $('.selectedAutoCompleted1').val(value);
+    $(".suggesstion-box").hide();     
+}
+</script>
 <table id="sample_table" style="display:none;" >
 			<tbody>
 				<tr class="main_tr" class="tab">
 					<td align="center" width="1px"></td>
 				    <td>
-						<?php echo $this->Form->input('item_id', ['empty'=>'--Select-','options'=>$items,'label' => false,'class' => 'form-control input-sm attribute']); ?>
-						<span class="msg_shw" style="color:blue;font-size:12px;"></span>
-						</td>
+				    	<input type="text" name="item_id" class="form-control input-sm selectedAutoCompleted autocompleted" valueType="item_name">
+						
+						 <div class="suggesstion-box"></div>
+					</td>
 					<td>
 						<?php echo $this->Form->input('show_quantity', ['label' => false,'class' => 'form-control input-sm number cal_amount quant','placeholder'=>'Quantity','value'=>0]); ?>
 						

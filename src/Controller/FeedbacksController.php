@@ -18,6 +18,27 @@ class FeedbacksController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
+
+    public function ajaxAutocompleted(){
+        $name=$this->request->getData('input'); 
+        $searchType=$this->request->getData('searchType');
+        if($searchType == 'item_name'){
+            $items=$this->Feedbacks->Customers->find()->where(['Customers.name Like'=>''.$name.'%']);
+            //pr($items->toArray());exit;
+            ?>
+                <ul id="item-list" style="width: 25% !important;">
+                    <?php foreach($items as $show){ ?>
+                        <li onClick="selectAutoCompleted('<?php echo $show->name;?>')">
+                            <?php echo $show->name?>
+                        </li>
+                    <?php } ?>
+                </ul>
+            <?php
+        }
+        
+        exit;  
+    }
+
     public function index()
     {
 		$this->viewBuilder()->layout('index_layout'); 
