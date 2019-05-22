@@ -130,4 +130,37 @@ class CartsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+    public function cartReport()
+    {
+         $this->viewBuilder()->layout('index_layout');
+         $Cart= $this->Carts->newEntity();
+        $Carts = $this->Carts->find()
+        ->group(['customer_id'])
+        ->contain(['Items','Customers','ItemVariations']);
+        if ($this->request->is('post')) {
+            $datas = $this->request->getData();
+            if(!empty($datas['customer_id']))
+            {
+                $Carts->where(['customer_id'=>$datas['customer_id']]);
+            }
+             if(!empty($datas['item_id']))
+            {
+                $Carts->where(['item_id'=>$datas['item_id']]);
+            }
+            if(!empty($datas['From'])){
+                $from_date=date("Y-m-d",strtotime($datas['From']));
+                $Carts->where(['Carts.created_on >='=> $from_date]);
+            }
+            if(!empty($datas['To'])){ 
+                $to_date=date("Y-m-d",strtotime($datas['To']));
+                $Carts->where(['Carts.created_on <=' => $to_date ]);
+            }
+        }
+        
+        //pr($promoCodes->toArray());exit
+         $Customers = $this->Carts->Customers->find('list', ['limit' => 200]);
+        $items = $this->Carts->Items->find('list', ['limit' => 200]);
+        $item_variation = $this->Carts->ItemVariations->find('list', ['limit' => 200]);
+        $this->set(compact('Cart', 'Carts','items','Customers','item_variation'));
+    }
 }

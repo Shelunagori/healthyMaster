@@ -45,6 +45,10 @@ class CartsTable extends Table
             'foreignKey' => 'item_id',
             'joinType' => 'INNER'
         ]);
+        $this->belongsTo('ItemVariations', [
+            'foreignKey' => 'item_variation_id',
+            'joinType' => 'INNER'
+        ]);
 		$this->belongsTo('CustomerAddresses');
 		$this->belongsTo('DeliveryTimes');
 		$this->belongsTo('Users');

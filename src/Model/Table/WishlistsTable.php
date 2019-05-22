@@ -45,6 +45,10 @@ class WishlistsTable extends Table
             'foreignKey' => 'customer_id',
             'joinType' => 'INNER'
         ]);
+        $this->belongsTo('ItemVariations', [
+            'foreignKey' => 'item_variation_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**

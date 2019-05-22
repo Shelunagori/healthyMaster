@@ -41,7 +41,6 @@
                             <td><?= h($pincode->pincode) ?></td>
                             <td class="actions">
                                 <?= $this->Html->link(__('Edit'), ['action' => 'edit', $pincode->id]) ?>
-                                <?= $this->Html->link(__('View'), ['action' => 'view', $pincode->id ]) ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>

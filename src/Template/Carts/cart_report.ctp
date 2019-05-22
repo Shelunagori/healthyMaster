@@ -4,7 +4,7 @@
 			<div class="portlet-title">
 				<div class="caption">
 					<i class=" fa fa-gift"></i>
-					<span class="caption-subject">Wishlist</span>
+					<span class="caption-subject">Cart</span>
 				</div>
 				<div class="actions">
 					<input type="text" class="form-control input-sm pull-right" placeholder="Search..." id="search3"  style="width: 200px;">
@@ -48,20 +48,28 @@
 							<th>Customer</th>
 							<!-- <th>Item Variation</th> -->
 							<th>Item</th>
+							<th>Quantity</th>
+							<th>Rate</th>
+							<th>Amount</th>
+							<th>Is Combo</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php
 						$i=0;
-						foreach ($Wishlists as $wishlist):
+						foreach ($Carts as $Cart):
 						$i++;
 
 						?>
 						<tr>
 							<td><?= $i ?></td>
-							<td><?= h(@$wishlist->customer->name) ?></td>
-							<!-- <td><?= h(@$wishlist->item_variation->name) ?></td> -->
-							<td><?= h(@$wishlist->item->name) ?></td>
+							<td><?= h(@$Cart->customer->name) ?></td>
+							<!-- <td><?= h(@$Cart->item_variation->name) ?></td> -->
+							<td><?= h(@$Cart->item->name) ?></td>
+							<td><?= h(@$Cart->quantity) ?></td>
+							<td><?= h(@$Cart->rate) ?></td>
+							<td><?= h(@$Cart->amount) ?></td>
+							<td><?= h(@$Cart->is_combo) ?></td>
 							
 						</tr>
 						<?php endforeach; ?>

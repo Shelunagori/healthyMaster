@@ -76,6 +76,7 @@ class PincodesController extends AppController
      */
     public function edit($id = null)
     {
+        $this->viewBuilder()->layout('index_layout');
         $pincode = $this->Pincodes->get($id, [
             'contain' => []
         ]);

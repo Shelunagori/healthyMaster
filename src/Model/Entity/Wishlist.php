@@ -28,6 +28,7 @@ class Wishlist extends Entity
     protected $_accessible = [
         'item_id' => true,
         'customer_id' => true,
+        'item_variation_id' => true,
         'created_on' => true,
         'item' => true,
         'customer' => true

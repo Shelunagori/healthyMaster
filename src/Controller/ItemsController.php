@@ -96,7 +96,9 @@ class ItemsController extends AppController
 		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
         $item = $this->Items->newEntity();
         if ($this->request->is('post')) {
-			
+
+        	$data=$this->request->getData();
+			//pr($data);exit;
 			$file = $this->request->data['image'];
 			$file_name=$file['name'];			
 			$ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
@@ -108,36 +110,44 @@ class ItemsController extends AppController
 			}if(empty($file_name)){
 				
 			}
-			$unit_id=$this->request->data['unit_id'];
-			$units_fetch_datas = $this->Items->Units->find()->where(['id'=>$unit_id]);
-			foreach($units_fetch_datas as $units_fetch_data){
-				$unit_shortname=$units_fetch_data->shortname;
-				$unit_name=$units_fetch_data->unit_name;	
-			}
-            $item = $this->Items->patchEntity($item, $this->request->getData());
-            $item->jain_thela_admin_id=$jain_thela_admin_id;
-            $item->item_sub_category_id=0;
-			if($unit_name=='kg'){
-				$minimum_quantity_factor=$this->request->data['minimum_quantity_factor'];
-				if($minimum_quantity_factor==0.10){
-					$item->print_quantity='100 gm';
-					$item->minimum_quantity_factor=$minimum_quantity_factor;	
-				}
-				if($minimum_quantity_factor==0.25){	
-					$item->print_quantity='250 gm';
-					$item->minimum_quantity_factor=$minimum_quantity_factor;	
-				}
-				if($minimum_quantity_factor==0.50){	
-					$item->print_quantity='500 gm';
-					$item->minimum_quantity_factor=$minimum_quantity_factor;	
-				}
-				if($minimum_quantity_factor==1){
-					$item->print_quantity='1 '.$unit_shortname;
-					$item->minimum_quantity_factor=$minimum_quantity_factor;
-				}
-			}else{		
-					$item->print_quantity='1 '.$unit_shortname;
-					$item->minimum_quantity_factor=1;
+
+			if($data['id'])
+                $items=$this->Items->get($data['id']);
+            else
+                $items=$this->Items->newEntity();
+
+             $item = $this->Items->patchEntity($items,$data,['associated'=>['ItemVariations']]);
+
+			// $unit_id=$this->request->data['unit_id'];
+			// $units_fetch_datas = $this->Items->Units->find()->where(['id'=>$unit_id]);
+			// foreach($units_fetch_datas as $units_fetch_data){
+			// 	$unit_shortname=$units_fetch_data->shortname;
+			// 	$unit_name=$units_fetch_data->unit_name;	
+			// }
+   // //          $item = $this->Items->patchEntity($item, $this->request->getData());
+   // //          $item->jain_thela_admin_id=$jain_thela_admin_id;
+   // //          $item->item_sub_category_id=0;
+			// // if($unit_name=='kg'){
+			// // 	$minimum_quantity_factor=$this->request->data['minimum_quantity_factor'];
+			// // 	if($minimum_quantity_factor==0.10){
+			// // 		$item->print_quantity='100 gm';
+			// // 		$item->minimum_quantity_factor=$minimum_quantity_factor;	
+			// // 	}
+			// // 	if($minimum_quantity_factor==0.25){	
+			// // 		$item->print_quantity='250 gm';
+			// // 		$item->minimum_quantity_factor=$minimum_quantity_factor;	
+			// // 	}
+			// // 	if($minimum_quantity_factor==0.50){	
+			// // 		$item->print_quantity='500 gm';
+			// // 		$item->minimum_quantity_factor=$minimum_quantity_factor;	
+			// // 	}
+			// // 	if($minimum_quantity_factor==1){
+			// // 		$item->print_quantity='1 '.$unit_shortname;
+			// // 		$item->minimum_quantity_factor=$minimum_quantity_factor;
+			// // 	}
+			// // }else{		
+			// // 		$item->print_quantity='1 '.$unit_shortname;
+			// // 		$item->minimum_quantity_factor=1;
 			}
 			if ($this->Items->save($item)) {
                 $this->Flash->success(__('The item has been saved.'));

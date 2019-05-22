@@ -16,11 +16,9 @@
                 <?= $this->Form->create($pincode,['id'=>'form_sample_3']) ?>
                 <div class="row">
                     <div class="col-md-3">
-                        <label class=" control-label">State <span class="required" aria-required="true">*</span></label>
                         <?php echo $this->Form->control('state_id', ['empty'=>'-- select --','options' => $states,'class'=>'form-control input-sm select select2me select2','required']); ?>
                     </div>
                     <div class="col-md-3">
-                        <label class=" control-label">City <span class="required" aria-required="true">*</span></label>
                         <?php echo $this->Form->control('city_id', ['empty'=>'-- select --','options' => $cities,'class'=>'form-control input-sm select select2me select2','required']); ?>
                     </div>
                     <div class="col-md-3">
