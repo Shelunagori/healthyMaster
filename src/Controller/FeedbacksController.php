@@ -26,7 +26,7 @@ class FeedbacksController extends AppController
             $items=$this->Feedbacks->Customers->find()->where(['Customers.name Like'=>''.$name.'%']);
             //pr($items->toArray());exit;
             ?>
-                <ul id="item-list" style="width: 25% !important;">
+                <ul id="item-list" style="width: 90% !important;">
                     <?php foreach($items as $show){ ?>
                         <li onClick="selectAutoCompleted('<?php echo $show->name;?>')">
                             <?php echo $show->name?>

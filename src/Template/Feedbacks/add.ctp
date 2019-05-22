@@ -1,3 +1,10 @@
+<style type="text/css">
+	#item-list{list-style:none;margin-left: 1px;padding:0;width:91%; margin-top: 10px;    position: absolute;
+z-index: 1000;
+background-color: #fff;}
+#item-list li{padding: 7px; background: #d8d4d41a ; border: 1px solid #bbb9b933;}
+#item-list li:hover{background:#d8d4d4;cursor: pointer;}
+</style>
 <div class="row">
 	<div class="col-md-9">
 		<div class="portlet light bordered">
@@ -18,7 +25,7 @@
 					<div class="col-md-6">
 						<label class="col-md-6 control-label">Customer <span class="required" 	aria-required="true">*</span></label><!-- 
 						<?= $this->Form->input('customer_id',array('options' => $customers,'class'=>'form-control input-sm select2me','empty' => 'Select','label'=>false)) ?> -->
-						<input type="text" name="customer_id" class="form-control input-sm selectedAutoCompleted autocompleted" valueType="item_name">
+						<input type="text" name="customer_id" class="form-control input-sm selectedAutoCompleted autocompleted customer_id cstmr chosen-select" valueType="item_name" id="customer_id">
 						
 						 <div class="suggesstion-box"></div>
 					</div>

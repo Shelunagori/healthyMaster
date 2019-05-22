@@ -78,8 +78,10 @@ class ItemCategoriesController extends AppController
     public function add()
     {
         $itemCategory = $this->ItemCategories->newEntity();
+        $jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
         if ($this->request->is('post')) {
             $itemCategory = $this->ItemCategories->patchEntity($itemCategory, $this->request->getData());
+            $itemCategory->jain_thela_admin_id=$jain_thela_admin_id;
             if ($this->ItemCategories->save($itemCategory)) {
                 $this->Flash->success(__('The item category has been saved.'));
 

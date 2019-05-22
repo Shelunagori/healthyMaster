@@ -35,11 +35,47 @@ class PromoCodesController extends AppController
         }
         $promoCodes = $this->PromoCodes->find()->where(['PromoCodes.jain_thela_admin_id'=>$jain_thela_admin_id]);
         $itemCategories = $this->PromoCodes->ItemCategories->find('list', ['limit' => 200])->where(['jain_thela_admin_id'=>$jain_thela_admin_id]);
-        $this->set(compact('promoCode', 'promoCodes', 'itemCategories'));
+        $items = $this->PromoCodes->Items->find('list', ['limit' => 200])->where(['jain_thela_admin_id'=>$jain_thela_admin_id]);
+        $this->set(compact('promoCode', 'promoCodes', 'itemCategories','items'));
 		$this->set('_serialize', ['promoCode']);
         $this->set('_serialize', ['promoCodes']);
     }
 	
+
+     public function promoCodeReport()
+    {
+        $this->viewBuilder()->layout('index_layout');
+        $jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
+        $promoCode = $this->PromoCodes->newEntity();
+        $promoCodes = $this->PromoCodes->find()->where(['PromoCodes.jain_thela_admin_id'=>$jain_thela_admin_id])->contain(['Items', 'ItemCategories']);
+        if ($this->request->is('post')) {
+            $datas = $this->request->getData();
+            if(!empty($datas['code']))
+            {
+                $promoCodes->where(['code'=>$datas['code']]);
+            }
+             if(!empty($datas['item_id']))
+            {
+                $promoCodes->where(['item_id'=>$datas['item_id']]);
+            }
+           if(!empty($datas['From'])){
+                $from_date=date("Y-m-d",strtotime($datas['From']));
+                $promoCodes->where(['valid_from >='=> $from_date]);
+            }
+            if(!empty($datas['To'])){ 
+                $to_date=date("Y-m-d",strtotime($datas['To']));
+                $promoCodes->where(['valid_to <=' => $to_date ]);
+            }
+        }
+        
+        //pr($promoCodes->toArray());exit
+        $itemCategories = $this->PromoCodes->ItemCategories->find('list', ['limit' => 200])->where(['jain_thela_admin_id'=>$jain_thela_admin_id]);
+        $items = $this->PromoCodes->Items->find('list', ['limit' => 200])->where(['jain_thela_admin_id'=>$jain_thela_admin_id]);
+        $this->set(compact('promoCode', 'promoCodes', 'itemCategories','items'));
+        $this->set('_serialize', ['promoCode']);
+        $this->set('_serialize', ['promoCodes']);
+    }
+
 	public function ajaxStatusPromoCode($status,$status_id)
     {
 		        $query=$this->PromoCodes->query();

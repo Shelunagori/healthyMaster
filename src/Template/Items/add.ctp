@@ -20,38 +20,34 @@
 					<div class="col-md-3">
 						<?php echo $this->Form->control('alias_name',['class'=>'form-control input-sm','placeholder'=>'Alias Name']); ?>
 					</div>
-					<div class="col-md-3">
+					<!-- <div class="col-md-3">
 						<?php echo $this->Form->control('unit_id', ['empty'=>'--select--','options' => $unit_option,'class'=>'form-control input-sm attribute']); ?>
-					</div>
+					</div> -->
 					<div class="col-md-3">
 						<?php echo $this->Form->control('item_category_id', ['empty'=>'--select--','options' => $itemCategories,'class'=>'form-control input-sm','required']); ?>
 					</div>
+
 				</div><br/>
 				<div class="row">
-					<div class="col-md-3">
-						<?php echo $this->Form->control('minimum_stock',['class'=>'form-control input-sm','placeholder'=>'Minimum Stock']); ?>
-						<span id="msg"></span>
-					</div>
-					<div class="col-md-3 set">
-						
-					</div>
-					<div class="col-md-3">
+					
+					<!-- <div class="col-md-3">
 						<label class="control-label">Maximum Order Limit<span class="required" aria-required="true"></span></label>
 						<?php echo $this->Form->control('minimum_quantity_purchase',['class'=>'form-control input-sm order_limit','placeholder'=>'Maximum Order Limit', 'label'=>false]); ?>
 						<span id="msg2"></span>
-					</div>
-					<div class="col-md-3">
-						<?php echo $this->Form->control('description', ['class'=>'form-control input-sm','placeholder'=>'Description']); ?>
-					</div>
-				</div>
-				<div class="row"><br>
+					</div> -->
+
+
 					<div class="col-md-3">
 						 <?= $this->Form->input('image',['class'=>'form-control','type'=>'File']) ?>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-6">
+						<?php echo $this->Form->control('description', ['class'=>'form-control input-sm','placeholder'=>'Description']); ?>
+						<input type="hidden" name="is_virtual" value="real">
+					</div>
+				</div>
+					<!-- <div class="col-md-3">
 								<div class="form-group">
-									<label class="control-label">Type<span class="required" aria-required="true">*</span></label>
-									<div class="radio-list">
+									 <div class="radio-list">
 										<div class="radio-inline" style="padding-left: 0px;">
 											<?php echo $this->Form->radio(
 											'is_virtual',
@@ -63,20 +59,97 @@
 										</div>
                                     </div>
 								</div>
-							</div>
-							<div class="col-md-3 set2">
-							</div>	
-				</div>
+					</div> -->	
+				<div class="row">
+                        <div class="col-md-12" style="height: 200px; overflow-y: scroll; margin-top: 10px;">
+                              <table class="table table-striped table-bordered">
+                                  <thead>
+                                      <tr>
+                                          <th>S.No</th>
+                                          <th>Quantity Variation</th>
+                                          <th>Unit</th>
+                                          <th>Minimum Stock</th>
+                                          <th>Minimum Purchase</th>
+                                          <th>Actions</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody id="main-tbody">
+                                  
+                                  </tbody>
+                              </table>
+                            </div>
+                        </div>
 			<?= $this->Form->button(__('Create new item'),['class'=>'btn btn-success']) ?>
 			<?= $this->Form->end() ?>
 			</div>
 		</div>
 	</div>
 </div>
+<table>
+              <tbody id="sub-body" class="hidden">
+                <tr>
+                    <td style="vertical-align: bottom;" class="index"> </td>
+                    <td style="vertical-align: bottom;"> <?php echo $this->Form->control('item_variations.0.quantity_variation',['class'=>'form-control quantity_variation','id'=>false,'label'=>false,'required']); ?></td>
+                    <td style="vertical-align: bottom;">
+                    <?php echo $this->Form->control('item_variations.0.unit_id', ['empty'=>'--select--','options' => $unit_option,'class'=>'form-control unit','label'=>false]); ?>
+                    </td>
+                    <td style="vertical-align: bottom;"> 
+                    	<?php echo $this->Form->control('item_variations.0.minimum_stock',['class'=>'form-control minimum_stock','placeholder'=>'Minimum Stock','label'=>false]); ?>
+                    </td>
+                    <td style="vertical-align: bottom;"> <?php echo $this->Form->control('item_variations.0.minimum_quantity_purchase',['class'=>'form-control minimum_quantity_purchase  order_limit','placeholder'=>'Maximum Order Limit', 'label'=>false]); ?></td>
+                    <td style="vertical-align: bottom;"> <button type="button" id="plus" class="btn btn-sm green"><i class="fa fa-plus"></i></button>
+                      <button type="button" id="minus" class="btn btn-sm red"><i class="fa fa-minus"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
 <?php echo $this->Html->script('/assets/global/plugins/jquery.min.js'); ?>
+
 <script>
 $(document).ready(function() {
-	
+	add_row();
+
+	 $(document).on('click','#plus',function(){
+           add_row();
+      });
+       $(document).on('click','#minus',function(){
+           var count=$('#main-tbody').children().length;
+            if(count >= 2)
+            {
+              $(this).parent().parent().remove();
+              rename_row();
+            }
+        });
+
+	    function add_row()
+    {
+
+      var tr = $('#sub-body>tr:last').clone();
+
+      $('#main-tbody').append(tr);
+
+           $('#main-tbody').find('tr').each(function()
+        {
+            $(this).find('.product_id').attr('autofocus','autofocus');
+
+        });
+      rename_row();
+    }
+   function rename_row()
+      {
+        var i=0;
+        $('#main-tbody').find('tr').each(function()
+        {
+            i++;
+            $(this).find('.index').html(i);
+            $(this).find('.quantity_variation').attr('name','item_variations['+i+'][quantity_variation]');
+            $(this).find('.unit').attr('name','item_variations['+i+'][unit_id]');
+            $(this).find('.minimum_stock').attr('name','item_variations['+i+'][minimum_stock]');
+            $(this).find('.minimum_quantity_purchase').attr('name','item_variations['+i+'][minimum_quantity_purchase]');
+
+          });
+          
+       }
+
   //--------- FORM VALIDATION
 	var form3 = $('#form_sample_3');
 	var error3 = $('.alert-danger', form3);
