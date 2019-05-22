@@ -99,6 +99,8 @@ class ItemsController extends AppController
 
         	$data=$this->request->getData();
 			//pr($data);exit;
+
+			
 			$file = $this->request->data['image'];
 			$file_name=$file['name'];			
 			$ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
@@ -148,7 +150,7 @@ class ItemsController extends AppController
 			// // }else{		
 			// // 		$item->print_quantity='1 '.$unit_shortname;
 			// // 		$item->minimum_quantity_factor=1;
-			}
+			
 			if ($this->Items->save($item)) {
                 $this->Flash->success(__('The item has been saved.'));
 				  if (in_array($ext, $arr_ext)) {

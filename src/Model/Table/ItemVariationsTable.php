@@ -56,39 +56,39 @@ class ItemVariationsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', 'create');
+        // $validator
+        //     ->integer('id')
+        //     ->allowEmptyString('id', 'create');
 
-        $validator
-            ->decimal('minimum_stock')
-            ->requirePresence('minimum_stock', 'create')
-            ->allowEmptyString('minimum_stock', false);
+        // $validator
+        //     ->decimal('minimum_stock')
+        //     ->requirePresence('minimum_stock', 'create')
+        //     ->allowEmptyString('minimum_stock', false);
 
-        $validator
-            ->scalar('ready_to_sale')
-            ->maxLength('ready_to_sale', 10)
-            ->requirePresence('ready_to_sale', 'create')
-            ->allowEmptyString('ready_to_sale', false);
+        // $validator
+        //     ->scalar('ready_to_sale')
+        //     ->maxLength('ready_to_sale', 10)
+        //     ->requirePresence('ready_to_sale', 'create')
+        //     ->allowEmptyString('ready_to_sale', false);
 
-        $validator
-            ->decimal('print_rate')
-            ->requirePresence('print_rate', 'create')
-            ->allowEmptyString('print_rate', false);
+        // $validator
+        //     ->decimal('print_rate')
+        //     ->requirePresence('print_rate', 'create')
+        //     ->allowEmptyString('print_rate', false);
 
-        $validator
-            ->decimal('sales_rate')
-            ->requirePresence('sales_rate', 'create')
-            ->allowEmptyString('sales_rate', false);
+        // $validator
+        //     ->decimal('sales_rate')
+        //     ->requirePresence('sales_rate', 'create')
+        //     ->allowEmptyString('sales_rate', false);
 
-        $validator
-            ->requirePresence('out_of_stock', 'create')
-            ->allowEmptyString('out_of_stock', false);
+        // $validator
+        //     ->requirePresence('out_of_stock', 'create')
+        //     ->allowEmptyString('out_of_stock', false);
 
-        $validator
-            ->integer('minimum_quantity_purchase')
-            ->requirePresence('minimum_quantity_purchase', 'create')
-            ->allowEmptyString('minimum_quantity_purchase', false);
+        // $validator
+        //     ->integer('minimum_quantity_purchase')
+        //     ->requirePresence('minimum_quantity_purchase', 'create')
+        //     ->allowEmptyString('minimum_quantity_purchase', false);
 
         return $validator;
     }
