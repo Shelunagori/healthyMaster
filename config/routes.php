@@ -163,6 +163,18 @@ Router::prefix('api', function ($routes) {
 		   ]
 		]
 	);
+
+
+	$routes->resources(
+		'Faqs', [
+		   'map' => [
+			   'faqdata' => [
+				   'action' => 'faqdata',
+				   'method' => 'GET'
+			   ]
+		   ]
+		]
+	);
 	
 	$routes->resources(
 		'Carts', [

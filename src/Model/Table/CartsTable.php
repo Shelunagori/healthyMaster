@@ -41,14 +41,17 @@ class CartsTable extends Table
             'foreignKey' => 'customer_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Items', [
+        
+		$this->belongsTo('Items', [
             'foreignKey' => 'item_id',
             'joinType' => 'INNER'
         ]);
+
         $this->belongsTo('ItemVariations', [
             'foreignKey' => 'item_variation_id',
             'joinType' => 'INNER'
         ]);
+
 		$this->belongsTo('CustomerAddresses');
 		$this->belongsTo('DeliveryTimes');
 		$this->belongsTo('Users');
@@ -82,7 +85,7 @@ class CartsTable extends Table
 
 	public function beforeMarshal(Event $event, ArrayObject $data)
     {
-        $data['is_combo'] = 'abhilash- '.$data['is_combo'];
+        $data['is_combo'] = 'healthyMaster- '.$data['is_combo'];
     }
     /**
      * Returns a rules checker object that will be used for validating
@@ -95,7 +98,7 @@ class CartsTable extends Table
     {
         $rules->add($rules->existsIn(['customer_id'], 'Customers'));
         $rules->add($rules->existsIn(['item_id'], 'Items'));
-
+		$rules->add($rules->existsIn(['item_variation_id'], 'ItemVariations'));
         return $rules;
     }
 }

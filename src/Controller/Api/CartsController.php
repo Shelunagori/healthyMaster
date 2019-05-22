@@ -7,6 +7,7 @@ class CartsController extends AppController
     {
 		$jain_thela_admin_id=$this->request->data('jain_thela_admin_id');
 		$item_id=$this->request->data('item_id');
+		$item_variation_id=$this->request->data('item_variation_id');
 		$customer_id=$this->request->data('customer_id');
 		$items = $this->Carts->Items->get($item_id);
 		$item_add_quantity=$items->minimum_quantity_factor;
@@ -15,10 +16,11 @@ class CartsController extends AppController
 		if(empty($fetchs->toArray()))
 		{
 			$query = $this->Carts->query();
-					$query->insert(['customer_id', 'item_id', 'quantity', 'cart_count', 'is_combo'])
+					$query->insert(['customer_id', 'item_id','item_variation_id','quantity', 'cart_count', 'is_combo'])
 							->values([
 							'customer_id' => $customer_id,
 							'item_id' => $item_id,
+							'item_variation_id' => $item_variation_id,
 							'quantity' => $item_add_quantity,
 							'cart_count' => 1,
 							'is_combo' => $is_combo
@@ -36,12 +38,13 @@ class CartsController extends AppController
 			$cart=$this->Carts->get($update_id);	
 			$query = $this->Carts->query();
 				$result = $query->update()
-                    ->set(['quantity' => $update_quantity, 'cart_count' => $update_count, 'is_combo' => $is_combo
-							])
+                    ->set(['quantity' => $update_quantity, 'cart_count' => $update_count, 'is_combo' => $is_combo])
                     ->where(['id' => $update_id])
                     ->execute();
 		}
-		$carts=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id])->contain(['Items'])->first();
+		$carts=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id,'item_variation_id' =>$item_variation_id])
+		->contain(['Items' => ['ItemVariations' => ['Units']]])
+		->first();
         
 		$cart_count = $this->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
 
@@ -54,15 +57,17 @@ class CartsController extends AppController
     {
 		$jain_thela_admin_id=$this->request->data('jain_thela_admin_id');
 		$item_id=$this->request->data('item_id');
+		$item_variation_id=$this->request->data('item_variation_id');
 		$customer_id=$this->request->data('customer_id');
 		$items = $this->Carts->Items->get($item_id);
 		$item_add_quantity=$items->minimum_quantity_factor;
 		$is_combo=$items->is_combo;
-		$fetchs=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id]);
+		$fetchs=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id,'item_variation_id' => $item_variation_id]);
 		
 		if(empty($fetchs->toArray()))
 		{
-		$carts=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id])->contain(['Items'])->first();
+		$carts=$this->Carts->find()->where(['customer_id' => $customer_id,'item_id' =>$item_id,'item_variation_id' => $item_variation_id])
+		->contain(['Items'])->first();
 		
 		if($carts==null)
 		{
@@ -90,7 +95,7 @@ class CartsController extends AppController
 				$result = $query->delete()
 				->where(['id' => $update_id])
 				->execute();
-				$carts=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id])->contain(['Items'])->first();
+				$carts=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id,'item_variation_id' => $item_variation_id])->contain(['Items' => ['ItemVariations' => ['Units']]])->first();
 				if($carts==null)
 				{
 				$carts=(object)[];
@@ -107,7 +112,8 @@ class CartsController extends AppController
 				->set(['quantity' => $update_quantity, 'cart_count' => $update_count, 'is_combo' => $is_combo])
 				->where(['id' => $update_id])
 				->execute();
-				$carts=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id])->contain(['Items'])->first();				
+				$carts=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id, 'item_variation_id' => $item_variation_id])->contain(['Items' => 
+				['ItemVariations' => ['Units']]])->first();				
 				$cart_count = $this->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
 			}
 		}
@@ -121,6 +127,7 @@ class CartsController extends AppController
     {
 		$jain_thela_admin_id=$this->request->data('jain_thela_admin_id');
 		$item_id=$this->request->data('item_id');
+		$item_variation_id=$this->request->data('item_variation_id');
 		$customer_id=$this->request->data('customer_id');
 		$tag=$this->request->data('tag');
 		
@@ -129,7 +136,7 @@ class CartsController extends AppController
 			$item_add_quantity=$items->minimum_quantity_factor;
      		$is_combo=$items->is_combo;
     
-        	$fetchs=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id]);
+        	$fetchs=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id, 'item_variation_id' =>$item_variation_id]);
 			foreach($fetchs as $fetch){
 			$update_id=$fetch->id;
 			$exist_quantity=$fetch->quantity;
@@ -145,6 +152,7 @@ class CartsController extends AppController
 								->values([
 								'customer_id' => $customer_id,
 								'item_id' => $item_id,
+								'item_variation_id' => $item_variation_id,
 								'quantity' => $item_add_quantity,
 								'cart_count' => 1,
 								'is_combo' => $is_combo
@@ -165,7 +173,7 @@ class CartsController extends AppController
 			$item_add_quantity=$items->minimum_quantity_factor;
      		$is_combo=$items->is_combo;
     
-			$fetchs=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id]);
+			$fetchs=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id,'item_variation_id' =>$item_variation_id]);
 		if(empty($fetchs->toArray()))
 		{
 		$cart_count = $this->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
@@ -204,7 +212,7 @@ class CartsController extends AppController
 		else if($tag=='remove'){
 			$query = $this->Carts->query();
 				$result = $query->delete()
-					->where(['item_id' => $item_id, 'customer_id' => $customer_id])
+					->where(['item_id' => $item_id, 'item_variation_id' => $item_variation_id, 'customer_id' => $customer_id])
 					->execute();
 			$cart_count = $this->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
 		}
@@ -226,7 +234,7 @@ class CartsController extends AppController
 			
 		$carts=$this->Carts->find()
 				->where(['customer_id' => $customer_id])
-				->contain(['Items'])
+				->contain(['Items' => ['ItemVariations' =>['Units']]])
 				->select(['image_url' => $this->Carts->Items->find()->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
 				->select(['total'=>'sum(Carts.cart_count * Items.sales_rate)'])
 				->group('Carts.item_id')
@@ -322,7 +330,7 @@ class CartsController extends AppController
 		$jain_thela_admin_id=$this->request->query('jain_thela_admin_id');
 		$customer_id=$this->request->query('customer_id');
 		$cart_details=$this->Carts->find()->where(['customer_id' => $customer_id])
-		->contain(['Items'=>['Units']]);
+		->contain(['Items'=> ['ItemVariations' => ['Units']]]);
 		$cart_details->select(['image_url' => $cart_details->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
                                 ->autoFields(true);
 								
@@ -406,7 +414,7 @@ class CartsController extends AppController
 				
 		$carts=$this->Carts->find()
 				->where(['customer_id' => $customer_id])
-				->contain(['Items'=>['Units']])
+				->contain(['Items'=> ['ItemVariations' =>['Units']]])
 				->select(['total'=>'sum(Carts.cart_count * Items.sales_rate)'])
 				->group('Carts.item_id')
 				->autoFields(true);

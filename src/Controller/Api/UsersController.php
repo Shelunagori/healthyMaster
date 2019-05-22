@@ -25,15 +25,17 @@ class UsersController extends AppController
 		$curent_version=$version->version;
 		if($api_version==$curent_version)
 		{
-		$status=true;
-		$error="Yes";
+			$status=true;
+			$error="Yes";
+			$data = $version;
 		}
 		else{
 		$status=false;
 		$error="Please Update Api Version";
+		$data = [];
 		}
-		$this->set(compact('status', 'error'));
-		$this->set('_serialize', ['status', 'error']);
+		$this->set(compact('status', 'error','data'));
+		$this->set('_serialize', ['status', 'error','data']);
 	}
 }
 
