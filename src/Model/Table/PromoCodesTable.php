@@ -49,6 +49,10 @@ class PromoCodesTable extends Table
         $this->hasMany('Orders', [
             'foreignKey' => 'promo_code_id'
         ]);
+        $this->belongsTo('Items', [
+            'foreignKey' => 'item_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**

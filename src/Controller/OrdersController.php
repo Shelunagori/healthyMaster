@@ -172,9 +172,9 @@ class OrdersController extends AppController
         $name=$this->request->getData('input'); 
         $searchType=$this->request->getData('searchType');
         if($searchType == 'item_name'){
-            $items=$this->Orders->OrderDetails->Items->find()->where(['Items.name Like'=>''.$name.'%']);
+            $items=$this->Orders->Customers->find()->where(['Customers.name Like'=>''.$name.'%']);
             ?>
-                <ul id="item-list" style="width: 25% !important;">
+                <ul id="item-list" style="width: 90% !important;">
                     <?php foreach($items as $show){ ?>
                         <li onClick="selectAutoCompleted('<?php echo $show->name;?>')">
                             <?php echo $show->name?>

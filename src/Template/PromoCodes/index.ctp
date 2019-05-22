@@ -16,7 +16,16 @@
 						<label class=" control-label">Promo Code Name <span class="required" aria-required="true">*</span></label>
 						<?php echo $this->Form->control('code',['placeholder'=>'Promo Code Name','class'=>'form-control input-sm','label'=>false]); ?>
 					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-8">
+						<div class="radio-list">
+							<label>Type</label>
+								<div class="radio-inline" style="padding-right: 1px;">
+									<input type="hidden" name="cash_back_flag" value=""><label for="cash-back-flag-no"><input type="radio" name="amount_type" value="percent" class="radio-task" checked="checked">Percent</label><label for="cash-back-flag-yes"><input type="radio" name="amount_type" value="amount" class="radio-task" checked="checked" >Amount</label>								</div>
+							</div>
 					</div>
+				</div>
 					<div class="row">
 					<div class="col-md-8">
 						<label class=" control-label">Discount</label>
@@ -29,8 +38,28 @@
 				</div>
 				<div class="row">
 					<div class="col-md-8">
+						<label class=" control-label">Item<span class="required" aria-required="true">*</span></label>
+						<?php echo $this->Form->control('item_id',['empty'=>'--Select Item--','options' => $items,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','label'=>false]); ?>
+
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-8">
+						<?php echo $this->Form->input('is_freeship', array('type'=>'checkbox', 'label'=>'Is Free Ship','id'=>'freeship'));
+						?>
+					</div>
+					
+				</div>
+				<div class="row">
+					<div class="col-md-8">
+						<label class=" control-label">Cart Value <span class="required" aria-required="true">*</span></label>
+						<?php echo $this->Form->control('cart_value',['placeholder'=>'Cart Value','class'=>'form-control input-sm','label'=>false]); ?>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-8">
 						<label class=" control-label">Valid From</label>
-						<?php echo $this->Form->control('valid_from',['readonly','placeholder'=>'Valid From','class'=>'form-control input-sm date-time-range-picker','label'=>false]); ?>
+						<?php echo $this->Form->control('valid_from',['readonly','placeholder'=>'Valid From','class'=>'form-control input-sm date-time-range-picker select2','label'=>false]); ?>
 					</div>
 				</div>
 				<div class="row">
@@ -103,6 +132,7 @@
 <script>
 $(document).ready(function() {
 	
+
   //--------- FORM VALIDATION
 	var form3 = $('#form_sample_3');
 	var error3 = $('.alert-danger', form3);
@@ -209,4 +239,20 @@ $(document).ready(function(){
 	
 });
 </script>
+<script type="text/javascript">
+    $(function()
+    {
+      $('[name="is_freeship"]').change(function()
+      {
+        if ($(this).is(':checked')) {
+           // Do something...
+           $('#freeship').val(1);
+        };
+        if ($(this).is(':unchecked')) {
+           // Do something...
+           $('#freeship').val(0);
+        };
+      });
+    });
+  </script>
 

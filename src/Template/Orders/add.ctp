@@ -34,8 +34,11 @@ background-color: #fff;}
 					?>
 				<div class="row">
 					<div class="col-md-3">
-						<label class=" control-label">Customer <span class="required" aria-required="true">*</span></label>
-						<?php echo $this->Form->control('customer_id',['empty'=>'--Select Customer--','options' => $customers,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','id'=>'customer_id','label'=>false]); ?>
+						<label class=" control-label">Customer <span class="required" aria-required="true">*</span></label><!-- 
+						<?php echo $this->Form->control('customer_id',['empty'=>'--Select Customer--','options' => $customers,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','id'=>'customer_id','label'=>false]); ?> -->
+						<input type="text" name="customer_id" class="form-control input-sm selectedAutoCompleted autocompleted customer_id cstmr chosen-select" valueType="item_name" id="customer_id">
+						
+						 <div class="suggesstion-box"></div>
 					</div>
 					<div class="col-md-3">
 						<label class=" control-label">Warehouse <span class="required" aria-required="true">*</span></label>
@@ -671,9 +674,8 @@ function selectAutoCompleted1(value) {
 				<tr class="main_tr" class="tab">
 					<td align="center" width="1px"></td>
 				    <td>
-				    	<input type="text" name="item_id" class="form-control input-sm selectedAutoCompleted autocompleted" valueType="item_name">
-						
-						 <div class="suggesstion-box"></div>
+				    	<?php echo $this->Form->control('item_id',['empty'=>'--Select Item--','options' => $items,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','label'=>false]); ?>
+
 					</td>
 					<td>
 						<?php echo $this->Form->input('show_quantity', ['label' => false,'class' => 'form-control input-sm number cal_amount quant','placeholder'=>'Quantity','value'=>0]); ?>
