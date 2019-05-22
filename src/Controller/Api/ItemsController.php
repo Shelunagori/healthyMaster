@@ -69,10 +69,14 @@ class ItemsController extends AppController
 							->contain(['ItemVariations'=>
 								function($q) use($customer_id) {
 									return $q->where(['ready_to_sale' =>'Yes'])
-									->contain(['WishLists','Units','Carts' => 
+									->contain(['Units','Wishlists' =>
+										function($q) use($customer_id)
+										{	
+											return $q->where(['Wishlists.customer_id'=>$customer_id]);
+										},'Carts' => 
 										function($q) use($customer_id)
 										{
-											return $q->where(['customer_id'=>$customer_id]);
+											return $q->where(['Carts.customer_id'=>$customer_id]);
 										}
 									]);
 								}])
