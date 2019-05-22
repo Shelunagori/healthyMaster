@@ -22,7 +22,7 @@ class CustomersController extends AppController
 	    $mobile_no=$this->request->query('mobile_no');
 	    $otp=$this->request->query('otp');
 		$signup=$this->request->query('status');
-		
+		$img_name = 'user_profile_pics/'.'user.png';
 		
 		if(!empty($mobile_no) && empty($otp) && empty($signup))
 		{
@@ -42,6 +42,7 @@ class CustomersController extends AppController
 					
 					$customerDetails = $this->Customers->get($customerDetails->id);
 					$customerDetails->otp=$random;
+					$customerDetails->user_img = $img_name;
 					$this->Customers->save($customerDetails);
 					$status=true;
 				}else{
@@ -62,6 +63,7 @@ class CustomersController extends AppController
 						
 						$customerDetails = $this->Customers->get($customerDetails->id);
 						$customerDetails->otp=$random;
+						$customerDetails->user_img = $img_name;
 						$this->Customers->save($customerDetails);
 						$status=true;	
 					}
@@ -69,6 +71,7 @@ class CustomersController extends AppController
 							$customer = $this->Customers->newEntity();
 							$customer->mobile=$mobile_no;
 							$customer->status='incompleted';
+							
 							$random=(string)mt_rand(1000,9999);
 							$customer->otp=$random;
 							$sms=str_replace(' ', '+', 'Your one time OTP for Jainthela App is: '.$random.'');
@@ -78,7 +81,7 @@ class CustomersController extends AppController
 							/* file_get_contents('http://alerts.sinfini.com/api/web2sms.php?workingkey='.$working_key.'&sender='.$sms_sender.'&to='.$mobile_no.'&message='.$sms.''); */
 							
 							file_get_contents('http://103.39.134.40/api/mt/SendSMS?user=phppoetsit&password=9829041695&senderid='.$sms_sender.'&channel=Trans&DCS=0&flashsms=0&number='.$mobile_no.'&text='.$sms.'&route=7');
-							
+							$customer->user_img = $img_name;
 							if($this->Customers->save($customer)){
 								$new_signup='yes';
 								$status=true;
@@ -131,6 +134,7 @@ class CustomersController extends AppController
 				    $customerDetails->created_on=$today;
 					$customerDetails->notification_key='AAAAXmNqxY4:APA91bG0X6RHVhwJKXUQGNSSCas44hruFdR6_CFd6WHPwx9abUr-WsrfEzsFInJawElgrp24QzaE4ksfmXu6kmIL6JG3yP487fierMys5byv-I1agRtMPIoSqdgCZf8R0iqsnds-u4CU';
 					$customerDetails->referral_code=$customerDetails->id;
+					$customerDetails->user_img = $img_name;
 					$this->Customers->save($customerDetails);
 					$customerDetails->already_login=false;
 					$status=true;
@@ -166,13 +170,39 @@ class CustomersController extends AppController
 		$name=$this->request->data('name');
 		$mobile=$this->request->data('mobile');
 		$email=$this->request->data('email');
+		
+		$isImageChanged=$this->request->data('isImageChanged');
+		
+		$user_img=$this->request->data('user_img');
+		
 		$fetchs=$this->Customers->find()->where(['Customers.id !=' => $customer_id, 'Customers.mobile' =>$mobile])->count();
 		if(empty($fetchs)){
+			if($isImageChanged == "true")
+			{
+				$file = $user_img;
+				$file_name=$file['name'];
+				$ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
+				$arr_ext = array('jpg', 'jpeg', 'png'); //set allowed extensions
+				$setNewFileName = uniqid();
+				$image_name= $setNewFileName.'.'.$ext;
+				if(!empty($file_name)){
+					$img_name = 'user_profile_pics/'.$image_name;
+				}else if(empty($file_name)){
+					$img_name = 'user_profile_pics/'.'user.png';
+				}
+				 if (in_array($ext, $arr_ext)) {
+						move_uploaded_file($file['tmp_name'], WWW_ROOT .$img_name);
+					  }				
+			}else 
+			{
+				$img_name = 'user_profile_pics/'.'user.png';	
+			}	
 			$query = $this->Customers->query();
 				$result = $query->update()
                     ->set([ 'name' => $name,
 							'mobile' => $mobile,
-							'email' => $email
+							'email' => $email,
+							'user_img' => $img_name
 							])
 					->where(['id' => $customer_id])
 					->execute();

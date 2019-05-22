@@ -3,7 +3,18 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 
-class Cart extends Entity
+/**
+ * Faq Entity
+ *
+ * @property int $id
+ * @property int $city_id
+ * @property string $question
+ * @property string $answer
+ * @property int $status
+ *
+ * @property \App\Model\Entity\City $city
+ */
+class Faq extends Entity
 {
 
     /**
@@ -16,7 +27,10 @@ class Cart extends Entity
      * @var array
      */
     protected $_accessible = [
-        '*' => true,
-        'id' => false
+        'city_id' => true,
+        'question' => true,
+        'answer' => true,
+        'status' => true,
+        'city' => true
     ];
 }
