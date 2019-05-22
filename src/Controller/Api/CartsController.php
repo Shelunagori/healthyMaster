@@ -246,13 +246,7 @@ class CartsController extends AppController
 				}
 				else{
 				$carts=$carts;
-				}
-	
-		
-		
-            $this->loadModel('DeliveryCharges');
-			$delivery_charges=$this->DeliveryCharges->find();
-			
+				}			
 		$grand_total1=0;
 		foreach($carts as $cart_data)
 		{
@@ -320,8 +314,8 @@ class CartsController extends AppController
 		 else{
 		$status=true;
 		$error='';
-        $this->set(compact('status', 'error','jain_cash_limit','address_available','grand_total', 'remaining_wallet_amount', 'remaining_jain_cash_point', 'carts', 'delivery_charges'));
-        $this->set('_serialize', ['status', 'error','jain_cash_limit','address_available','grand_total', 'remaining_wallet_amount', 'remaining_jain_cash_point', 'carts', 'delivery_charges']);
+        $this->set(compact('status', 'error','jain_cash_limit','address_available','grand_total', 'remaining_wallet_amount', 'remaining_jain_cash_point', 'carts'));
+        $this->set('_serialize', ['status', 'error','jain_cash_limit','address_available','grand_total', 'remaining_wallet_amount', 'remaining_jain_cash_point', 'carts']);
     	 }
 	}
 	
