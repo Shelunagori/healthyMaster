@@ -19,10 +19,6 @@
     <h3><?= h($faq->id) ?></h3>
     <table class="vertical-table">
         <tr>
-            <th scope="row"><?= __('City') ?></th>
-            <td><?= $faq->has('city') ? $this->Html->link($faq->city->name, ['controller' => 'Cities', 'action' => 'view', $faq->city->id]) : '' ?></td>
-        </tr>
-        <tr>
             <th scope="row"><?= __('Id') ?></th>
             <td><?= $this->Number->format($faq->id) ?></td>
         </tr>

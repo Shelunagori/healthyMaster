@@ -18,6 +18,30 @@ class CartsController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
+
+    public function ajaxAutocompleted(){
+        $name=$this->request->getData('input'); 
+        //pr($name);exit;
+        $searchType=$this->request->getData('searchType');
+        if($searchType == 'item_name'){
+            $items=$this->Carts->Customers->find()->where(['Customers.name Like'=>''.$name.'%']);
+
+            //pr($items);exit;
+            
+            ?>
+                <ul id="item-list" style="width: 16% !important;">
+                    <?php foreach($items as $show){ ?>
+                        <li onClick="selectAutoCompleted('<?php echo $show->id;?>')">
+                            <?php echo $show->name?>    
+                        </li>
+                    <?php } ?>
+                </ul>
+            <?php
+        }
+        
+        exit;  
+    }
+
     public function index()
     {
         $this->paginate = [
@@ -53,12 +77,10 @@ class CartsController extends AppController
      */
     public function view($id = null)
     {
-        $cart = $this->Carts->get($id, [
-            'contain' => ['Customers', 'Items']
-        ]);
+        $name="test";
+        $items=$this->Carts->Customers->find()->where(['Customers.name Like'=>''.$name.'%']);
 
-        $this->set('cart', $cart);
-        $this->set('_serialize', ['cart']);
+            pr($items->toArray());exit;
     }
 
     /**
@@ -142,6 +164,8 @@ class CartsController extends AppController
             if(!empty($datas['customer_id']))
             {
                 $Carts->where(['customer_id'=>$datas['customer_id']]);
+                pr($datas['customer_id']);
+                pr($Carts->toArray());exit;
             }
              if(!empty($datas['item_id']))
             {

@@ -153,6 +153,9 @@
 								<?php echo $this->Html->link('<i class="fa fa-user"></i> Customers','/Customers',['escape'=>false]) ?>
 								</li>
 								<li>
+								<?php echo $this->Html->link('<i class="fa fa-user"></i> FAQ','/Faqs',['escape'=>false]) ?>
+								</li>
+								<li>
 								<?php echo $this->Html->link('<i class="fa fa-user"></i> Pincodes','/Pincodes',['escape'=>false]) ?>
 								</li>
 								<li>

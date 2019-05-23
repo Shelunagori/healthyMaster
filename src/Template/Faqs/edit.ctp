@@ -23,7 +23,6 @@
     <fieldset>
         <legend><?= __('Edit Faq') ?></legend>
         <?php
-            echo $this->Form->control('city_id', ['options' => $cities]);
             echo $this->Form->control('question');
             echo $this->Form->control('answer');
             echo $this->Form->control('status');

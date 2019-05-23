@@ -674,7 +674,7 @@ function selectAutoCompleted1(value) {
 				<tr class="main_tr" class="tab">
 					<td align="center" width="1px"></td>
 				    <td>
-				    	<?php echo $this->Form->control('item_id',['empty'=>'--Select Item--','options' => $items,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','label'=>false]); ?>
+				    	<?php echo $this->Form->control('item_id',['empty'=>'--Select Item--','options' => $item,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','label'=>false]); ?>
 
 					</td>
 					<td>

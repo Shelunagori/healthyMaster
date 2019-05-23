@@ -934,9 +934,10 @@ class OrdersController extends AppController
 			$items[]= ['value'=>$item_fetch->id,'text'=>$item_name." (".$alias_name.")", 'print_quantity'=>$print_quantity, 'rates'=>$rates,'sales_rate' =>$sales_rates,'minimum_quantity_factor'=>$minimum_quantity_factor, 'unit_name'=>$unit_name, 'minimum_quantity_purchase'=>$minimum_quantity_purchase,'is_combo' => $is_combo];
 		}
 		$this->loadModel('BulkBookingLeads');
+		$item = $this->Orders->Items->find('list', ['limit' => 200])->where(['jain_thela_admin_id'=>$jain_thela_admin_id]);
         $bulk_Details = $this->BulkBookingLeads->find()->where(['id' => $bulkorder_id])->toArray();
 		$warehouses = $this->Orders->Warehouses->find('list')->where(['jain_thela_admin_id' => $jain_thela_admin_id]);
-        $this->set(compact('order', 'customers', 'items', 'order_type', 'bulk_Details', 'bulkorder_id','delivery_time','tax', 'warehouses'));
+        $this->set(compact('order', 'customers', 'item', 'order_type', 'bulk_Details', 'bulkorder_id','delivery_time','tax', 'warehouses'));
         $this->set('_serialize', ['order', 'warehouses']);
     }
 	/**
