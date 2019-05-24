@@ -232,12 +232,30 @@ Router::prefix('api', function ($routes) {
 		   ]
 		]
 	);
+	
+	$routes->resources(
+		'Pincodes', [ 
+		   'map' => [
+			   'verifyPinCodes' => [
+				   'action' => 'verifyPinCodes',
+				   'method' => 'GET'
+			   ]
+		   ]
+		]
+	);	
+	
+	
+	
 	$routes->resources(
 		'CustomerAddresses', [
 		   'map' => [
 			   'add_address' => [
 				   'action' => 'add_address',
 				   'method' => 'POST'
+			   ],
+			   'addressList' => [
+				   'action' => 'addressList',
+				   'method' => 'GET'
 			   ]
 		   ]
 		]

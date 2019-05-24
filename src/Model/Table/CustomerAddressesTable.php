@@ -41,6 +41,17 @@ class CustomerAddressesTable extends Table
             'joinType' => 'INNER'
         ]);
 		
+        $this->belongsTo('States', [
+            'foreignKey' => 'state_id',
+            'joinType' => 'INNER'
+        ]);
+
+        $this->belongsTo('Cities', [
+            'foreignKey' => 'city_id',
+            'joinType' => 'INNER'
+        ]);		
+		
+		
     }
 
     /**

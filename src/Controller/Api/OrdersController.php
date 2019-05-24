@@ -56,12 +56,13 @@ class OrdersController extends AppController
 		$order_id=$this->request->query('order_id');
 		
 		$orders_details_data = $this->Orders->get($order_id, ['contain'=>
-		['OrderDetails'=>
-			['ItemVariations' =>['Items'=>function($q)
+		['OrderDetails'=>			
+				'Items'=>function($q)
 				{
-				   return $q->select(['image_path' => $q->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])->contain('Units')->autoFields(true);
-				}]
-			]
+				   return $q->select(['image_path' => $q->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
+				   ->contain(['ItemVariations' =>['Units']])
+				   ->autoFields(true);
+				}
 		]]);
 		
 		

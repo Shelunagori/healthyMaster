@@ -21,11 +21,11 @@ class ItemsController extends AppController
 		$limit = 10;
 		if($item_sub_category_id=='0')
 		{
-			$where=['Items.jain_thela_admin_id'=>$jain_thela_admin_id, 'Items.item_category_id'=>$item_category_id, 'Items.is_combo'=>'no', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'];
+			$where=['Items.item_category_id'=>$item_category_id, 'Items.is_combo'=>'no', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'];
 		}
 		else
 		{
-			$where=['Items.jain_thela_admin_id'=>$jain_thela_admin_id, 'Items.item_category_id'=>$item_category_id, 'Items.item_sub_category_id'=>$item_sub_category_id, 'Items.is_combo'=>'no', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'];
+			$where=['Items.item_category_id'=>$item_category_id, 'Items.item_sub_category_id'=>$item_sub_category_id, 'Items.is_combo'=>'no', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'];
 		}
 		$items = $this->Items->find()
 					->where($where)
@@ -66,7 +66,7 @@ class ItemsController extends AppController
 		$customer_id=$this->request->query('customer_id');
 		$item_description = $this->Items->find()
 							->select(['image_url' => $this->Items->find()->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
-							->where(['Items.jain_thela_admin_id'=>$jain_thela_admin_id, 'Items.id'=>$item_id])
+							->where(['Items.id'=>$item_id,'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'])
 							->contain(['ItemVariations'=>
 								function($q) use($customer_id) {
 									return $q->where(['ready_to_sale' =>'Yes'])
@@ -106,7 +106,7 @@ class ItemsController extends AppController
 						->order(['total_rows'=>'DESC'])
 						->limit(5)
 						->contain(['Items'=>function($q)use($customer_id){
-								return $q->select(['name', 'image', 'sales_rate','minimum_quantity_factor','ready_to_sale', 'out_of_stock', 'print_rate', 'print_quantity', 'discount_per','minimum_quantity_purchase'])
+								return $q->select(['name', 'image','alias_name','ready_to_sale'])
 						->contain(['ItemVariations' => 
 								function($q) use($customer_id){
 									return $q->where(['ready_to_sale' =>'Yes'])
@@ -147,7 +147,7 @@ class ItemsController extends AppController
 						->order(['total_rows'=>'DESC'])
 						->limit(1)
 						->contain(['Items'=>function($q) use($customer_id){
-							return $q->select(['name', 'image', 'sales_rate','minimum_quantity_factor','ready_to_sale', 'out_of_stock', 'print_rate', 'print_quantity', 'discount_per','minimum_quantity_purchase'])
+							return $q->select(['name', 'image','ready_to_sale'])
 								->contain(['ItemVariations' => 
 									function($q) use($customer_id) {
 										return $q->where(['ready_to_sale' => 'Yes'])
@@ -183,7 +183,7 @@ class ItemsController extends AppController
 						->order(['total_rows'=>'DESC'])
 						->limit(5)
 						->contain(['Items'=>function($q) use($customer_id){
-							return $q->select(['name', 'image', 'sales_rate','minimum_quantity_factor','ready_to_sale', 'out_of_stock', 'print_rate', 'print_quantity', 'discount_per','minimum_quantity_purchase'])
+							return $q->select(['name', 'image','ready_to_sale'])
 							->contain(['ItemVariations' => 
 									function($q) use($customer_id){
 										return $q->where(['ready_to_sale' => 'Yes'])
@@ -215,7 +215,7 @@ class ItemsController extends AppController
 						->order(['total_rows'=>'DESC'])
 						->limit(5)
 						->contain(['Items'=>function($q) use($customer_id){
-						return $q->select(['name', 'image', 'sales_rate','minimum_quantity_factor','ready_to_sale', 'out_of_stock', 'print_rate', 'print_quantity', 'discount_per','minimum_quantity_purchase'])
+						return $q->select(['name', 'image','ready_to_sale'])
 						->contain(['ItemVariations' => 
 									function($q) use($customer_id) {
 										return $q->where(['ready_to_sale' => 'Yes'])
@@ -256,7 +256,7 @@ class ItemsController extends AppController
 		$customer_id=$this->request->query('customer_id');
 		$search_items = [];
         $search_items_data = $this->Items->find()
-		->where(['Items.is_combo'=>'no', 'Items.jain_thela_admin_id'=>$jain_thela_admin_id, 'Items.name LIKE' => '%'.$item_query.'%', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'])->contain(['ItemCategories']);
+		->where(['Items.is_combo'=>'no','Items.name LIKE' => '%'.$item_query.'%', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'])->contain(['ItemCategories']);
 		
 		if(!empty($search_items_data->toArray()))
 		{

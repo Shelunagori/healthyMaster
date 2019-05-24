@@ -41,17 +41,17 @@ class PromoCodesController extends AppController
 		->where(['PromoCodes.jain_thela_admin_id'=>$jain_thela_admin_id, 'PromoCodes.valid_from <' =>$current_timestamp, 'PromoCodes.valid_to >' =>$current_timestamp, 'PromoCodes.code'=>$promo_code])->first();
 		if(empty($promo_codes))
 		{
-		$status=false;
-		$error="Invalid Promo Code";
-		$this->set(compact('status', 'error'));
-        $this->set('_serialize', ['status', 'error']); 
+			$status=false;
+			$error="Invalid Promo Code";
+			$this->set(compact('status', 'error'));
+			$this->set('_serialize', ['status', 'error']); 
         }
 		else
 		{
-		$status=true;
-		$error="";
-		$this->set(compact('status', 'error', 'promo_codes'));
-        $this->set('_serialize', ['status', 'error', 'promo_codes']); 
+			$status=true;
+			$error="";
+			$this->set(compact('status', 'error', 'promo_codes'));
+			$this->set('_serialize', ['status', 'error', 'promo_codes']); 
         }
     }
 }

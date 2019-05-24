@@ -8,7 +8,7 @@ class ItemCategoriesController extends AppController
     {
 		$jain_thela_admin_id=$this->request->query('jain_thela_admin_id');
 		$customer_id=$this->request->query('customer_id');
-	    $itemCategories = $this->ItemCategories->find('All')->where(['jain_thela_admin_id'=>$jain_thela_admin_id]);
+	    $itemCategories = $this->ItemCategories->find('All')->where(['is_deleted'=>0]);
 		$itemCategories->select(['image_url' => $itemCategories->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'itemcategories/','image' => 'identifier' ])])
                                 ->autoFields(true);
 		
@@ -21,34 +21,47 @@ class ItemCategoriesController extends AppController
 						->where(['inventory_transfer'=>'no','status'=>'out'])
 						->group(['ItemLedgers.item_id'])
 						->order(['total_rows'=>'DESC'])
-						
-						->contain(['Items'=>function($q){
-							return $q->select(['name', 'image', 'sales_rate','minimum_quantity_factor','ready_to_sale', 'out_of_stock', 'print_rate', 'print_quantity', 'discount_per'])
-									->contain(['Units'=>function($q){
-										return $q->select(['id','longname','shortname','is_deleted','jain_thela_admin_id']);
+						->limit(10)
+						->contain(['Items'=>function($q) use($customer_id){
+							return $q->select(['name', 'image','ready_to_sale'])
+							
+							->contain(['ItemVariations'=>
+								function($q) use($customer_id) {
+									return $q->where(['ready_to_sale' =>'Yes'])
+									->contain(['Units','Carts'=>
+										function($q) use($customer_id){
+											return $q->where(['customer_id'=>$customer_id]);
 									}]);
-						}])->limit(2);
+								}
+							]);
+						}]);
 						$popular_items->select(['image_url' => $popular_items->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
 					
 				//	$popular_items=array();
 					
-					$recently_bought=$popular_items;	
+					//$recently_bought=$popular_items;	
 					
 							
-				/* $querys=$this->ItemCategories->Items->ItemLedgers->find();
+				 $querys=$this->ItemCategories->Items->ItemLedgers->find();
 				$recently_bought=$querys
-						->select(['total_rows' => $querys->func()->count('ItemLedgers.id'),'item_id',])
+						->select(['total_rows' => $querys->func()->count('ItemLedgers.id'),'item_id'])
 						->where(['inventory_transfer'=>'no','status'=>'out'])
 						->group(['ItemLedgers.item_id'])
 						->order(['total_rows'=>'DESC'])
-						->limit(2)
-						->contain(['Items'=>function($q){
-							return $q->select(['name', 'image', 'sales_rate','minimum_quantity_factor','ready_to_sale', 'out_of_stock', 'print_rate', 'print_quantity', 'discount_per'])
-							->contain(['Units'=>function($q){
-								return $q->select(['id','longname','shortname','is_deleted','jain_thela_admin_id']);
-							}]);
+						->limit(10)
+						->contain(['Items'=>function($q) use($customer_id) {
+							return $q->select(['name', 'image','ready_to_sale'])
+							->contain(['ItemVariations'=>
+								function($q) use($customer_id) {
+									return $q->where(['ready_to_sale' =>'Yes'])
+									->contain(['Units','Carts'=>
+										function($q) use($customer_id){
+											return $q->where(['customer_id'=>$customer_id]);
+									}]);
+								}
+							]);
 						}]);
-						$recently_bought->select(['image_url' => $recently_bought->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]); */
+						$recently_bought->select(['image_url' => $recently_bought->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]); 
 		
 						$cart_count = $this->ItemCategories->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();						
 

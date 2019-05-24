@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller\Api;
 use App\Controller\Api\AppController;
+use Cake\I18n\Time;
+use Cake\ORM\Behavior\TimestampBehavior;
 class CartsController extends AppController
 {
     public function plusAddToCart()
@@ -129,6 +131,7 @@ class CartsController extends AppController
 		$item_id=$this->request->data('item_id');
 		$item_variation_id=$this->request->data('item_variation_id');
 		$customer_id=$this->request->data('customer_id');
+		$promocode=$this->request->data('promocode');
 		$tag=$this->request->data('tag');
 		
 		if($tag=='add'){
@@ -231,17 +234,17 @@ class CartsController extends AppController
 			}
 			
 		$carts=$this->Carts->find()
-				->where(['customer_id' => $customer_id])
-				->contain(['Items' => ['ItemVariations' =>['Units']]])
-				->autoFields(true);
-				
-				if($carts==null)
-				{
-					$carts=[];
-				}
-				else{
-					$carts=$carts;
-				}		
+			->where(['customer_id' => $customer_id])
+			->contain(['Items' => ['ItemVariations' =>['Units']]])
+			->autoFields(true);
+			
+			if($carts==null)
+			{
+				$carts=[];
+			}
+			else{
+				$carts=$carts;
+			}		
 
 		//pr($carts->toArray());exit;
 				
@@ -260,69 +263,52 @@ class CartsController extends AppController
 		}
 		$grand_total=round($grand_total1);
 		
+		$subtotal = 0.00;
 		
-		$Customers = $this->Carts->Customers->get($customer_id, [
-            'contain' => ['JainCashPoints'=>function($query){
-				return $query->select([
-					'total_point' => $query->func()->sum('point'),
-					'total_used_point' => $query->func()->sum('used_point'),'customer_id'
-				]);
-			},'Wallets'=>function($query){
-				return $query->select([
-					'total_advance' => $query->func()->sum('advance'),
-					'total_consumed' => $query->func()->sum('consumed'),'customer_id',
-				]);
-			},'Orders'=>function($query){
-				return $query->select([
-					
-					'total_order' => $query->func()->count('customer_id'),'customer_id',
-				]);
-			}
-				]
-        ]);
-		if(empty($Customers->wallets))
-		{
-			$remaining_wallet_amount=0;
-		}
-		else{
-		foreach($Customers->wallets as $Customer_data_wallet){
-		  $wallet_total_advance=$Customer_data_wallet->total_advance;
-		  $wallet_total_consumed=$Customer_data_wallet->total_consumed;
-		  $remaining_wallet_amount=round($wallet_total_advance-$wallet_total_consumed);
-		}
-		}
-		 
-		 if(empty($Customers->jain_cash_points))
-		{
-			$remaining_jain_cash_point=0;
-		}
-		else{
-		foreach($Customers->jain_cash_points as $Customer_data_jain_cash){
-		  $jain_cash_total_point=$Customer_data_jain_cash->total_point;
-		  $jain_cash_total_used_point=$Customer_data_jain_cash->total_consumed;
-		  $remaining_jain_cash_point=round($jain_cash_total_point-$jain_cash_total_used_point);
-		}
-		}
+		$subtotal = $grand_total;
 		
-		 $cash_limit=$this->Carts->Users->get($jain_thela_admin_id);
-		 $jain_cash_limit=$cash_limit->jain_cash_limit;
+		
+		$delivery_charges = '0';
+		$this->loadModel('DeliveryCharges');
+		$delivery_charges=$this->DeliveryCharges->find()->order(['id' =>'DESC'])->first();
+		
+		if($grand_total < $delivery_charges->amount)
+		{
+			$delivery_charges = $delivery_charges->charge;
+			$grand_total = $grand_total + $delivery_charges->charge;
+		}
+		else
+		{
+			$delivery_charges = 'Free';
+		}
 
-		 
-		 
-		 if(empty($carts->toArray()))
-		 {
+		if(!empty($promocode))
+		{
+			$ts = Time::now('Asia/Kolkata');
+			$current_timestamp = date('Y-m-d H:i:s',strtotime($ts));
+			$this->loadModel('PromoCodes');
+			$promoCodeLists = $this->PromoCodes->find()->where(['PromoCodes.valid_from <' =>$current_timestamp, 'PromoCodes.valid_to >' =>$current_timestamp,'PromoCodes.code'=>$promocode]);	
 			
-		$status=false;
-		$error='Cart is Empty';
-        $this->set(compact('status', 'error'));
-        $this->set('_serialize', ['status', 'error']);
-		 }
-		 else{
-		$status=true;
-		$error='';
-        $this->set(compact('status', 'error','jain_cash_limit','address_available','grand_total', 'remaining_wallet_amount', 'remaining_jain_cash_point', 'carts'));
-        $this->set('_serialize', ['status', 'error','jain_cash_limit','address_available','grand_total', 'remaining_wallet_amount', 'remaining_jain_cash_point', 'carts']);
-    	 }
+			if($promoCodeLists->)
+			
+			pr($promoCodeLists->toArray());exit;
+			
+			
+		}
+
+		if(empty($carts->toArray()))
+		{			
+			$status=false;
+			$error='Cart is Empty';
+			$this->set(compact('status', 'error'));
+			$this->set('_serialize', ['status', 'error']);
+		}
+		else{
+			$status=true;
+			$error='';
+			$this->set(compact('status', 'error','address_available','grand_total','carts','delivery_charges','subtotal'));
+			$this->set('_serialize', ['status', 'error','subtotal','delivery_charges','grand_total','address_available','carts']);
+		}
 	}
 	
 	public function reviewOrder()

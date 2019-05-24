@@ -14,8 +14,12 @@ class CustomerAddressesController extends AppController
 		$locality=$this->request->data('locality');
 		$landmark=$this->request->data('landmark');
 		$tag=$this->request->data('tag');
+		$pincode=$this->request->data('pincode');
+		$address_type=$this->request->data('address_type');
+		$city_id=$this->request->data('city_id');
+		$state_id=$this->request->data('state_id');
 		$customer_address_id=$this->request->data('customer_address_id');
-		$city='1';
+		//$city='1';
 		
 		if($tag=='add'){
 		  $query = $this->CustomerAddresses->query();
@@ -25,7 +29,7 @@ class CustomerAddressesController extends AppController
                     ->execute();
 					 
 			$query = $this->CustomerAddresses->query();
-					$query->insert(['customer_id', 'name', 'mobile', 'house_no', 'address', 'locality', 'default_address','landmark'])
+					$query->insert(['customer_id', 'name', 'mobile', 'house_no', 'address', 'locality', 'default_address','landmark','pincode','address_type','city_id','state_id'])
 							->values([
 							'customer_id' => $customer_id,
 							'name' => $name,
@@ -34,6 +38,10 @@ class CustomerAddressesController extends AppController
 							'address' => $address,
 							'locality' => $locality,
 							'landmark'=>$landmark,
+							'pincode' =>$pincode,
+							'address_type' =>$address_type,
+							'city_id'=>$city_id,
+							'state_id'=> $state_id,
 							'default_address' => 1
 							])
 					->execute();
@@ -55,6 +63,10 @@ class CustomerAddressesController extends AppController
 							'address' => $address,
 							'locality' => $locality,
 							'landmark'=>$landmark,
+							'pincode' =>$pincode,
+							'city_id'=>$city_id,
+							'state_id'=> $state_id,
+							'address_type' =>$address_type,
 							'default_address' => 1
 							])
 					->where(['id' => $customer_address_id])
@@ -87,8 +99,34 @@ class CustomerAddressesController extends AppController
 		
 		
 		$status=true;
-		$error="";
+		$error="Added Successfully";
         $this->set(compact('status', 'error','customer_addresses'));
         $this->set('_serialize', ['status', 'error', 'customer_addresses']);
     }
+	
+	public function addressList()
+	{
+		$customer_id=$this->request->query('customer_id');
+		$customer_addresses=$this->CustomerAddresses->find()
+		->where(['customer_id' => $customer_id])
+		->contain(['States','Cities'])
+		->order(['default_address' => 'DESC']);
+		
+		if(!empty($customer_addresses->toArray()))
+		{
+			$status=true;
+			$error="";			
+		}
+		else{
+			$status=false;
+			$error="No data found";			
+		}
+
+        $this->set(compact('status', 'error','customer_addresses'));
+        $this->set('_serialize', ['status', 'error', 'customer_addresses']);		
+	}
+	
+	
+	
+	
 }
