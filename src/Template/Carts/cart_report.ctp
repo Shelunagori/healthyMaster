@@ -29,8 +29,9 @@ background-color: #fff;}
 						<tr>
 							<td width="5%">
 								<label class=" control-label">Customer <span class="required" aria-required="true">*</span></label><!-- 
-						<?php echo $this->Form->control('customer_id',['empty'=>'--Select Customer--','options' => $customers,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','id'=>'customer_id','label'=>false]); ?> -->
-						<input type="text" name="customer_id" class="form-control input-sm selectedAutoCompleted autocompleted customer_id cstmr chosen-select" valueType="item_name" id="customer_id">
+						<?php echo $this->Form->control('customer_id',['empty'=>'--Select Customer--','options' => $customers,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','label'=>false]); ?> -->
+						<input type="text" name="customer" class="form-control input-sm selectedAutoCompleted autocompleted customer_id cstmr chosen-select" valueType="item_name"  autocomplete="off">
+						<input type="hidden" name="customer_id" id="customer_id">
 						
 						 <div class="suggesstion-box"></div>
 							</td>
@@ -108,7 +109,7 @@ $(document).ready(function() {
         var master = $(this); 
         if(input.length>0){
             var m_data = new FormData();
-            var url ="<?php echo $this->Url->build(["controller" => "Wishlists", "action" => "ajaxAutocompleted"]); ?>";
+            var url ="<?php echo $this->Url->build(["controller" => "Carts", "action" => "ajaxAutocompleted"]); ?>";
            //alert(url);
             m_data.append('input',input); 
             m_data.append('searchType',searchType); 
@@ -121,7 +122,7 @@ $(document).ready(function() {
                 dataType:'text',
                 success: function(data)
                 { 
-                	alert(data);
+                	//alert(data);
                     master.closest('div').find('.suggesstion-box').show();
                     master.closest('div').find('.suggesstion-box').html(data);
                    	master.css("background","#FFF");
@@ -133,10 +134,10 @@ $(document).ready(function() {
 
 </script>
 <script>
-function selectAutoCompleted(value) { 
-	alert(value);
+function selectAutoCompleted(ids,value) { 
+	
     $('.selectedAutoCompleted').val(value);
-    $('#customer_id').val(value);
+    $('#customer_id').val(ids);
     $(".suggesstion-box").hide();     
 }
 function selectAutoCompleted1(value) {  

@@ -31,7 +31,7 @@ class CartsController extends AppController
             ?>
                 <ul id="item-list" style="width: 16% !important;">
                     <?php foreach($items as $show){ ?>
-                        <li onClick="selectAutoCompleted('<?php echo $show->id;?>')">
+                        <li onClick="selectAutoCompleted('<?php echo $show->id;?>','<?php echo $show->name;?>')">
                             <?php echo $show->name?>    
                         </li>
                     <?php } ?>
@@ -164,8 +164,8 @@ class CartsController extends AppController
             if(!empty($datas['customer_id']))
             {
                 $Carts->where(['customer_id'=>$datas['customer_id']]);
-                pr($datas['customer_id']);
-                pr($Carts->toArray());exit;
+                //pr($datas['customer_id']);
+                //pr($Carts->toArray());exit;
             }
              if(!empty($datas['item_id']))
             {

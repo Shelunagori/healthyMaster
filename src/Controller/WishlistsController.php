@@ -26,8 +26,8 @@ class WishlistsController extends AppController
             ?>
                 <ul id="item-list" style="width: 16% !important;">
                     <?php foreach($items as $show){ ?>
-                        <li onClick="selectAutoCompleted('<?php echo $show->name;?>')">
-                            <?php echo $show->name?>
+                        <li onClick="selectAutoCompleted('<?php echo $show->id;?>','<?php echo $show->name;?>')">
+                            <?php echo $show->name?>    
                         </li>
                     <?php } ?>
                 </ul>

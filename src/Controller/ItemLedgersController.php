@@ -115,7 +115,9 @@ class ItemLedgersController extends AppController
 			$minimum_quantity_factor=$item_fetch->minimum_quantity_factor;
 			$items[]= ['value'=>$item_fetch->id,'text'=>$item_name." (".$alias_name.")", 'print_quantity'=>$print_quantity, 'minimum_quantity_factor'=>$minimum_quantity_factor, 'unit_name'=>$unit_name];
 		}
+		pr($items[]);exit;
         $drivers = $this->ItemLedgers->Drivers->find('list')->where(['jain_thela_admin_id' => $jain_thela_admin_id]);
+
 		$warehouses = $this->ItemLedgers->Warehouses->find('list')->where(['jain_thela_admin_id' => $jain_thela_admin_id]);
         $this->set(compact('itemLedger', 'items', 'drivers', 'warehouses'));
         $this->set('_serialize', ['itemLedger']);
