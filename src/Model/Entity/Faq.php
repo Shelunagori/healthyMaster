@@ -4,15 +4,17 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Faq Entity
+ * Customer Entity
  *
  * @property int $id
- * @property int $city_id
- * @property string $question
- * @property string $answer
- * @property int $status
+ * @property string $name
+ * @property string $mobile
+ * @property string $email
+ * @property string $address
+ * @property int $franchise_id
+ * @property bool $freeze
  *
- * @property \App\Model\Entity\City $city
+ * @property \App\Model\Entity\Franchise $franchise
  */
 class Faq extends Entity
 {
@@ -27,10 +29,9 @@ class Faq extends Entity
      * @var array
      */
     protected $_accessible = [
-        'city_id' => true,
+        'id' => true,
         'question' => true,
         'answer' => true,
-        'status' => true,
-        'city' => true
+        'status' => true
     ];
 }

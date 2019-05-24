@@ -36,7 +36,8 @@ background-color: #fff;}
 					<div class="col-md-3">
 						<label class=" control-label">Customer <span class="required" aria-required="true">*</span></label><!-- 
 						<?php echo $this->Form->control('customer_id',['empty'=>'--Select Customer--','options' => $customers,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','id'=>'customer_id','label'=>false]); ?> -->
-						<input type="text" name="customer_id" class="form-control input-sm selectedAutoCompleted autocompleted customer_id cstmr chosen-select" valueType="item_name" id="customer_id">
+						<input type="text" name="customer" class="form-control input-sm selectedAutoCompleted autocompleted customer_id cstmr chosen-select" valueType="item_name" >
+						<input type="hidden" name="customer_id" id="customer_id">
 						
 						 <div class="suggesstion-box"></div>
 					</div>
@@ -660,8 +661,10 @@ $(document).ready(function() {
 });
 </script>
 <script>
-function selectAutoCompleted(value) { 
+function selectAutoCompleted(ids,value) { 
+	
     $('.selectedAutoCompleted').val(value);
+    $('#customer_id').val(ids);
     $(".suggesstion-box").hide();     
 }
 function selectAutoCompleted1(value) {  
@@ -674,7 +677,7 @@ function selectAutoCompleted1(value) {
 				<tr class="main_tr" class="tab">
 					<td align="center" width="1px"></td>
 				    <td>
-				    	<?php echo $this->Form->control('item_id',['empty'=>'--Select Item--','options' => $items,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','label'=>false]); ?>
+				    	<?php echo $this->Form->control('item_id',['empty'=>'--Select Item--','options' => $item,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','label'=>false]); ?>
 
 					</td>
 					<td>

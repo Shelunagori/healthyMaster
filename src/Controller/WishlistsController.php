@@ -17,6 +17,26 @@ class WishlistsController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
+
+    public function ajaxAutocompleted(){
+        $name=$this->request->getData('input'); 
+        $searchType=$this->request->getData('searchType');
+        if($searchType == 'item_name'){
+            $items=$this->Wishlists->Customers->find()->where(['Customers.name Like'=>''.$name.'%']);
+            ?>
+                <ul id="item-list" style="width: 16% !important;">
+                    <?php foreach($items as $show){ ?>
+                        <li onClick="selectAutoCompleted('<?php echo $show->id;?>','<?php echo $show->name;?>')">
+                            <?php echo $show->name?>    
+                        </li>
+                    <?php } ?>
+                </ul>
+            <?php
+        }
+        
+        exit;  
+    }
+
     public function index()
     {
         $this->paginate = [
@@ -48,16 +68,16 @@ class WishlistsController extends AppController
         $this->viewBuilder()->layout('index_layout');
         $jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
         $Wishlist= $this->Wishlists->newEntity();
-        $Wishlists = $this->Wishlists->find()->contain(['Items','Customers']);
+        $Wishlists = $this->Wishlists->find()->contain(['Items','Customers','ItemVariations'=>['Units']]);
         if ($this->request->is('post')) {
             $datas = $this->request->getData();
             if(!empty($datas['customer_id']))
             {
-                $Wishlists->where(['customer_id'=>$datas['customer_id']]);
+                $Wishlists->where(['Wishlists.customer_id'=>$datas['customer_id']]);
             }
-             if(!empty($datas['item_id']))
+             if(!empty($datas['Wishlists.item_id']))
             {
-                $Wishlists->where(['item_id'=>$datas['item_id']]);
+                $Wishlists->where(['Wishlists.item_id'=>$datas['item_id']]);
             }
             if(!empty($datas['From'])){
                 $from_date=date("Y-m-d",strtotime($datas['From']));

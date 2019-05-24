@@ -176,8 +176,8 @@ class OrdersController extends AppController
             ?>
                 <ul id="item-list" style="width: 90% !important;">
                     <?php foreach($items as $show){ ?>
-                        <li onClick="selectAutoCompleted('<?php echo $show->name;?>')">
-                            <?php echo $show->name?>
+                        <li onClick="selectAutoCompleted('<?php echo $show->id;?>','<?php echo $show->name;?>')">
+                            <?php echo $show->name?>    
                         </li>
                     <?php } ?>
                 </ul>
@@ -934,6 +934,7 @@ class OrdersController extends AppController
 			$items[]= ['value'=>$item_fetch->id,'text'=>$item_name." (".$alias_name.")", 'print_quantity'=>$print_quantity, 'rates'=>$rates,'sales_rate' =>$sales_rates,'minimum_quantity_factor'=>$minimum_quantity_factor, 'unit_name'=>$unit_name, 'minimum_quantity_purchase'=>$minimum_quantity_purchase,'is_combo' => $is_combo];
 		}
 		$this->loadModel('BulkBookingLeads');
+		
         $bulk_Details = $this->BulkBookingLeads->find()->where(['id' => $bulkorder_id])->toArray();
 		$warehouses = $this->Orders->Warehouses->find('list')->where(['jain_thela_admin_id' => $jain_thela_admin_id]);
         $this->set(compact('order', 'customers', 'items', 'order_type', 'bulk_Details', 'bulkorder_id','delivery_time','tax', 'warehouses'));
