@@ -6,6 +6,29 @@ use Cake\I18n\Time;
 use Cake\ORM\Behavior\TimestampBehavior;
 class PromoCodesController extends AppController
 {
+	public function promoCodeList()
+	{
+		$ts = Time::now('Asia/Kolkata');
+        $current_timestamp = date('Y-m-d H:i:s',strtotime($ts));
+		$promo_codes = $this->PromoCodes->find()
+		->select(['id','code','title','description'])
+		->where(['PromoCodes.valid_from <' =>$current_timestamp, 'PromoCodes.valid_to >' =>$current_timestamp,'PromoCodes.status' => 'Active']);
+		
+		if(!empty($promo_codes->toArray()))
+		{
+			$status=true;
+			$error="Promo List";			
+		}else
+		{
+			$status=false;
+			$promo_codes = (object)[];
+			$error="No data found";			
+		}
+		$this->set(compact('status', 'error', 'promo_codes'));
+        $this->set('_serialize', ['status', 'error', 'promo_codes']); 		
+	}
+	
+	
     public function varifyPromoCodes()
     {
 		$ts = Time::now('Asia/Kolkata');

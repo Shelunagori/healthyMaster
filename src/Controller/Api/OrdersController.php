@@ -40,7 +40,7 @@ class OrdersController extends AppController
 					}
 						
 		foreach($orders_data as $order){
-			$order->image_url='http://app.jainthela.in'.$this->request->webroot.'img/item_images/'.@$order->order_details[0]->item->image;
+			$order->image_url='http://healthymaster.in'.$this->request->webroot.'img/item_images/'.@$order->order_details[0]->item->image;
 			unset($order->order_details);
 		}
 		
@@ -55,9 +55,14 @@ class OrdersController extends AppController
 		$customer_id=$this->request->query('customer_id');
 		$order_id=$this->request->query('order_id');
 		
-		$orders_details_data = $this->Orders->get($order_id, ['contain'=>['OrderDetails'=>['Items'=>function($q){
-               return $q->select(['image_path' => $q->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])->contain('Units')->autoFields(true);
-			}]]]);
+		$orders_details_data = $this->Orders->get($order_id, ['contain'=>
+		['OrderDetails'=>
+			['ItemVariations' =>['Items'=>function($q)
+				{
+				   return $q->select(['image_path' => $q->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])->contain('Units')->autoFields(true);
+				}]
+			]
+		]]);
 		
 		
 		
@@ -87,22 +92,26 @@ class OrdersController extends AppController
 		->where(['customer_id' => $customer_id, 'jain_thela_admin_id' => $jain_thela_admin_id, 'status IN' => ['Delivered','Cancel'] ])
 		->order(['order_date' => 'DESC'])
 		->contain(['OrderDetails'=>function($q){
-							return $q->contain(['Items'])->limit(1);
-						}])
-						->autoFields(true);
+				return $q->contain(['ItemVariations' =>['Items','Units']]);
+			}])
+			->autoFields(true);
+			
+		foreach($orders_data as $data)
+		{
+			$data->created_date=date('D M j, Y H:i a', strtotime($data->order_date));
+			$data->order_date=date('D M j, Y H:i a', strtotime($data->order_date));
+			$data->delivery_date=date('D M j, Y H:i a', strtotime($data->delivery_date)); 
+		}
 						
-						
-					foreach($orders_data as $data)
-					{
-						$data->created_date=date('D M j, Y H:i a', strtotime($data->order_date));
-						$data->order_date=date('D M j, Y H:i a', strtotime($data->order_date));
-                        $data->delivery_date=date('D M j, Y H:i a', strtotime($data->delivery_date)); 
-					}
-						
-						
+		//pr($orders_data->toArray());exit;
 						
 		foreach($orders_data as $order){
-			$order->image_url='http://app.jainthela.in'.$this->request->webroot.'img/item_images/'.@$order->order_details[0]->item->image;
+			$order->total_item_count = sizeof($order->order_details);
+			
+			$order->item_name = @$order->order_details[0]->item_variation->item->name;
+			$order->quantity = @$order->order_details[0]->quantity;  
+			$order->varitation_name	=	@$order->order_details[0]->item_variation->quantity_variation .' '.@$order->order_details[0]->item_variation->unit->shortname;
+			$order->image_url='http://healthymaster.in'.$this->request->webroot.'img/item_images/'.@$order->order_details[0]->item->image;
 			unset($order->order_details);
 		} 
 		
@@ -932,7 +941,7 @@ curl_close($ch);
 		
 						
 		foreach($pending_order_data as $order){
-			$order->image_url='http://app.jainthela.in'.$this->request->webroot.'img/item_images/'.@$order->order_details[0]->item->image;
+			$order->image_url='http://healthymaster.in'.$this->request->webroot.'img/item_images/'.@$order->order_details[0]->item->image;
 			unset($order->order_details);
 		}	
 		}
@@ -958,7 +967,7 @@ curl_close($ch);
 						
 						
 		foreach($pending_order_data as $order){
-			$order->image_url='http://app.jainthela.in'.$this->request->webroot.'img/item_images/'.@$order->order_details[0]->item->image;
+			$order->image_url='http://healthymaster.in'.$this->request->webroot.'img/item_images/'.@$order->order_details[0]->item->image;
 			unset($order->order_details);
 		}	
 		}
@@ -981,7 +990,7 @@ curl_close($ch);
               
 		
 		$view_pending_details_data = $this->Orders->get($order_id, ['contain'=>['OrderDetails'=>['Items'=>function($q){
-			 return $q->select(['image_path' => $q->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
+			 return $q->select(['image_path' => $q->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
 			   ->contain('Units')
 			   ->autoFields(true);
 			}]]]);
@@ -1072,7 +1081,7 @@ curl_close($ch);
 		}
 	
 		$Order_details = $this->Orders->get($order_id, ['contain'=>['OrderDetails'=>['Items'=>function($q){
-               return $q->select(['image_path' => $q->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])->contain('Units')->autoFields(true);
+               return $q->select(['image_path' => $q->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])->contain('Units')->autoFields(true);
 			}]]]);	
 			
 			$order_detail_fetch=$this->Orders->get($order_id);

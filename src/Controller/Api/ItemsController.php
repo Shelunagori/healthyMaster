@@ -17,7 +17,8 @@ class ItemsController extends AppController
 		$item_category_id=$this->request->query('item_category_id');
 		$item_sub_category_id=$this->request->query('item_sub_category_id');
 		$customer_id=$this->request->query('customer_id');
-
+		$page=@$this->request->query('page');
+		$limit = 10;
 		if($item_sub_category_id=='0')
 		{
 			$where=['Items.jain_thela_admin_id'=>$jain_thela_admin_id, 'Items.item_category_id'=>$item_category_id, 'Items.is_combo'=>'no', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'];
@@ -37,7 +38,7 @@ class ItemsController extends AppController
 									return $q->where(['customer_id'=>$customer_id]);
 							}]);
 						}
-					]);
+					])->limit($limit)->page($page);
 					$items->select(['image_url' => $items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
                     ->autoFields(true);
 					
@@ -81,6 +82,21 @@ class ItemsController extends AppController
 									]);
 								}])
 							->autoFields(true)->first();
+				
+				if(!empty($item_description->toArray()))
+				{
+					foreach($item_description->item_variations as $item_variation)
+					{
+						if(!empty($item_variation->wishlist))
+						{
+							$item_variation->isInWishlist = true;
+						}else
+						{
+							$item_variation->isInWishlist = false;							
+						}
+					}
+				}
+				
 				
 				$querys=$this->Items->ItemLedgers->find();
 				$customer_also_bought=$querys
@@ -238,25 +254,17 @@ class ItemsController extends AppController
 		$jain_thela_admin_id=$this->request->query('jain_thela_admin_id');
 		$item_query=$this->request->query('item_query');
 		$customer_id=$this->request->query('customer_id');
-
-        $search_items = $this->Items->find()
-		->where(['Items.is_combo'=>'no', 'Items.jain_thela_admin_id'=>$jain_thela_admin_id, 'Items.name LIKE' => '%'.$item_query.'%', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'])
-		->contain(['ItemVariations' => 
-						function($q) use($customer_id){
-							return $q->where(['ready_to_sale' => 'Yes'])
-							->contain(['Units','Carts'=>
-								function($q) use($customer_id){
-									return $q->where(['customer_id'=>$customer_id]);
-								}
-							]);
-						}]);
-		$search_items->select(['image_url' => $search_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
-                                ->autoFields(true);
-/* 		foreach($search_items as $item){
-			if(!$item->cart){
-				$item->cart=(object)[];
+		$search_items = [];
+        $search_items_data = $this->Items->find()
+		->where(['Items.is_combo'=>'no', 'Items.jain_thela_admin_id'=>$jain_thela_admin_id, 'Items.name LIKE' => '%'.$item_query.'%', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'])->contain(['ItemCategories']);
+		
+		if(!empty($search_items_data->toArray()))
+		{
+			foreach($search_items_data as $search_item){
+				$search_items[] = ['item_id' =>$search_item->id,'name' => $search_item->name,'category_id' =>$search_item->item_category_id,'category_name' => $search_item->item_category->name,'image' => 'http://healthymaster.in'.$this->request->webroot.'img/item_images/'.$search_item->image];	
 			}
-		} */
+		}
+		
 		
 		$cart_count = $this->Items->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
 		$status=true;
@@ -264,7 +272,70 @@ class ItemsController extends AppController
         $this->set(compact('status', 'error', 'cart_count', 'search_items'));
         $this->set('_serialize', ['status', 'error', 'cart_count', 'search_items']);
      }
-	 public function fetchItem()
+	 
+	public function searchResult()
+	{
+		$item_name=$this->request->query('item_name');
+		$customer_id=$this->request->query('customer_id');	
+		$category_id=$this->request->query('category_id');
+        $where = '';
+        if(!empty($category_id))
+        { $where = ['item_category_id' => $category_id]; }
+	
+		if(!empty($item_name))
+		{
+
+			$searchResult = $this->Items->find()
+			->where(['Items.is_combo'=>'no', 'Items.name LIKE' =>$item_name, 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'])
+			->order(['name'=>'ASC'])
+					->contain(['ItemVariations'=>
+						function($q) use($customer_id) {
+							return $q->where(['ready_to_sale' =>'Yes'])
+							->contain(['Units','Carts'=>
+								function($q) use($customer_id){
+									return $q->where(['customer_id'=>$customer_id]);
+							}]);
+						}
+					])
+			->where($where);
+			if(empty($searchResult->toArray()))
+			{
+				$searchResult = $this->Items->find()
+				->where(['Items.is_combo'=>'no', 'Items.name LIKE' => '%'.$item_name.'%', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'])
+				->order(['name'=>'ASC'])
+					->contain(['ItemVariations'=>
+						function($q) use($customer_id) {
+							return $q->where(['ready_to_sale' =>'Yes'])
+							->contain(['Units','Carts'=>
+								function($q) use($customer_id){
+									return $q->where(['customer_id'=>$customer_id]);
+							}]);
+						}
+					])
+				->where($where);				
+			}
+			
+			$totalItems = sizeof($searchResult);
+			$status=true;
+			$error="";			
+		}else
+		{
+			$totalItems = 0;
+			$status=false;
+			$error="Item Name Empty";				
+		}
+
+
+		$cart_count = $this->Items->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
+
+        $this->set(compact('status', 'error', 'cart_count', 'totalItems','searchResult'));
+        $this->set('_serialize', ['status', 'error', 'cart_count','totalItems' ,'searchResult']);
+		
+	}	
+	
+	 
+	 
+	public function fetchItem()
     {
 		$jain_thela_admin_id=$this->request->query('jain_thela_admin_id');
 			$where=['Items.jain_thela_admin_id'=>$jain_thela_admin_id, 'Items.is_combo'=>'no', 'Items.freeze'=>0,'Items.is_virtual'=>'no'];

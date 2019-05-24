@@ -96,6 +96,10 @@ Router::prefix('api', function ($routes) {
 				   'action' => 'search_item',
 				   'method' => 'GET'
 			   ],
+			   'search_result' => [
+				   'action' => 'search_result',
+				   'method' => 'GET'
+			   ],
 			   'fetch_item' => [
 				   'action' => 'fetch_item',
 				   'method' => 'GET'
@@ -159,10 +163,26 @@ Router::prefix('api', function ($routes) {
 			   'home' => [
 				   'action' => 'home',
 				   'method' => 'GET'
+			   ],
+			   'category_list' => [
+				   'action' => 'category_list',
+				   'method' => 'GET'
+			   ]
+		   ]
+		]		
+	);
+	
+	
+	$routes->resources(
+		'WishLists', [
+		   'map' => [
+			   'add_wish_list' => [
+				   'action' => 'add_wish_list',
+				   'method' => 'POST'
 			   ]
 		   ]
 		]
-	);
+	);	
 
 
 	$routes->resources(
@@ -203,6 +223,10 @@ Router::prefix('api', function ($routes) {
 		   'map' => [
 			   'varifyPromoCodes' => [
 				   'action' => 'varifyPromoCodes',
+				   'method' => 'GET'
+			   ],
+			   'promo_code_list' => [
+				   'action' => 'promo_code_list',
 				   'method' => 'GET'
 			   ]
 		   ]

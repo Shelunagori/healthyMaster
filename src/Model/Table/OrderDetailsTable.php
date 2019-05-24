@@ -45,6 +45,12 @@ class OrderDetailsTable extends Table
             'foreignKey' => 'item_id',
             'joinType' => 'Left'
         ]);
+
+        $this->belongsTo('ItemVariations', [
+            'foreignKey' => 'item_variation_id',
+            'joinType' => 'Left'
+        ]);
+		
     }
 
     /**

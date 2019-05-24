@@ -138,35 +138,35 @@ class CartsController extends AppController
     
         	$fetchs=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id, 'item_variation_id' =>$item_variation_id]);
 			foreach($fetchs as $fetch){
-			$update_id=$fetch->id;
-			$exist_quantity=$fetch->quantity;
-			$exist_count=$fetch->cart_count;
-		}
-		$update_quantity=$item_add_quantity+$exist_quantity;
-		$update_count=$exist_count+1;
-		
-			if(empty($fetchs->toArray()))
-			{
-				$query = $this->Carts->query();
-						$query->insert(['customer_id', 'item_id', 'quantity', 'cart_count', 'is_combo'])
-								->values([
-								'customer_id' => $customer_id,
-								'item_id' => $item_id,
-								'item_variation_id' => $item_variation_id,
-								'quantity' => $item_add_quantity,
-								'cart_count' => 1,
-								'is_combo' => $is_combo
-								])
-						->execute();
-			}else{
-				$cart=$this->Carts->get($update_id);
-				$query = $this->Carts->query();
-					$result = $query->update()
-						->set(['quantity' => $update_quantity, 'cart_count' => $update_count, 'is_combo' => $is_combo])
-						->where(['id' => $update_id])
-						->execute();
+				$update_id=$fetch->id;
+				$exist_quantity=$fetch->quantity;
+				$exist_count=$fetch->cart_count;
 			}
+			$update_quantity=$item_add_quantity+$exist_quantity;
+			$update_count=$exist_count+1;
+			
+				if(empty($fetchs->toArray()))
+				{
+					$query = $this->Carts->query();
+							$query->insert(['customer_id', 'item_id', 'quantity', 'cart_count', 'is_combo'])
+									->values([
+									'customer_id' => $customer_id,
+									'item_id' => $item_id,
+									'item_variation_id' => $item_variation_id,
+									'quantity' => $item_add_quantity,
+									'cart_count' => 1,
+									'is_combo' => $is_combo
+									])
+							->execute();
+				}else{
+					$cart=$this->Carts->get($update_id);
+					$query = $this->Carts->query();
+						$result = $query->update()
+							->set(['quantity' => $update_quantity, 'cart_count' => $update_count, 'is_combo' => $is_combo])
+							->where(['id' => $update_id])
+							->execute();
 				}
+		}
 		else if($tag=='minus')
 		{
 			$items = $this->Carts->Items->get($item_id);
@@ -174,52 +174,50 @@ class CartsController extends AppController
      		$is_combo=$items->is_combo;
     
 			$fetchs=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id,'item_variation_id' =>$item_variation_id]);
-		if(empty($fetchs->toArray()))
-		{
-		$cart_count = $this->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
-		}
-		else
-		{
-		foreach($fetchs as $fetch){
-			$update_id=$fetch->id;
-			$exist_quantity=$fetch->quantity;
-			$exist_count=$fetch->cart_count;
-		}
-		$update_quantity=$exist_quantity-$item_add_quantity;
-		$update_count=$exist_count-1;
-		
-			if($exist_count==1)
+			if(empty($fetchs->toArray()))
 			{
-				$cart=$this->Carts->get($update_id);	
-				$query = $this->Carts->query();
-				$result = $query->delete()
-				->where(['id' => $update_id])
-				->execute();
 				$cart_count = $this->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
+			}
+			else
+			{
+				foreach($fetchs as $fetch){
+					$update_id=$fetch->id;
+					$exist_quantity=$fetch->quantity;
+					$exist_count=$fetch->cart_count;
+				}
+				$update_quantity=$exist_quantity-$item_add_quantity;
+				$update_count=$exist_count-1;
 			
+				if($exist_count==1)
+				{
+					$cart=$this->Carts->get($update_id);	
+					$query = $this->Carts->query();
+					$result = $query->delete()
+					->where(['id' => $update_id])
+					->execute();
+					$cart_count = $this->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
+				
+				}
+				else if($exist_count>1){
+					$cart=$this->Carts->get($update_id);	
+					$query = $this->Carts->query();
+					$result = $query->update()
+					->set(['quantity' => $update_quantity, 'cart_count' => $update_count, 'is_combo' => $is_combo])
+					->where(['id' => $update_id])
+					->execute();
+					$cart_count = $this->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
+				}
 			}
-			else if($exist_count>1){
-				$cart=$this->Carts->get($update_id);	
-				$query = $this->Carts->query();
-				$result = $query->update()
-				->set(['quantity' => $update_quantity, 'cart_count' => $update_count, 'is_combo' => $is_combo])
-				->where(['id' => $update_id])
-				->execute();
-				$cart_count = $this->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
-			}
-		}
 		}
 		else if($tag=='remove'){
 			$query = $this->Carts->query();
-				$result = $query->delete()
-					->where(['item_id' => $item_id, 'item_variation_id' => $item_variation_id, 'customer_id' => $customer_id])
-					->execute();
+			$result = $query->delete()
+				->where(['item_id' => $item_id, 'item_variation_id' => $item_variation_id, 'customer_id' => $customer_id])
+				->execute();
 			$cart_count = $this->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
 		}
 		else if($tag=='cart'){
-			
 			$cart_count = $this->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
-			
 		}
 		$address_availablity = $this->Carts->CustomerAddresses->find()
 			->where(['CustomerAddresses.customer_id'=>$customer_id]);
@@ -235,21 +233,29 @@ class CartsController extends AppController
 		$carts=$this->Carts->find()
 				->where(['customer_id' => $customer_id])
 				->contain(['Items' => ['ItemVariations' =>['Units']]])
-				->select(['image_url' => $this->Carts->Items->find()->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
-				->select(['total'=>'sum(Carts.cart_count * Items.sales_rate)'])
-				->group('Carts.item_id')
 				->autoFields(true);
 				
 				if($carts==null)
 				{
-				$carts=[];
+					$carts=[];
 				}
 				else{
-				$carts=$carts;
-				}			
+					$carts=$carts;
+				}		
+
+		//pr($carts->toArray());exit;
+				
 		$grand_total1=0;
 		foreach($carts as $cart_data)
 		{
+			foreach($cart_data->item->item_variations as $item_variation)
+			{
+				$saleRate = $item_variation->sales_rate;
+				$count  = $cart_data->cart_count;
+				$item_variation->total_varitaion_amount = $saleRate * $count;
+				$cart_data->total += $item_variation->total_varitaion_amount;
+			}
+			
 			$grand_total1+=$cart_data->total;
 		}
 		$grand_total=round($grand_total1);

@@ -57,4 +57,23 @@ class ItemCategoriesController extends AppController
         $this->set(compact('status', 'error', 'itemCategories', 'banners','popular_items','recently_bought', 'cart_count'));
         $this->set('_serialize', ['status', 'error', 'itemCategories', 'banners', 'popular_items','recently_bought','cart_count']);
     }
+	
+	public function categoryList()
+	{
+		$customer_id=$this->request->query('customer_id');
+	    $categoryList = $this->ItemCategories->find('All')->where(['is_deleted'=>0]);
+		$categoryList->select(['image_url' => $categoryList->func()->concat(['http://http://healthymaster.in'.$this->request->webroot.'itemcategories/','image' => 'identifier' ])])->autoFields(true);		
+		
+		$cart_count = $this->ItemCategories->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();	
+		$status=true;
+		$error="";
+        $this->set(compact('status', 'error', 'categoryList','cart_count'));
+        $this->set('_serialize', ['status', 'error', 'categoryList','cart_count']);		
+	}
+	
+	
+	
+	
+	
+	
 }

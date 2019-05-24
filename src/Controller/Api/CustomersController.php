@@ -170,7 +170,7 @@ class CustomersController extends AppController
 		$name=$this->request->data('name');
 		$mobile=$this->request->data('mobile');
 		$email=$this->request->data('email');
-		
+		@$old_image=$this->request->data('old_image');
 		$isImageChanged=$this->request->data('isImageChanged');
 		
 		$user_img=$this->request->data('user_img');
@@ -195,7 +195,8 @@ class CustomersController extends AppController
 					  }				
 			}else 
 			{
-				$img_name = 'user_profile_pics/'.'user.png';	
+				
+				$img_name = @$old_image;	
 			}	
 			$query = $this->Customers->query();
 				$result = $query->update()
