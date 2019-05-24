@@ -26,12 +26,12 @@ class ItemsController extends AppController
 		if($status==''){ $status='unfreeze'; }
         if($status=='freeze')
 		{
-        $items = $this->Items->find()->where(['Items.freeze'=>1])->contain(['ItemCategories']);
+        $items = $this->Items->find()->where(['Items.freeze'=>1])->contain(['ItemCategories','ItemVariations']);
 		}
 		elseif($status=='unfreeze')
 		{
 			$where = $status;
-			$items = $this->Items->find()->where(['Items.freeze'=>0])->contain(['ItemCategories']);
+			$items = $this->Items->find()->where(['Items.freeze'=>0])->contain(['ItemCategories','ItemVariations']);
 		}
 		
 		
@@ -66,7 +66,9 @@ class ItemsController extends AppController
 			}
 			$this->Flash->success(__('Item rates have updated successfully.'));
 		 }
-		$items = $this->Items->find()->where(['Items.freeze'=>0])->contain(['ItemCategories']);
+		$items = $this->Items->find()->where(['Items.freeze'=>0])
+        //->group(['ItemVariations.quantity_variation'])
+        ->contain(['ItemCategories','ItemVariations']);
 		//pr($items->toArray());exit;
 		$this->set(compact('items', 'itemCategories', 'units'));
         $this->set('_serialize', ['items']);
@@ -101,6 +103,7 @@ class ItemsController extends AppController
         if ($this->request->is('post')) {
 			
         	$data=$this->request->getData();
+            pr($data);
 			$item = $this->Items->patchEntity($item,$data,['associated'=>['ItemVariations']]);
 			$file = $this->request->data['image'];
 			$file_name=$file['name'];			

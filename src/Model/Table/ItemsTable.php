@@ -52,9 +52,7 @@ class ItemsTable extends Table
             'foreignKey' => 'item_id'
         ]);
 		
-		$this->hasMany('ItemVariations', [
-            'foreignKey' => 'item_id'
-        ]);
+		$this->hasMany('ItemVariations');
 		$this->hasOne('Carts', [
             'foreignKey' => 'item_id'
         ]);

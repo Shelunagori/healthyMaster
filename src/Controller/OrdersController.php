@@ -916,9 +916,9 @@ class OrdersController extends AppController
 		}
        // $promoCodes = $this->Orders->PromoCodes->find('list');
 	   if($order_type == 'Bulkorder'){
-		   $item_fetchs = $this->Orders->Items->find()->where(['Items.jain_thela_admin_id' => $jain_thela_admin_id, 'Items.freeze'=>0,'is_combo'=>'no','is_virtual'=>'no'])->contain(['Units']);
+		   $item_fetchs = $this->Orders->Items->find()->where(['Items.freeze'=>0,'is_combo'=>'no','is_virtual'=>'no']);
 	   }else{
-		$item_fetchs = $this->Orders->Items->find()->where(['Items.jain_thela_admin_id' => $jain_thela_admin_id, 'Items.freeze'=>0, 'Items.ready_to_sale' => 'Yes'])->contain(['Units']);
+		$item_fetchs = $this->Orders->Items->find()->where(['Items.freeze'=>0, 'Items.ready_to_sale' => 'Yes']);
 	   }
 		foreach($item_fetchs as $item_fetch){
 			$item_name=$item_fetch->name;
@@ -937,7 +937,8 @@ class OrdersController extends AppController
 		
         $bulk_Details = $this->BulkBookingLeads->find()->where(['id' => $bulkorder_id])->toArray();
 		$warehouses = $this->Orders->Warehouses->find('list')->where(['jain_thela_admin_id' => $jain_thela_admin_id]);
-        $this->set(compact('order', 'customers', 'items', 'order_type', 'bulk_Details', 'bulkorder_id','delivery_time','tax', 'warehouses'));
+		$item = $this->Orders->items->find('list');
+        $this->set(compact('order', 'customers', 'items', 'order_type', 'bulk_Details', 'bulkorder_id','delivery_time','tax', 'warehouses','item'));
         $this->set('_serialize', ['order', 'warehouses']);
     }
 	/**

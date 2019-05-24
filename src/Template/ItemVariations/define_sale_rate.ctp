@@ -5,7 +5,7 @@
 </style>
 <div class="row">
 	<div class="col-md-12">
-	<?= $this->Form->create($items,['id'=>'form_sample_3']) ?>
+	<?= $this->Form->create($itemvariation,['id'=>'form_sample_3']) ?>
 	
 		<div class="portlet light bordered">
 			<div class="portlet-title">
@@ -20,18 +20,24 @@
 				</div>
 			</div>
 			<div class="portlet-body">
+				<?php $i=0; foreach ($item_variations as $item_variation): ?>	
 				<table class="table table-condensed table-hover table-bordered" id="main_tble">
 					<thead>
 						<tr>
+							<th colspan="7"><?php
+								$item_name=$item_variation->item->name;
+								$alias_name=$item_variation->item->alias_name;
+								?>
+								<?= h(@$item_name. ' ('.$alias_name.')') ?></th>
+						</tr>
+						<tr>
 							<th>Sr</th>
-							<th>Category</th>
-							<th>Name</th>
-							<th>Type</th>
+							<th>Category</th><!-- 
+							<th>Type</th> -->
 							<th width="100">Unit</th>
 							<th>Print Rate</th>
-							<th>Item Discount %</th>
 							<th>Online Sale Rate</th>
-							<th>Offline Sale Rate</th>
+							<th>Item Discount %</th>
 							<th width="100">
 								Ready to Sale
 								<?php echo  $this->Form->control('rts',['class'=>'form-control input-sm all','options'=>['empty'=>'--All--', 'Yes'=>'Yes','No'=>'No'], 'label'=>false]); ?>
@@ -40,20 +46,19 @@
 						</tr>
 					</thead>
 					<tbody id="main_tbody">
-						<?php $i=0; foreach ($items as $item): ?>	
 						<tr class="main_tr">
 							<td><?php echo ++$i; $i--; ?></td>
-							<td><?= h(@$item->item_category->name) ?></td>
-                            <td>
+							<td><?= h(@$item_variation->item->item_category->name) ?></td>
+                            <!-- <td>
 								<?php
-								$item_name=$item->name;
-								$alias_name=$item->alias_name;
+								$item_name=$item_variation->item->name;
+								$alias_name=$item_variation->item->alias_name;
 								?>
 								<?= h(@$item_name. ' ('.$alias_name.')') ?>
 								
-								<?php echo  $this->Form->control('items['.$i.'][item_id]',['type'=>'hidden','class'=>'form-control input-sm input-small', 'value'=>$item->id]); ?>
-							</td>
-							<td>
+								<?php echo  $this->Form->control('itemVariations['.$i.'][id]',['type'=>'hidden','class'=>'form-control input-sm input-small', 'value'=>$item_variation->id]); ?>
+							</td> -->
+							<!-- <td>
 								<?php
 								if($item->is_virtual=="yes"){
 									echo '<span class="badge badge-warning tooltips" data-original-title="Virtule Item">V</span>';
@@ -65,29 +70,29 @@
 									echo '<span class="badge badge-primary tooltips" data-original-title="Real Item">R</span>';
 								}
 								?>
-							</td>
+							</td> -->
 							<td style="font-size:10px;">
-								Rate per <b style="font-size:12px;"><?= h($item->print_quantity) ?></b>
+								Rate per <b style="font-size:12px;"><?= $item_variation->quantity_variation." ".h($item_variation->unit->shortname) ?></b>
 							</td>
 							<td>
-								<?php echo  $this->Form->control('items['.$i.'][print_rate]',['class'=>'form-control input-sm  print_rate','placeholder'=>'Print Rate', 'value'=>$item->print_rate,'label'=>false]); ?></td>
+								<?php echo  $this->Form->control('itemVariations['.$i.'][print_rate]',['class'=>'form-control input-sm  print_rate','placeholder'=>'Print Rate', 'value'=>$item_variation->print_rate,'label'=>false]); ?></td>
 							<td>
-								<?php echo  $this->Form->control('items['.$i.'][discount_per]',['class'=>'form-control input-sm  discount_per','placeholder'=>'Print Rate', 'value'=>$item->discount_per,'label'=>false]); ?></td>
+								<?php echo  $this->Form->control('itemVariations['.$i.'][discount_per]',['class'=>'form-control input-sm  discount_per','placeholder'=>'Print Rate', 'value'=>$item_variation->discount_per,'label'=>false]); ?></td>
 							<td>
-								<?php echo  $this->Form->control('items['.$i.'][sales_rate]',['class'=>'form-control input-sm  sales_rate','placeholder'=>'Print Rate', 'value'=>$item->sales_rate,'label'=>false]); ?>
+								<?php echo  $this->Form->control('itemVariations['.$i.'][sales_rate]',['class'=>'form-control input-sm  sales_rate','placeholder'=>'Print Rate', 'value'=>$item_variation->sales_rate,'label'=>false]); ?>
 							</td>
+							<!-- <td>
+								<?php echo  $this->Form->control('itemVariations['.$i.'][offline_sales_rate]',['class'=>'form-control input-sm  offline_sales_rate','placeholder'=>'offline Print Rate', 'value'=>$item->offline_sales_rate,'label'=>false]); ?>
+							</td> -->
 							<td>
-								<?php echo  $this->Form->control('items['.$i.'][offline_sales_rate]',['class'=>'form-control input-sm  offline_sales_rate','placeholder'=>'offline Print Rate', 'value'=>$item->offline_sales_rate,'label'=>false]); ?>
-							</td>
-							<td>
-								<?php echo  $this->Form->control('items['.$i.'][ready_to_sale]',['class'=>'form-control input-sm single','options'=>['Yes'=>'Yes','No'=>'No'], 'value'=>$item->ready_to_sale,'label'=>false]); ?>
+								<?php echo  $this->Form->control('itemVariations['.$i.'][ready_to_sale]',['class'=>'form-control input-sm single','options'=>['Yes'=>'Yes','No'=>'No'], 'value'=>$item_variation->ready_to_sale,'label'=>false]); ?>
 							</td>
 						</tr>
-						<?php $i++; endforeach; ?>
 						
 						
 					</tbody>
 				</table>
+				<?php $i++; endforeach; ?>
 				<div align="center">
 					<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']) . __(' Update Sales Rate'),['class'=>'btn btn-success','id'=>'submitbtn']); ?>
 				</div>

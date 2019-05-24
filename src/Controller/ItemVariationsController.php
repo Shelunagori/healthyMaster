@@ -18,6 +18,45 @@ class ItemVariationsController extends AppController
      *
      * @return \Cake\Http\Response|void
      */
+
+    public function defineSaleRate()
+    {
+        $this->viewBuilder()->layout('index_layout');
+        $jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
+        $itemvariation = $this->ItemVariations->newEntity();
+        
+        if ($this->request->is(['post', 'put'])) {
+            $item_variation=$this->request->getData('itemVariations');
+            //pr($item_variation);exit;
+            
+            foreach($item_variation as $itemVariations){
+                //pr($itemVariations['print_rate']);exit;
+                $itemVariation=(object)$itemVariations;
+                $query = $this->ItemVariations->query();
+                    //$query->update(['promote_date', 'due_amount', amount', 'discount', 'end_date'])
+                    $query->update()
+                            ->set([
+                            'print_rate' => $itemVariations['print_rate'],
+                            'ready_to_sale' => $itemVariations['ready_to_sale'],
+                            'discount_per' => $itemVariations['discount_per'],
+                            'sales_rate' => $itemVariations['sales_rate']
+                            ])
+                            ->where(['id'=>$itemVariations['id']])
+                    ->execute();
+            }
+
+            //pr($query->toArray());exit;
+            $this->Flash->success(__('Item rates have updated successfully.'));
+         }
+        $item_variations = $this->ItemVariations->find()
+        //->group(['Items.name'])
+        //->Distinct(['ItemVariations.quantity_variation'])
+        ->contain(['Items'=>['ItemCategories'],'Units']);
+        //pr($item_variations->toArray());exit;
+        $this->set(compact('item_variations','itemvariation', 'itemCategories', 'units'));
+        $this->set('_serialize', ['items']);
+    }
+
     public function index()
     {
         $this->paginate = [

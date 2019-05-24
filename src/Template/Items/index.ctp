@@ -37,13 +37,10 @@
 						<tr>
 							<th>Sr</th>
 							<th>Name</th>
-							<th>Type</th>
-							<th>Unit</th>
+							<th>Alias Name</th>
 							<th>Item Category</th>
-							<th>Minimum Stock</th>
-							<th>Selling Factor</th>
-							<th>Out Of Stock</th>
 							<th>Freeze</th>
+							<th>Image</th>
 							<th scope="col" class="actions"><?= __('Actions') ?></th>
 						</tr>
 					</thead>
@@ -62,25 +59,9 @@
 							<?php }else{ ?>
 								<td><?= h($name) ?></td>
 							<?php } ?>
-							<td>
-								<?php
-								if($item->is_virtual=="yes"){
-									echo '<span class="badge badge-warning tooltips" data-original-title="Virtule Item">V</span>';
-								}
-								else if($item->is_combo=="yes"){
-									echo '<span class="badge badge-success tooltips" data-original-title="Combo Item">C</span>';
-								}
-								else{
-									echo '<span class="badge badge-primary tooltips" data-original-title="Real Item">R</span>';
-								}
-								?>
-							</td>
-							<td>
-								<?php // h($item->print_quantity) ?>
-								<?= h(@$unit_name=$item->unit->unit_name) ?>
-							</td>
+							<td><?= $item->alias_name?></td>
 							<td><?= h($item->item_category->name) ?></td>
-							<td>
+							<!-- <td>
 								<?php
 									$minimum_stock=$item->minimum_stock; 
 									$minimum_quantity_factor=$item->minimum_quantity_factor; 
@@ -102,8 +83,9 @@
 								}
 								?>
 								<?= h($stock_msg) ?>
-							</td>
+							</td> -->
 							<td><?= h($item->freeze) ?></td>
+							<td><img src="webroot/img/item_images/<?= $item->image ?>" height="20%"></td>
 							<td class="actions">
 								<?= $this->Html->link(__('Edit'), ['action' => 'edit', $item->id]) ?>
 								<?php if($status=='unfreeze' or $status==''){ ?>
