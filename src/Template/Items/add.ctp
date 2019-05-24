@@ -70,6 +70,7 @@
                                           <th>Unit</th>
                                           <th>Minimum Stock</th>
                                           <th>Minimum Purchase</th>
+                                          <th>Ready To Sale</th>
                                           <th>Actions</th>
                                       </tr>
                                   </thead>
@@ -97,6 +98,15 @@
                     	<?php echo $this->Form->control('item_variations.0.minimum_stock',['class'=>'form-control minimum_stock','placeholder'=>'Minimum Stock','label'=>false]); ?>
                     </td>
                     <td style="vertical-align: bottom;"> <?php echo $this->Form->control('item_variations.0.minimum_quantity_purchase',['class'=>'form-control minimum_quantity_purchase  order_limit','placeholder'=>'Maximum Order Limit', 'label'=>false]); ?></td>
+                    <td><div class="radio-inline" style="padding-right: 5px;">
+									<?php echo $this->Form->radio(
+									'item_variations.0.ready_to_sale',
+									[
+										['value' => 'no', 'text' => 'Yes','class' => 'radio-task ready'],
+										['value' => 'yes', 'text' => 'No','class' => 'radio-task ready','checked' => 'checked']
+									]
+									); ?>
+								</div></td>
                     <td style="vertical-align: bottom;"> <button type="button" id="plus" class="btn btn-sm green"><i class="fa fa-plus"></i></button>
                       <button type="button" id="minus" class="btn btn-sm red"><i class="fa fa-minus"></i></button></td>
                 </tr>
@@ -143,6 +153,7 @@ $(document).ready(function() {
             $(this).find('.index').html(i);
             $(this).find('.quantity_variation').attr('name','item_variations['+i+'][quantity_variation]');
             $(this).find('.unit').attr('name','item_variations['+i+'][unit_id]');
+            $(this).find('.ready').attr('name','item_variations['+i+'][ready_to_sale]');
             $(this).find('.minimum_stock').attr('name','item_variations['+i+'][minimum_stock]');
             $(this).find('.minimum_quantity_purchase').attr('name','item_variations['+i+'][minimum_quantity_purchase]');
 			i++;

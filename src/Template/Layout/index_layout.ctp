@@ -174,7 +174,7 @@
 									<?php echo $this->Html->link('<i class="fa fa-info"></i> Items','/Items',['escape'=>false]) ?>
 								</li>
 								<li>
-									<?php echo $this->Html->link('<i class="fa fa-cubes"></i> Sales Rate Update','/Items/define_sale_rate',['escape'=>false]) ?>
+									<?php echo $this->Html->link('<i class="fa fa-cubes"></i> Sales Rate Update','/ItemVariations/define_sale_rate',['escape'=>false]) ?>
 								</li>
 								
 							</ul>
