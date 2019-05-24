@@ -139,13 +139,13 @@ $(document).ready(function() {
         var i=0;
         $('#main-tbody').find('tr').each(function()
         {
-            i++;
+            
             $(this).find('.index').html(i);
             $(this).find('.quantity_variation').attr('name','item_variations['+i+'][quantity_variation]');
             $(this).find('.unit').attr('name','item_variations['+i+'][unit_id]');
             $(this).find('.minimum_stock').attr('name','item_variations['+i+'][minimum_stock]');
             $(this).find('.minimum_quantity_purchase').attr('name','item_variations['+i+'][minimum_quantity_purchase]');
-
+			i++;
           });
           
        }

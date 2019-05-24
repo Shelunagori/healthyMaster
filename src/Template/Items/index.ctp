@@ -48,7 +48,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach ($items as $item): 
+						<?php
+							foreach ($items as $item): 
 							@$i++;
 							?>
 						<tr>

@@ -33,6 +33,7 @@ class ItemVariation extends Entity
      */
     protected $_accessible = [
         'item_id' => true,
+		'quantity_variation' => true,
         'unit_id' => true,
         'minimum_stock' => true,
         'ready_to_sale' => true,

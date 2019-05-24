@@ -22,17 +22,20 @@ class ItemsController extends AppController
     {
 		$this->viewBuilder()->layout('index_layout');
 		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
-        $items = $this->Items->find()->contain(['ItemCategories', 'Units']);
+        $items = $this->Items->find()->contain(['ItemCategories']);
 		if($status==''){ $status='unfreeze'; }
         if($status=='freeze')
 		{
-        $items = $this->Items->find()->where(['Items.jain_thela_admin_id'=>$jain_thela_admin_id, 'Items.freeze'=>1])->contain(['ItemCategories', 'Units']);
+        $items = $this->Items->find()->where(['Items.freeze'=>1])->contain(['ItemCategories']);
 		}
 		elseif($status=='unfreeze')
 		{
 			$where = $status;
-			$items = $this->Items->find()->where(['Items.jain_thela_admin_id'=>$jain_thela_admin_id, 'Items.freeze'=>0])->contain(['ItemCategories', 'Units']);
+			$items = $this->Items->find()->where(['Items.freeze'=>0])->contain(['ItemCategories']);
 		}
+		
+		
+		
         $this->set(compact('items', 'status'));
         $this->set('_serialize', ['items', 'status']);
     }
@@ -63,7 +66,7 @@ class ItemsController extends AppController
 			}
 			$this->Flash->success(__('Item rates have updated successfully.'));
 		 }
-		$items = $this->Items->find()->where(['Items.jain_thela_admin_id'=>$jain_thela_admin_id, 'Items.freeze'=>0])->contain(['ItemCategories', 'Units']);
+		$items = $this->Items->find()->where(['Items.freeze'=>0])->contain(['ItemCategories']);
 		//pr($items->toArray());exit;
 		$this->set(compact('items', 'itemCategories', 'units'));
         $this->set('_serialize', ['items']);
@@ -96,11 +99,9 @@ class ItemsController extends AppController
 		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
         $item = $this->Items->newEntity();
         if ($this->request->is('post')) {
-
-        	$data=$this->request->getData();
-			//pr($data);exit;
-
 			
+        	$data=$this->request->getData();
+			$item = $this->Items->patchEntity($item,$data,['associated'=>['ItemVariations']]);
 			$file = $this->request->data['image'];
 			$file_name=$file['name'];			
 			$ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
@@ -108,50 +109,13 @@ class ItemsController extends AppController
             $setNewFileName = uniqid();
             $img_name= $setNewFileName.'.'.$ext;
 			if(!empty($file_name)){
-			$this->request->data['image']=$img_name;
+				$item->image=$img_name;
 			}if(empty($file_name)){
 				
 			}
-
-			if($data['id'])
-                $items=$this->Items->get($data['id']);
-            else
-                $items=$this->Items->newEntity();
-
-             $item = $this->Items->patchEntity($items,$data,['associated'=>['ItemVariations']]);
-
-			// $unit_id=$this->request->data['unit_id'];
-			// $units_fetch_datas = $this->Items->Units->find()->where(['id'=>$unit_id]);
-			// foreach($units_fetch_datas as $units_fetch_data){
-			// 	$unit_shortname=$units_fetch_data->shortname;
-			// 	$unit_name=$units_fetch_data->unit_name;	
-			// }
-   // //          $item = $this->Items->patchEntity($item, $this->request->getData());
-   // //          $item->jain_thela_admin_id=$jain_thela_admin_id;
-   // //          $item->item_sub_category_id=0;
-			// // if($unit_name=='kg'){
-			// // 	$minimum_quantity_factor=$this->request->data['minimum_quantity_factor'];
-			// // 	if($minimum_quantity_factor==0.10){
-			// // 		$item->print_quantity='100 gm';
-			// // 		$item->minimum_quantity_factor=$minimum_quantity_factor;	
-			// // 	}
-			// // 	if($minimum_quantity_factor==0.25){	
-			// // 		$item->print_quantity='250 gm';
-			// // 		$item->minimum_quantity_factor=$minimum_quantity_factor;	
-			// // 	}
-			// // 	if($minimum_quantity_factor==0.50){	
-			// // 		$item->print_quantity='500 gm';
-			// // 		$item->minimum_quantity_factor=$minimum_quantity_factor;	
-			// // 	}
-			// // 	if($minimum_quantity_factor==1){
-			// // 		$item->print_quantity='1 '.$unit_shortname;
-			// // 		$item->minimum_quantity_factor=$minimum_quantity_factor;
-			// // 	}
-			// // }else{		
-			// // 		$item->print_quantity='1 '.$unit_shortname;
-			// // 		$item->minimum_quantity_factor=1;
-			
+			//pr($item);exit;
 			if ($this->Items->save($item)) {
+				//pr($item);exit;
                 $this->Flash->success(__('The item has been saved.'));
 				  if (in_array($ext, $arr_ext)) {
 					move_uploaded_file($file['tmp_name'], WWW_ROOT . 'img/item_images/'.$img_name);
@@ -162,8 +126,8 @@ class ItemsController extends AppController
         }
 		
         $itemCategories = $this->Items->ItemCategories->find('list')->where(['is_deleted'=>0,'jain_thela_admin_id'=>$jain_thela_admin_id]);
-        $units = $this->Items->Units->find()->where(['is_deleted'=>0]);
-        $item_fetchs = $this->Items->find('list')->where(['is_virtual'=> 'no','freeze'=>0]);
+        $units = $this->Items->ItemVariations->Units->find()->where(['is_deleted'=>0]);
+        $item_fetchs = $this->Items->find('list')->where(['freeze'=>0]);
 		foreach($units as $unit_data){
 			$unit_name=$unit_data->unit_name;
 			$unit_option[]= ['value'=>$unit_data->id,'text'=>$unit_data->shortname,'unit_name'=>$unit_name];

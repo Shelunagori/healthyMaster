@@ -42,11 +42,7 @@ class ItemsTable extends Table
             'foreignKey' => 'item_category_id',
             'joinType' => 'LEFT'
         ]);
-        $this->belongsTo('Units', [
-            'foreignKey' => 'unit_id'
-        ]);
-		
-		
+    	
         $this->belongsTo('Franchises', [
             'foreignKey' => 'franchise_id',
             'joinType' => 'INNER'
@@ -80,25 +76,10 @@ class ItemsTable extends Table
         $validator
             ->requirePresence('name', 'create')
             ->notEmpty('name');
-/* 
-        $validator
-            ->requirePresence('alias_name', 'create')
-            ->notEmpty('alias_name');
- */
         $validator
             ->requirePresence('description', 'create')
             ->notEmpty('description');
 
-        $validator
-            ->decimal('minimum_stock')
-            ->requirePresence('minimum_stock', 'create')
-            ->notEmpty('minimum_stock');
-/* 
-        $validator
-            ->decimal('minimum_quantity_factor')
-            ->requirePresence('minimum_quantity_factor', 'create')
-            ->notEmpty('minimum_quantity_factor');
- */
         return $validator;
     }
 
@@ -112,8 +93,6 @@ class ItemsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['item_category_id'], 'ItemCategories'));
-        $rules->add($rules->existsIn(['unit_id'], 'Units'));
-
-        return $rules;
+		return $rules;
     }
 }
