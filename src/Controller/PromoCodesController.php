@@ -33,9 +33,9 @@ class PromoCodesController extends AppController
             }
             $this->Flash->error(__('The promo code could not be saved. Please, try again.'));
         }
-        $promoCodes = $this->PromoCodes->find()->where(['PromoCodes.jain_thela_admin_id'=>$jain_thela_admin_id]);
-        $itemCategories = $this->PromoCodes->ItemCategories->find('list', ['limit' => 200])->where(['jain_thela_admin_id'=>$jain_thela_admin_id]);
-        $items = $this->PromoCodes->Items->find('list', ['limit' => 200])->where(['jain_thela_admin_id'=>$jain_thela_admin_id]);
+        $promoCodes = $this->PromoCodes->find();
+        $itemCategories = $this->PromoCodes->ItemCategories->find('list');
+        $items = $this->PromoCodes->Items->find('list');
         $this->set(compact('promoCode', 'promoCodes', 'itemCategories','items'));
 		$this->set('_serialize', ['promoCode']);
         $this->set('_serialize', ['promoCodes']);

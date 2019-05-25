@@ -13,10 +13,24 @@
 				<?= $this->Form->create($promoCode,['id'=>'form_sample_3']) ?>
 				<div class="row">
 					<div class="col-md-8">
+						<label class=" control-label">Promo Code Type <span class="required" aria-required="true">*</span></label>
+						<select name="promo_code_type" class="form-control select2me" required>
+							<option value=""> Select Promo Code Type </option>
+							<option value="Item Wise"> Item Wise </option>
+							<option value="Category Wise"> Category Wise </option>
+							<option value="Free Shipping"> Free Shipping </option>
+							<option value="On Cart Value"> On Cart Value </option>
+						</select>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-8">
 						<label class=" control-label">Promo Code Name <span class="required" aria-required="true">*</span></label>
 						<?php echo $this->Form->control('code',['placeholder'=>'Promo Code Name','class'=>'form-control input-sm','label'=>false]); ?>
 					</div>
 				</div>
+
 				<div class="row">
 					<div class="col-md-8">
 						<div class="radio-list">

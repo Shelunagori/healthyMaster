@@ -281,19 +281,62 @@ class CartsController extends AppController
 		{
 			$delivery_charges = 'Free';
 		}
-
+		$discount_amount = 0.00;
 		if(!empty($promocode))
 		{
 			$ts = Time::now('Asia/Kolkata');
 			$current_timestamp = date('Y-m-d H:i:s',strtotime($ts));
 			$this->loadModel('PromoCodes');
-			$promoCodeLists = $this->PromoCodes->find()->where(['PromoCodes.valid_from <' =>$current_timestamp, 'PromoCodes.valid_to >' =>$current_timestamp,'PromoCodes.code'=>$promocode]);	
-			
-			if($promoCodeLists->)
-			
-			pr($promoCodeLists->toArray());exit;
-			
-			
+			$promoCodeLists = $this->PromoCodes->find()->where(['PromoCodes.valid_from <' =>$current_timestamp, 'PromoCodes.valid_to >' =>$current_timestamp,'PromoCodes.code'=>$promocode])->first();	
+			$cat_item_total = 0.00;
+		
+			foreach($carts as $cart_data)
+			{
+				echo $cart_data->item->id;
+				 if($promoCodeLists->promo_code_type = 'Item Wise')
+				{
+					if($cart_data->item->id == $promoCodeLists->item_id)
+					{
+						if($promoCodeLists->amount_type == 'percent')
+						{
+							$discount_amount =  $cart_data->total * $promoCodeLists->discount_per / 100;
+						}
+						else if($promoCodeLists->amount_type == 'amount' && $cart_data->total > $promoCodeLists->discount_per)
+						{
+							$discount_amount =  $cart_data->total - $promoCodeLists->discount_per;
+						}						
+					}
+				}
+
+				else if($promoCodeLists->promo_code_type = 'Category Wise')
+				{
+					if($cart_data->item->item_category_id == $promoCodeLists->item_category_id)
+					{
+						$cat_item_total = $cat_item_total + $cart_data->total;
+					}
+
+					if($promoCodeLists->amount_type == 'percent')
+					{
+						$discount_amount =  $cat_item_total * $promoCodeLists->discount_per / 100;
+					}
+					else if($promoCodeLists->amount_type == 'amount' && $cat_item_total > $promoCodeLists->discount_per)
+					{
+						$discount_amount =  $cat_item_total - $promoCodeLists->discount_per;
+					}						
+				} 			
+			} 
+
+
+				if($promoCodeLists->promo_code_type = 'Free Shipping')
+				{
+					
+				}
+
+				if($promoCodeLists->promo_code_type = 'On Cart Value')
+				{
+					
+				}	
+		
 		}
 
 		if(empty($carts->toArray()))
@@ -306,8 +349,8 @@ class CartsController extends AppController
 		else{
 			$status=true;
 			$error='';
-			$this->set(compact('status', 'error','address_available','grand_total','carts','delivery_charges','subtotal'));
-			$this->set('_serialize', ['status', 'error','subtotal','delivery_charges','grand_total','address_available','carts']);
+			$this->set(compact('status', 'error','address_available','grand_total','carts','delivery_charges','subtotal','discount_amount'));
+			$this->set('_serialize', ['status', 'error','subtotal','delivery_charges','discount_amount','grand_total','address_available','carts']);
 		}
 	}
 	
