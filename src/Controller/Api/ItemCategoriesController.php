@@ -10,7 +10,7 @@ class ItemCategoriesController extends AppController
 		$customer_id=$this->request->query('customer_id');
 		$dynamic=[];
 	    $itemCategories = $this->ItemCategories->find('All')->where(['is_deleted'=>0]);
-		$itemCategories->select(['image_url' => $itemCategories->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'itemcategories/','image' => 'identifier' ])])
+		$itemCategories->select(['image_url' => $itemCategories->func()->concat(['http://healthymaster.in'.$this->request->webroot.'itemcategories/','image' => 'identifier' ])])
                                 ->autoFields(true);
 		
 		
@@ -19,7 +19,7 @@ class ItemCategoriesController extends AppController
 		array_push($dynamic,$Category);
 		
 	    $banners = $this->ItemCategories->Banners->find('All')->where(['link_name'=>'offer', 'Banners.status'=>'Active']);
-		$banners->select(['image_url' => $banners->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'banners/','image' => 'identifier' ])])->autoFields(true);
+		$banners->select(['image_url' => $banners->func()->concat(['http://healthymaster.in'.$this->request->webroot.'banners/','image' => 'identifier' ])])->autoFields(true);
 
 		$query=$this->ItemCategories->Items->ItemLedgers->find();
 		$popular_items=$query
@@ -41,8 +41,15 @@ class ItemCategoriesController extends AppController
 								}
 							]);
 						}]);
-						$popular_items->select(['image_url' => $popular_items->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
-			
+						
+					if(!empty($popular_items->toArray()))
+					{
+						foreach($popular_items as $popular_item)
+						{
+							$popular_item->item->image = 'http://healthymaster.in'.$this->request->webroot.'img/item_images/'.$popular_item->item->image;	
+						}
+					}						
+		
 			$popular_items_list = array("title"=>'Popular Items',"List"=>$popular_items);
 			array_push($dynamic,$popular_items_list);
 			
@@ -65,12 +72,21 @@ class ItemCategoriesController extends AppController
 								}
 							]);
 						}]);
-						$recently_bought->select(['image_url' => $recently_bought->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]); 
+					
+
+					if(!empty($recently_bought->toArray()))
+					{
+						foreach($recently_bought as $popular_item)
+						{
+							$popular_item->item->image = 'http://healthymaster.in'.$this->request->webroot.'img/item_images/'.$popular_item->item->image;	
+						}
+					}
+
 
 				$top_selling_list = array("title"=>'Top Selling Product',"List"=>$recently_bought);
 				array_push($dynamic,$top_selling_list);
 		
-						$cart_count = $this->ItemCategories->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();						
+				$cart_count = $this->ItemCategories->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();						
 
 		$status=true;
 		$error="";
@@ -82,7 +98,7 @@ class ItemCategoriesController extends AppController
 	{
 		$customer_id=$this->request->query('customer_id');
 	    $categoryList = $this->ItemCategories->find('All')->where(['is_deleted'=>0]);
-		$categoryList->select(['image_url' => $categoryList->func()->concat(['http://http://healthymaster.in'.$this->request->webroot.'itemcategories/','image' => 'identifier' ])])->autoFields(true);		
+		$categoryList->select(['image_url' => $categoryList->func()->concat(['http://healthymaster.in'.$this->request->webroot.'itemcategories/','image' => 'identifier' ])])->autoFields(true);		
 		
 		$cart_count = $this->ItemCategories->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();	
 		$status=true;

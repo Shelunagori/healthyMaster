@@ -56,30 +56,48 @@ class OrdersController extends AppController
 		$order_id=$this->request->query('order_id');
 		
 		$orders_details_data = $this->Orders->get($order_id, ['contain'=>
-		['OrderDetails'=>			
-				'Items'=>function($q)
-				{
-				   return $q->select(['image_path' => $q->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
-				   ->contain(['ItemVariations' =>['Units']])
-				   ->autoFields(true);
-				}
+		['OrderDetails'=>	
+			['ItemVariations' =>['Units','Items'=>function($q)
+			{
+			   return $q->select(['image_path' => $q->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
+			   ->autoFields(true);
+			}]]
+			
 		]]);
-		
-		
-		
-		$orders_details_data->curent_date=date('D M j, Y H:i a', strtotime($orders_details_data->curent_date));
-	 	$orders_details_data->order_date=date('D M j, Y H:i a', strtotime($orders_details_data->order_date));
-	    $orders_details_data->delivery_date=date('D M j, Y H:i a', strtotime($orders_details_data->delivery_date));
-		
-		 $c_a_id=$orders_details_data->customer_address_id;
-		 $customer_addresses=$this->Orders->CustomerAddresses->find()
-		->where(['CustomerAddresses.customer_id' => $customer_id, 'CustomerAddresses.id'=>$c_a_id])->first();
-		
-		 $cancellation_reasons=$this->Orders->CancelReasons->find();
-		
+	
+		if(!empty($orders_details_data->toArray()))
+		{
+			
+			foreach($orders_details_data->order_details as $details)
+			{
+				$details->item = $details->item_variation->item;
+				unset($details->item_variation->item);
+				$details->item->item_variation = [$details->item_variation];
+				unset($details->item_variation);
+			}
+			//pr($orders_details_data);exit;
+			$orders_details_data->curent_date=date('D M j, Y H:i a', strtotime($orders_details_data->curent_date));
+			$orders_details_data->order_date=date('D M j, Y H:i a', strtotime($orders_details_data->order_date));
+			$orders_details_data->delivery_date=date('D M j, Y H:i a', strtotime($orders_details_data->delivery_date));
+			
+			 $c_a_id=$orders_details_data->customer_address_id;
+			 $customer_addresses=$this->Orders->CustomerAddresses->find()
+			->where(['CustomerAddresses.customer_id' => $customer_id, 'CustomerAddresses.id'=>$c_a_id])->first();
+			
+			if(empty($customer_addresses)) { $customer_addresses = []; }
+			
+			 $cancellation_reasons=$this->Orders->CancelReasons->find();
+			
 
-		$status=true;
-		$error="";
+			$status=true;
+			$error="";			
+		}
+		else
+		{
+			$status=false;
+			$error="No data Found";			
+		}			
+
         $this->set(compact('status', 'error','orders_details_data','customer_addresses','cancellation_reasons'));
         $this->set('_serialize', ['status', 'error', 'orders_details_data','customer_addresses','cancellation_reasons']);
     }

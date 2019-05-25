@@ -343,5 +343,31 @@ class ItemsController extends AppController
     }
 
 
-	
+	public function wishListItem()
+	{
+		$customer_id=$this->request->query('customer_id');	
+		$this->loadModel('Wishlists');		
+		$wishlist = $this->Wishlists->find()
+		->contain(['Items' =>['ItemVariations' =>['Units']]])
+		->where(['customer_id' => $customer_id]);
+		
+		if(!empty($wishlist->toArray()))
+		{
+			foreach($wishlist as $wishListItem)
+			{
+				$wishListItem->item->image = 'http://healthymaster.in'.$this->request->webroot.'img/item_images/'.$wishListItem->item->image;
+			}
+			
+			$totalItem = sizeof($wishlist->toArray());
+			$status=true;
+			$error="";			
+		}else
+		{
+			$totalItem = 0;
+			$status=false;
+			$error="No data found";				
+		}
+        $this->set(compact('status', 'error','totalItem', 'wishlist'));
+        $this->set('_serialize', ['status', 'error','totalItem', 'wishlist']);
+	}
 }

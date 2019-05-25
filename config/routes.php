@@ -103,6 +103,10 @@ Router::prefix('api', function ($routes) {
 			   'fetch_item' => [
 				   'action' => 'fetch_item',
 				   'method' => 'GET'
+			   ],
+			   'wish_list_item' => [
+				   'action' => 'wish_list_item',
+				   'method' => 'GET'
 			   ]
 		   ]
 		]
@@ -214,6 +218,10 @@ Router::prefix('api', function ($routes) {
 			   'reviewOrder' => [
 				   'action' => 'reviewOrder',
 				   'method' => 'GET'
+			   ],
+			   'move_to_cart' => [
+				   'action' => 'move_to_cart',
+				   'method' => 'POST'
 			   ]
 		   ]
 		]
@@ -372,6 +380,18 @@ Router::prefix('api', function ($routes) {
 		   ]
 		]
 	);
+
+	$routes->resources(
+		'WishLists', [
+		   'map' => [
+			   'add_wish_list' => [
+				   'action' => 'add_wish_list',
+				   'method' => 'GET'
+			   ]
+		   ]
+		]
+	);
+
 	
 	$routes->resources(
 		'ItemSubCategories', [
@@ -476,9 +496,6 @@ Router::prefix('api', function ($routes) {
 		   ]
 		]
 	);
-
-	
-
 });
 
 /**
