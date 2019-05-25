@@ -12,7 +12,8 @@ class CartsController extends AppController
 		$item_variation_id=$this->request->data('item_variation_id');
 		$customer_id=$this->request->data('customer_id');
 		$items = $this->Carts->Items->get($item_id);
-		$item_add_quantity=$items->minimum_quantity_factor;
+		//$item_add_quantity=$items->minimum_quantity_factor;
+		$item_add_quantity=1;
 		$is_combo=$items->is_combo;
 		$fetchs=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id]);
 		if(empty($fetchs->toArray()))
@@ -62,7 +63,8 @@ class CartsController extends AppController
 		$item_variation_id=$this->request->data('item_variation_id');
 		$customer_id=$this->request->data('customer_id');
 		$items = $this->Carts->Items->get($item_id);
-		$item_add_quantity=$items->minimum_quantity_factor;
+		//$item_add_quantity=$items->minimum_quantity_factor;
+		$item_add_quantity=1;
 		$is_combo=$items->is_combo;
 		$fetchs=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id,'item_variation_id' => $item_variation_id]);
 		
@@ -136,7 +138,8 @@ class CartsController extends AppController
 		
 		if($tag=='add'){
 			$items = $this->Carts->Items->get($item_id);
-			$item_add_quantity=$items->minimum_quantity_factor;
+			//$item_add_quantity=$items->minimum_quantity_factor;
+			$item_add_quantity=1;
      		$is_combo=$items->is_combo;
     
         	$fetchs=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id, 'item_variation_id' =>$item_variation_id]);
@@ -173,7 +176,8 @@ class CartsController extends AppController
 		else if($tag=='minus')
 		{
 			$items = $this->Carts->Items->get($item_id);
-			$item_add_quantity=$items->minimum_quantity_factor;
+			//$item_add_quantity=$items->minimum_quantity_factor;
+			$item_add_quantity=1;
      		$is_combo=$items->is_combo;
     
 			$fetchs=$this->Carts->find()->where(['customer_id' => $customer_id, 'item_id' =>$item_id,'item_variation_id' =>$item_variation_id]);
@@ -267,21 +271,8 @@ class CartsController extends AppController
 		
 		$subtotal = $grand_total;
 		
-		
-		$delivery_charges = '0';
-		$this->loadModel('DeliveryCharges');
-		$delivery_charges=$this->DeliveryCharges->find()->order(['id' =>'DESC'])->first();
-		
-		if($grand_total < $delivery_charges->amount)
-		{
-			$delivery_charges = $delivery_charges->charge;
-			$grand_total = $grand_total + $delivery_charges->charge;
-		}
-		else
-		{
-			$delivery_charges = 'Free';
-		}
 		$discount_amount = 0.00;
+		$isPromoApplied = false;
 		if(!empty($promocode))
 		{
 			$ts = Time::now('Asia/Kolkata');
@@ -289,56 +280,106 @@ class CartsController extends AppController
 			$this->loadModel('PromoCodes');
 			$promoCodeLists = $this->PromoCodes->find()->where(['PromoCodes.valid_from <' =>$current_timestamp, 'PromoCodes.valid_to >' =>$current_timestamp,'PromoCodes.code'=>$promocode])->first();	
 			$cat_item_total = 0.00;
-		
-			foreach($carts as $cart_data)
+			$isFreeShipping = 'No';	
+			
+			if(!empty($promoCodeLists))
 			{
-				echo $cart_data->item->id;
-				 if($promoCodeLists->promo_code_type = 'Item Wise')
+				foreach($carts as $cart_data)
 				{
-					if($cart_data->item->id == $promoCodeLists->item_id)
+					//echo $cart_data->item->id;
+					if($promoCodeLists->promo_code_type == 'Item Wise')
+					{
+						if($cart_data->item->id == $promoCodeLists->item_id)
+						{
+							if($promoCodeLists->amount_type == 'percent')
+							{
+								$discount_amount =  $cart_data->total * $promoCodeLists->discount_per / 100;
+							}
+							else if($promoCodeLists->amount_type == 'amount' && $cart_data->total > $promoCodeLists->discount_per)
+							{
+								$discount_amount =  $cart_data->total - $promoCodeLists->discount_per;
+							}						
+						}
+					}
+
+					else if($promoCodeLists->promo_code_type == 'Category Wise')
+					{
+						if($cart_data->item->item_category_id == $promoCodeLists->item_category_id)
+						{
+							$cat_item_total = $cat_item_total + $cart_data->total;
+						}
+
+						if($promoCodeLists->amount_type == 'percent')
+						{
+							$discount_amount =  $cat_item_total * $promoCodeLists->discount_per / 100;
+						}
+						else if($promoCodeLists->amount_type == 'amount' && $cat_item_total > $promoCodeLists->discount_per)
+						{
+							$discount_amount =  $cat_item_total - $promoCodeLists->discount_per;
+						}						
+					} 			
+				} 
+				
+				
+				
+				if($promoCodeLists->promo_code_type == 'Free Shipping')
+				{
+					if($promoCodeLists->is_freeship == 1)
+					{
+						if($grand_total >= $promoCodeLists->cart_value)
+						{
+							$isFreeShipping = 'Yes';
+						}
+					}
+				}
+
+				if($promoCodeLists->promo_code_type == 'On Cart Value')
+				{
+					if($grand_total >= $promoCodeLists->cart_value)
 					{
 						if($promoCodeLists->amount_type == 'percent')
 						{
-							$discount_amount =  $cart_data->total * $promoCodeLists->discount_per / 100;
+							$discount_amount =  $grand_total * $promoCodeLists->discount_per / 100;
 						}
-						else if($promoCodeLists->amount_type == 'amount' && $cart_data->total > $promoCodeLists->discount_per)
+						else if($promoCodeLists->amount_type == 'amount' && $grand_total > $promoCodeLists->discount_per)
 						{
-							$discount_amount =  $cart_data->total - $promoCodeLists->discount_per;
-						}						
-					}
-				}
-
-				else if($promoCodeLists->promo_code_type = 'Category Wise')
-				{
-					if($cart_data->item->item_category_id == $promoCodeLists->item_category_id)
-					{
-						$cat_item_total = $cat_item_total + $cart_data->total;
-					}
-
-					if($promoCodeLists->amount_type == 'percent')
-					{
-						$discount_amount =  $cat_item_total * $promoCodeLists->discount_per / 100;
-					}
-					else if($promoCodeLists->amount_type == 'amount' && $cat_item_total > $promoCodeLists->discount_per)
-					{
-						$discount_amount =  $cat_item_total - $promoCodeLists->discount_per;
-					}						
-				} 			
-			} 
-
-
-				if($promoCodeLists->promo_code_type = 'Free Shipping')
-				{
-					
-				}
-
-				if($promoCodeLists->promo_code_type = 'On Cart Value')
-				{
-					
+							$discount_amount =  $grand_total - $promoCodeLists->discount_per;
+						}					
+					}				
 				}	
-		
+				
+				if($discount_amount > 0)
+				{
+					round($discount_amount);
+					$grand_total = $grand_total - $discount_amount;
+					$isPromoApplied = true;
+				}		
+			}
 		}
 
+
+		$delivery_charges = '0';
+		$this->loadModel('DeliveryCharges');
+		$delivery_charges=$this->DeliveryCharges->find()->order(['id' =>'DESC'])->first();
+		if($isFreeShipping == 'Yes')
+		{
+			$delivery_charges = 'Free';
+			$isPromoApplied = true;
+		}
+		else if($grand_total < $delivery_charges->amount)
+		{
+			$delivery_charges = $delivery_charges->charge;
+			$grand_total = $grand_total + $delivery_charges->charge;
+			round($delivery_charges);
+		}
+		else
+		{
+			$delivery_charges = 'Free';
+		}
+
+		round($subtotal);
+		round($grand_total);
+		
 		if(empty($carts->toArray()))
 		{			
 			$status=false;
@@ -349,8 +390,8 @@ class CartsController extends AppController
 		else{
 			$status=true;
 			$error='';
-			$this->set(compact('status', 'error','address_available','grand_total','carts','delivery_charges','subtotal','discount_amount'));
-			$this->set('_serialize', ['status', 'error','subtotal','delivery_charges','discount_amount','grand_total','address_available','carts']);
+			$this->set(compact('status', 'error','address_available','grand_total','carts','delivery_charges','subtotal','discount_amount','isPromoApplied'));
+			$this->set('_serialize', ['status', 'error','subtotal','delivery_charges','discount_amount','isPromoApplied','grand_total','address_available','carts']);
 		}
 	}
 	

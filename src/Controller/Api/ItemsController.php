@@ -137,7 +137,7 @@ class ItemsController extends AppController
 		$type=$this->request->query('type');
 		$customer_id=$this->request->query('customer_id');
 
-		if($type=='popular')
+		if($type=='Popular Items')
 		{
 			$query=$this->Items->ItemLedgers->find();
 		$view_items=$query
@@ -166,12 +166,6 @@ class ItemsController extends AppController
 								])->autoFields(true);
 							}]);
 						$view_items->select(['image_url' => $view_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
-						
-	/* 	foreach($view_items as $item){
-			if(!$item->item->cart){
-				$item->item->cart=(object)[];
-			}
-		} */
 		}
 		else if($type=='recently')
 		{
@@ -205,7 +199,7 @@ class ItemsController extends AppController
 		
 
 		}
-		else if($type='bought')
+		else if($type='Top Selling Product')
 		{
         $querys=$this->Items->ItemLedgers->find();
 				$view_items=$querys
@@ -234,11 +228,6 @@ class ItemsController extends AppController
 								])->autoFields(true);
 						}]);
 						$view_items->select(['image_url' => $view_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
-	/* 	foreach($view_items as $item){
-			if(!$item->item->cart){
-				$item->item->cart=(object)[];
-			}
-		} */
 		}
         
 		$cart_count = $this->Items->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
