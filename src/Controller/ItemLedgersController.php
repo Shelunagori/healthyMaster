@@ -106,7 +106,7 @@ class ItemLedgersController extends AppController
 			return $this->redirect(['action' => 'add']);
             $this->Flash->error(__('The item ledger could not be saved. Please, try again.'));
         }
-		$item_fetchs = $this->ItemLedgers->Items->find()->where(['Items.jain_thela_admin_id' => $jain_thela_admin_id, 'Items.is_combo'=>'no', 'Items.is_virtual'=>'no', 'Items.freeze'=>0])->contain(['Units']);
+		$item_fetchs = $this->ItemLedgers->Items->find()->where(['Items.is_combo'=>'no', 'Items.is_virtual'=>'no', 'Items.freeze'=>0]);
 			foreach($item_fetchs as $item_fetch){
 			$item_name=$item_fetch->name;
 			$alias_name=$item_fetch->alias_name;
@@ -115,11 +115,12 @@ class ItemLedgersController extends AppController
 			$minimum_quantity_factor=$item_fetch->minimum_quantity_factor;
 			$items[]= ['value'=>$item_fetch->id,'text'=>$item_name." (".$alias_name.")", 'print_quantity'=>$print_quantity, 'minimum_quantity_factor'=>$minimum_quantity_factor, 'unit_name'=>$unit_name];
 		}
-		pr($items[]);exit;
+		//pr($items[]);exit;
         $drivers = $this->ItemLedgers->Drivers->find('list')->where(['jain_thela_admin_id' => $jain_thela_admin_id]);
 
 		$warehouses = $this->ItemLedgers->Warehouses->find('list')->where(['jain_thela_admin_id' => $jain_thela_admin_id]);
-        $this->set(compact('itemLedger', 'items', 'drivers', 'warehouses'));
+		$item = $this->ItemLedgers->Items->find('list');
+        $this->set(compact('itemLedger', 'items', 'drivers', 'warehouses','item'));
         $this->set('_serialize', ['itemLedger']);
     }
 

@@ -33,7 +33,7 @@ class PromoCodesController extends AppController
             }
             $this->Flash->error(__('The promo code could not be saved. Please, try again.'));
         }
-        $promoCodes = $this->PromoCodes->find();
+        $promoCodes = $this->PromoCodes->find()->contain(['ItemCategories']);
         $itemCategories = $this->PromoCodes->ItemCategories->find('list');
         $items = $this->PromoCodes->Items->find('list');
         $this->set(compact('promoCode', 'promoCodes', 'itemCategories','items'));
@@ -70,7 +70,7 @@ class PromoCodesController extends AppController
         
         //pr($promoCodes->toArray());exit
         $itemCategories = $this->PromoCodes->ItemCategories->find('list', ['limit' => 200])->where(['jain_thela_admin_id'=>$jain_thela_admin_id]);
-        $items = $this->PromoCodes->Items->find('list', ['limit' => 200])->where(['jain_thela_admin_id'=>$jain_thela_admin_id]);
+        $items = $this->PromoCodes->Items->find('list', ['limit' => 200]);
         $this->set(compact('promoCode', 'promoCodes', 'itemCategories','items'));
         $this->set('_serialize', ['promoCode']);
         $this->set('_serialize', ['promoCodes']);
@@ -134,6 +134,7 @@ class PromoCodesController extends AppController
      */
     public function edit($id = null)
     {
+        $this->viewBuilder()->layout('index_layout');
         $promoCode = $this->PromoCodes->get($id, [
             'contain' => []
         ]);
@@ -147,8 +148,9 @@ class PromoCodesController extends AppController
             $this->Flash->error(__('The promo code could not be saved. Please, try again.'));
         }
         $itemCategories = $this->PromoCodes->ItemCategories->find('list', ['limit' => 200]);
+        $items = $this->PromoCodes->Items->find('list', ['limit' => 200]);
         $jainThelaAdmins = $this->PromoCodes->JainThelaAdmins->find('list', ['limit' => 200]);
-        $this->set(compact('promoCode', 'itemCategories', 'jainThelaAdmins'));
+        $this->set(compact('promoCode', 'itemCategories', 'jainThelaAdmins','items'));
         $this->set('_serialize', ['promoCode']);
     }
 

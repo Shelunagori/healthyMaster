@@ -40,7 +40,7 @@
                 
                 <td><?= h(date('d-M-Y', strtotime($transferInventoryVoucher->created_on))) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $transferInventoryVoucher->id]) ?>
+                    <?= $this->Html->link(__('<span class="fa fa-pencil"></span>'), ['action' => 'edit', $transferInventoryVoucher->id],['class'=>'btn btn-primary  btn-condensed btn-sm','escape'=>false]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

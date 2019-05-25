@@ -52,6 +52,8 @@ class GrnsTable extends Table
             'foreignKey' => 'jain_thela_admin_id',
             'joinType' => 'INNER'
         ]);
+
+        
         $this->hasMany('GrnDetails', [
             'foreignKey' => 'grn_id'
         ]);
@@ -75,19 +77,19 @@ class GrnsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
-        $validator
-            ->integer('id')
-            ->allowEmpty('id', 'create');
+        // $validator
+        //     ->integer('id')
+        //     ->allowEmpty('id', 'create');
 
-        $validator
-            ->integer('grn_no')
-            ->requirePresence('grn_no', 'create')
-            ->notEmpty('grn_no');
+        // $validator
+        //     ->integer('grn_no')
+        //     ->requirePresence('grn_no', 'create')
+        //     ->notEmpty('grn_no');
 
-        $validator
-            ->date('transaction_date')
-            ->requirePresence('transaction_date', 'create')
-            ->notEmpty('transaction_date');
+        // $validator
+        //     ->date('transaction_date')
+        //     ->requirePresence('transaction_date', 'create')
+        //     ->notEmpty('transaction_date');
 
         return $validator;
     }

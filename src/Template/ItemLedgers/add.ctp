@@ -287,7 +287,7 @@ $(document).ready(function() {
 				<tr class="main_tr" class="tab">
 					<td align="center" width="1px"></td>
 				    <td>
-						<?= $this->Form->input('item_id[]',array('options' => $items,'class'=>'form-control input-sm itm_chng attribute','empty' => 'Select','label'=>false)) ?>
+						<?= $this->Form->input('item_id[]',array('options' => $item,'class'=>'form-control input-sm itm_chng attribute','empty' => 'Select','label'=>false)) ?>
 						<span class="msg_shw" style="color:blue;font-size:12px;"></span>
 					
 					</td>
