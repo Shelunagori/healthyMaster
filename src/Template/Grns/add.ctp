@@ -50,10 +50,15 @@
 									<td width="70%">
 										<label>item<label>
 									</td>
+									<td width="70%">
+										<label>Variation<label>
+									</td>
 									<td width="20%">
 										<label>Quantity<label>
 									</td>
-									<td></td>
+									<td>
+										<label>Action</label>
+									</td>
 								</tr>
 							</thead>
 							<tbody id='main_tbody' class="tab">
@@ -62,7 +67,7 @@
 							<tfoot>
 								
 								<tr>
-									<td colspan="4"><a class="btn btn-default input-sm add_row" href="#" role="button" ><i class="fa fa-plus"></i> Add Row</a></td>
+									<td colspan="5"><a class="btn btn-default input-sm add_row" href="#" role="button" ><i class="fa fa-plus"></i> Add Row</a></td>
 								</tr>
 							</tfoot>
 						</table>
@@ -83,6 +88,36 @@
 <script>
 $(document).ready(function() {
 	
+
+	 $(document).on('change','.item-id',function(){
+        var input=$(this).val();
+        var master = $(this); 
+        master.closest('tr').find("td:nth-child(3) .varition option").remove();
+        if(input.length>0){
+            var m_data = new FormData();
+            var url ="<?php echo $this->Url->build(["controller" => "Grns", "action" => "options"]); ?>";
+         //   alert(url);
+            m_data.append('input',input); 
+            $.ajax({
+                url: url,
+                data: m_data,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                dataType:'text',
+                success: function(data)
+                { 
+                	//alert(data);
+
+					//$("#breeds").append('<option value=' + key + '>' + value + '</option>');
+					//master.closest('tr').find('td:nth-child(3) .varition').append('').select2();
+                    master.closest('tr').find('td:nth-child(3) .varition').append(data);
+                   	//master.css("background","#FFF");
+                }
+            });
+        }
+      });
+
   //--------- FORM VALIDATION
 	var form3 = $('#form_sample_3');
 	var error3 = $('.alert-danger', form3);
@@ -172,7 +207,10 @@ $(document).ready(function() {
 			$(this).find("td:nth-child(2) select").select2().attr({name:"grn_details["+i+"][item_id]", id:"grn_details-"+i+"-item_id"}).rules('add', {
 						required: true
 					});
-			$(this).find("td:nth-child(3) input").attr({name:"grn_details["+i+"][quantity]", id:"grn_details-"+i+"-quantity"}).rules('add', {
+			$(this).find("td:nth-child(3) select").select2().attr({name:"grn_details["+i+"][item_variation_id]"}).rules('add', {
+						required: true
+					});
+			$(this).find("td:nth-child(4) input").attr({name:"grn_details["+i+"][quantity]", id:"grn_details-"+i+"-quantity"}).rules('add', {
 						required: true
 					});
 			i++;
@@ -203,8 +241,16 @@ $(this).closest('tr').find('.msg_shw').html("Selling Factor in : " +raw_attr_nam
 				<tr class="main_tr" class="tab">
 					<td align="center" width="1px"></td>
 				    <td>
-						<?php echo $this->Form->input('item_id', ['empty'=>'--Select-','options'=>$items,'label' => false,'class' => 'form-control input-sm attribute']); ?>
+						<?php echo $this->Form->input('item_id', ['empty'=>'--Select-','options'=>$item,'label' => false,'class' => 'form-control input-sm attribute item-id','id'=>'item']); ?>
 						<span class="msg_shw" style="color:blue;font-size:12px;"></span>
+					</td>
+					<td>
+						<select name="variation" class="form-control varition">
+							<option>--Select--</option>
+							
+						</select>
+
+						<span class="msg_shw2" style="color:blue;font-size:12px;"></span>
 					</td>
 					<td>
 						<?php echo $this->Form->input('quantity', ['label' => false,'class' => 'form-control input-sm number quant','placeholder'=>'Quantity']); ?>
@@ -216,4 +262,3 @@ $(this).closest('tr').find('.msg_shw').html("Selling Factor in : " +raw_attr_nam
 				</tr>
 			</tbody>
 		</table>
-

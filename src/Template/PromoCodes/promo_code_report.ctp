@@ -54,6 +54,7 @@
 						<th>Valid From</th>
 						<th>Valid To</th>
 						<th>Status</th>
+						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -99,6 +100,9 @@
 						</td>
 						<td>
 						<?php echo  $this->Form->control('status',['class'=>'form-control input-sm input-small status','options'=>['Active'=>'Active','Deactive'=>'Deactive'], 'value'=>$promoCode->status,'label'=>false]); ?>
+						</td>
+						<td class="actions">
+							<?= $this->Html->link(__('<span class="fa fa-pencil"></span>'), ['action' => 'edit', $promoCode->id],['class'=>'btn btn-primary  btn-condensed btn-sm','escape'=>false]) ?>
 						</td>
 						
 					</tr>

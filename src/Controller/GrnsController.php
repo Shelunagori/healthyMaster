@@ -44,13 +44,30 @@ class GrnsController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+
+
+    public function options(){
+        $item_id=$this->request->getData('input'); 
+
+            $items=$this->Grns->GrnDetails->Items->ItemVariations->find()->where(['ItemVariations.item_id '=>$item_id])->contain(['Units']);
+            ?>
+                    
+                    <?php foreach($items as $show){ ?>
+                        
+                        <option value="<?= $show->id ?>"><?= $show->quantity_variation." ".$show->unit->shortname ?></option>
+                    <?php } ?>
+            <?php
+        
+        exit;  
+    }
+
     public function view($id = null)
     {
 		$this->viewBuilder()->layout('index_layout');
 		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
 		
         $grn = $this->Grns->get($id, [
-            'contain' => ['Vendors','Warehouses','GrnDetails'=>['Items'=>['Units']]]
+            'contain' => ['Vendors','Warehouses','GrnDetails'=>['Items','ItemVariations'=>['Units']]]
         ]);
 		
         $this->set('grn', $grn);
@@ -105,7 +122,7 @@ class GrnsController extends AppController
         }
         $vendors = $this->Grns->Vendors->find('list');
         $warehouses = $this->Grns->ItemLedgers->Warehouses->find('list')->where(['jain_thela_admin_id'=>$jain_thela_admin_id]);
-			$item_fetchs = $this->Grns->GrnDetails->Items->find()->where(['Items.jain_thela_admin_id' => $jain_thela_admin_id, 'Items.is_combo'=>'no', 'Items.is_virtual'=>'no', 'Items.freeze'=>0])->contain(['Units']);
+			$item_fetchs = $this->Grns->GrnDetails->Items->find()->where([ 'Items.is_combo'=>'no', 'Items.is_virtual'=>'no', 'Items.freeze'=>0]);
 		foreach($item_fetchs as $item_fetch){
 			$item_name=$item_fetch->name;
 			$alias_name=$item_fetch->alias_name;
@@ -116,7 +133,8 @@ class GrnsController extends AppController
 			$minimum_quantity_purchase=$item_fetch->minimum_quantity_purchase;
 			$items[]= ['value'=>$item_fetch->id,'text'=>$item_name." (".$alias_name.")", 'print_quantity'=>$print_quantity, 'rates'=>$rates, 'minimum_quantity_factor'=>$minimum_quantity_factor, 'unit_name'=>$unit_name, 'minimum_quantity_purchase'=>$minimum_quantity_purchase];
 		}
-        $this->set(compact('grn', 'vendors', 'items', 'warehouses'));
+        $item=$this->Grns->GrnDetails->Items->find('list');
+        $this->set(compact('grn', 'vendors', 'items', 'warehouses','item'));
         $this->set('_serialize', ['grn']);
     }
 

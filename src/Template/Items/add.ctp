@@ -118,6 +118,8 @@
 $(document).ready(function() {
 	add_row();
 
+	
+
 	 $(document).on('click','#plus',function(){
            add_row();
       });

@@ -37,6 +37,11 @@ class GrnDetailsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
+        $this->belongsTo('ItemVariations', [
+            'foreignKey' => 'item_variation_id',
+            'joinType' => 'INNER'
+        ]);
+
         $this->belongsTo('Grns', [
             'foreignKey' => 'grn_id',
             'joinType' => 'INNER'
@@ -54,14 +59,14 @@ class GrnDetailsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
-        $validator
-            ->integer('id')
-            ->allowEmpty('id', 'create');
+        // $validator
+        //     ->integer('id')
+        //     ->allowEmpty('id', 'create');
 
-        $validator
-            ->decimal('quantity')
-            ->requirePresence('quantity', 'create')
-            ->notEmpty('quantity');
+        // $validator
+        //     ->decimal('quantity')
+        //     ->requirePresence('quantity', 'create')
+        //     ->notEmpty('quantity');
 
         return $validator;
     }

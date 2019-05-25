@@ -91,7 +91,7 @@ class WishlistsController extends AppController
         
         //pr($promoCodes->toArray());exit
          $Customers = $this->Wishlists->Customers->find('list', ['limit' => 200]);
-        $items = $this->Wishlists->Items->find('list', ['limit' => 200])->where(['jain_thela_admin_id'=>$jain_thela_admin_id]);
+        $items = $this->Wishlists->Items->find('list', ['limit' => 200]);
         $item_variation = $this->Wishlists->ItemVariations->find('list', ['limit' => 200]);
         $this->set(compact('Wishlist', 'Wishlists','items','Customers','item_variation'));
     }

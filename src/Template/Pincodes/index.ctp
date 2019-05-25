@@ -10,7 +10,7 @@
                 <div class="caption">
                     <i class="font-purple-intense"></i>
                     <span class="caption-subject font-purple-intense ">
-                        <i class="fa fa-plus"></i> Customers
+                        <i class="fa fa-plus"></i> PinCode
                     </span>
                 </div>
                 <div class="actions">
@@ -40,7 +40,7 @@
                             <td><?= h($pincode->city->name) ?></td>
                             <td><?= h($pincode->pincode) ?></td>
                             <td class="actions">
-                                <?= $this->Html->link(__('Edit'), ['action' => 'edit', $pincode->id]) ?>
+                                <?= $this->Html->link(__('<span class="fa fa-pencil"></span>'), ['action' => 'edit', $pincode->id],['class'=>'btn btn-primary  btn-condensed btn-sm','escape'=>false]) ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>

@@ -12,7 +12,7 @@
 			<div class="portlet-body">
 				<?= $this->Form->create($promoCode,['id'=>'form_sample_3']) ?>
 				<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-10">
 						<label class=" control-label">Promo Code Type <span class="required" aria-required="true">*</span></label>
 						<select name="promo_code_type" class="form-control select2me" required>
 							<option value=""> Select Promo Code Type </option>
@@ -25,14 +25,21 @@
 				</div>
 
 				<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-10">
 						<label class=" control-label">Promo Code Name <span class="required" aria-required="true">*</span></label>
 						<?php echo $this->Form->control('code',['placeholder'=>'Promo Code Name','class'=>'form-control input-sm','label'=>false]); ?>
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-10">
+						<label class=" control-label">Title<span class="required" aria-required="true">*</span></label>
+						<?php echo $this->Form->control('title',['placeholder'=>'Title','class'=>'form-control input-sm','label'=>false]); ?>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-10">
 						<div class="radio-list">
 							<label>Type</label>
 								<div class="radio-inline" style="padding-right: 1px;">
@@ -41,43 +48,49 @@
 					</div>
 				</div>
 					<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-10">
 						<label class=" control-label">Discount</label>
 						<?php echo $this->Form->control('discount_per',['placeholder'=>'Discount','class'=>'form-control input-sm','label'=>false]); ?>
 					</div></div>
 					<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-10">
 						<?php echo $this->Form->control('item_category_id', ['empty'=>'-- select --','options' => $itemCategories,'class'=>'form-control input-sm select select2me select2','required']); ?>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-10">
 						<label class=" control-label">Item<span class="required" aria-required="true">*</span></label>
 						<?php echo $this->Form->control('item_id',['empty'=>'--Select Item--','options' => $items,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','label'=>false]); ?>
 
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-10">
 						<?php echo $this->Form->input('is_freeship', array('type'=>'checkbox', 'label'=>'Is Free Ship','id'=>'freeship'));
 						?>
 					</div>
 					
 				</div>
 				<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-10">
 						<label class=" control-label">Cart Value <span class="required" aria-required="true">*</span></label>
 						<?php echo $this->Form->control('cart_value',['placeholder'=>'Cart Value','class'=>'form-control input-sm','label'=>false]); ?>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-10">
+						<label class=" control-label">Description<span class="required" aria-required="true">*</span></label>
+						<textarea name="description" class="form-control"></textarea>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-10">
 						<label class=" control-label">Valid From</label>
 						<?php echo $this->Form->control('valid_from',['readonly','placeholder'=>'Valid From','class'=>'form-control input-sm date-time-range-picker select2','label'=>false]); ?>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-10">
 						<label class=" control-label">Valid To</label>
 						<?php echo $this->Form->control('valid_to',['readonly','placeholder'=>'Valid To','class'=>'form-control input-sm','label'=>false]); ?>
 					</div>
@@ -124,7 +137,7 @@
 							<td><?= $i ?></td>
 							<td><?= h(@$promoCode->code) ?></td>
 							<td><?= h(@$promoCode->discount_per) ?></td>
-							<td><?= h(@$promoCode->ItemCategories->item_category_id) ?></td>
+							<td><?= h(@$promoCode->item_category->name) ?></td>
 							<td><?= h(@$promoCode->valid_from) ?>
 							<td><?= h(@$promoCode->valid_to) ?>
 							<span id="status_id" style="display:none;"><?php echo $promoCode->id; ?></span>
