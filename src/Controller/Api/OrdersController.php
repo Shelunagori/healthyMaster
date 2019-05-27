@@ -84,7 +84,7 @@ class OrdersController extends AppController
 			 $customer_addresses=$this->Orders->CustomerAddresses->find()
 			->where(['CustomerAddresses.customer_id' => $customer_id, 'CustomerAddresses.id'=>$c_a_id])->first();
 			
-			if(empty($customer_addresses)) { $customer_addresses = []; }
+			if(empty($customer_addresses)) { $customer_addresses = (object)[]; }
 			
 			 $cancellation_reasons=$this->Orders->CancelReasons->find();
 			
