@@ -533,21 +533,13 @@ curl_close($ch);
 	 public function placeOrder()
     {
 		$jain_thela_admin_id=$this->request->data('jain_thela_admin_id');
-		$customer_id=$this->request->data('customer_id');
-		$wallet_amount=$this->request->data('wallet_amount');
+		$customer_id=$this->request->data('customer_id');		
 		$jain_cash_amount=$this->request->data('jain_cash_amount');
 		$customer_address_id=$this->request->data('customer_address_id');
-		$delivery_time_id=$this->request->data('delivery_time_id');
 		$online_amount=$this->request->data('online_amount');
 		$total_amount=$this->request->data('total_amount');
-		$delivery_charge1=$this->request->data('delivery_charge');
-		$delivery_charge_id=$this->request->data('delivery_charge_id');
-		$promo_code_amount=$this->request->data('promo_code_amount');
-		$promo_code_id=$this->request->data('promo_code_id');
-        $discount_percent=$this->request->data('discount_percent');
-		$order_type=$this->request->data('order_type');
+		$order_type=$this->request->data('order_type');		
 		$payment_status=$this->request->data('payment_status');
-		$order_no=$this->request->data('order_no');
 		$order_from=$this->request->data('order_from');
 		$warehouse_id=1;
 		$order = $this->Orders->newEntity();
@@ -555,59 +547,44 @@ curl_close($ch);
 		$order_date=date('Y-m-d 00:00:00');
 		$order_time=date('h:i:s:a');
 		
-		$order_no_counts=$this->Orders->find()->where(['transaction_order_no' => $order_no, 'status' => 'In Process'])->count();
-		if(empty($order_no_counts))
+		// Unused
+	
+		$wallet_amount=$this->request->data('wallet_amount');	
+		$delivery_time_id=$this->request->data('delivery_time_id');
+		$delivery_charge1=$this->request->data('delivery_charge');
+		$delivery_charge_id=$this->request->data('delivery_charge_id');
+		$promo_code_amount=$this->request->data('promo_code_amount');		
+		$promo_code_id=$this->request->data('promo_code_id');
+        $discount_percent=$this->request->data('discount_percent');
+		$order_no=$this->request->data('order_no');
+	
+		if($total_amount >=100)
 		{
+			$delivery_charge=0;
+		}
+		else{
+			$delivery_charge=$delivery_charge1;
+		}
 		
-				if($total_amount >=100)
-				{
-					$delivery_charge=0;
-				}
-				else{
-					$delivery_charge=$delivery_charge1;
-				}
-		
-				///////////////////////GET TIME/////////////////	
-				$delivery_time_data = $this->Orders->DeliveryTimes->find()
-				->where(['DeliveryTimes.id'=>$delivery_time_id])->first();
-				$d_from=$delivery_time_data->time_from;
-				$d_to=$delivery_time_data->time_to;
-				$delivery_time=$d_from.$d_to;
 
-				///////////////////////GET DELIVERY DATE/////////////////				
-				$out_of_stock_data=$this->Orders->Carts->find()->where(['customer_id' => $customer_id]);
-        		$counts=0;
-				foreach($out_of_stock_data as $fetch_data)
-				{
-					$item_id=$fetch_data->item_id;
-					$out_data=$this->Orders->Carts->Items->get($item_id);
-					$d=$out_data->out_of_stock;
-					$counts+=$d;
-				}				
-				$current_timess1=date('h', time());
-				$current_timess2=date('i', time());
-				$dots='.';
-				$current_timess=$current_timess1.$dots.$current_timess2;
-				$current_ampm=date('a', time());
-				$start = "04";
-				$end = "12";
-	if($current_ampm=='pm' &&  $current_timess > $start  && $current_timess < $end || $counts>0) 
-				{
-				    $delivery_date=date('Y-m-d 00:00:00', strtotime('+1 day', strtotime($curent_date)));
-					//$delivery_date='2017-10-21 00:00:00';
-				}
-    else{
-				$delivery_date=date('Y-m-d 00:00:00');//delivery_date///
-				//$delivery_date='2017-10-21 00:00:00';
-				}
+		///////////////////////GET DELIVERY DATE/////////////////				
+		$out_of_stock_data=$this->Orders->Carts->find()->where(['customer_id' => $customer_id]);
+		$counts=0;
+		foreach($out_of_stock_data as $fetch_data)
+		{
+			$item_id=$fetch_data->item_id;
+			$out_data=$this->Orders->Carts->Items->get($item_id);
+			$d=$out_data->out_of_stock;
+			$counts+=$d;
+		}				
+	
 				
-				$delivery_date=date('Y-m-d 00:00:00', strtotime('+1 day', strtotime($curent_date)));
 				
+			$curent_date = date('Y-m-d');	
 			///////////////////////GET LAST ORDER NO/////////////////
 			$last_order_no = $this->Orders->find()
 			->select(['get_auto_no'])
-			->order(['get_auto_no'=>'DESC'])->where(['jain_thela_admin_id'=>$jain_thela_admin_id, 'curent_date'=>$curent_date])
-			->first();
+			->order(['get_auto_no'=>'DESC'])->first();
 
 			if(!empty($last_order_no)){
 			$get_auto_no = h(str_pad(number_format($last_order_no->get_auto_no+1),6, '0', STR_PAD_LEFT));
@@ -619,7 +596,7 @@ curl_close($ch);
 
 		///////////////////////INSERTION IN ORDER/////////////////
 		$grand_total=$total_amount+$delivery_charge;
-		$pay_amount=$grand_total-($wallet_amount+$jain_cash_amount+$online_amount+$promo_code_amount);
+		$pay_amount=$grand_total-($jain_cash_amount+$online_amount+$promo_code_amount);
 			
 		$this->loadModel('Carts');
 		$carts_data=$this->Carts->find()->where(['customer_id'=>$customer_id])->contain(['Items']);
@@ -676,49 +653,44 @@ curl_close($ch);
 			///////////////////////DELETED CART/////////////////
 			
 	        //////////WALLET UPDATION///////////////////
-			if($wallet_amount>0)
-			{
-			$wallet_data=$this->Orders->find()->where(['customer_id'=>$customer_id,'transaction_order_no'=>$order_no])
-			->first();
-			$order_id=$wallet_data->id;
-			$wallet_query = $this->Orders->Wallets->query();
-					$wallet_query->insert(['order_id', 'consumed', 'customer_id'])
-							->values([
-							'order_id' => $order_id,
-							'consumed' => $wallet_amount,
-							'customer_id' => $customer_id
-							])
-					->execute();
-            }
-			///////////////////////WALLET UPDATION/////////////////
-			
-			
-	    //////////SMS AND NOTIFICATIONS///////////////////
-			
-		$get_data = $this->Orders->find()
-		->order(['id'=>'DESC'])->where(['jain_thela_admin_id'=>$jain_thela_admin_id, 'customer_id'=>$customer_id])
-		->first();
-		    $delivery_day_date=date('D M j', strtotime($get_data->delivery_date));
-            $order_day_date=date('D M j, Y H:i a', strtotime($get_data->order_date));
-            $c_date=$curent_date;
-			$d_date=date('Y-m-d', strtotime($get_data->delivery_date));
-			
-			if($c_date==$d_date)
-			{
-				$isOrderType='Today';
-			}
-			else{
-				$isOrderType='Next day';
-			}
-			
-			$result=array('order_date'=>$order_day_date,
-			'delivery_date'=>$delivery_day_date,
-			'order_no'=>$get_data->order_no,
-			'pay_amount'=>$get_data->pay_amount,
-			'order_type'=>$get_data->order_type,
-			'grand_total'=>$get_data->grand_total,
-			'order_day'=>$isOrderType
-			);
+					if($wallet_amount>0)
+					{
+					$wallet_data=$this->Orders->find()->where(['customer_id'=>$customer_id,'transaction_order_no'=>$order_no])
+					->first();
+					$order_id=$wallet_data->id;
+					$wallet_query = $this->Orders->Wallets->query();
+							$wallet_query->insert(['order_id', 'consumed', 'customer_id'])
+									->values([
+									'order_id' => $order_id,
+									'consumed' => $wallet_amount,
+									'customer_id' => $customer_id
+									])
+							->execute();
+					}
+					
+					$get_data = $this->Orders->find()
+					->order(['id'=>'DESC'])->where(['jain_thela_admin_id'=>$jain_thela_admin_id, 'customer_id'=>$customer_id])->first();
+					$delivery_day_date=date('D M j', strtotime($get_data->delivery_date));
+					$order_day_date=date('D M j, Y H:i a', strtotime($get_data->order_date));
+					$c_date=$curent_date;
+					$d_date=date('Y-m-d', strtotime($get_data->delivery_date));
+					
+					if($c_date==$d_date)
+					{
+						$isOrderType='Today';
+					}
+					else{
+						$isOrderType='Next day';
+					}
+					
+					$result=array('order_date'=>$order_day_date,
+					'delivery_date'=>$delivery_day_date,
+					'order_no'=>$get_data->order_no,
+					'pay_amount'=>$get_data->pay_amount,
+					'order_type'=>$get_data->order_type,
+					'grand_total'=>$get_data->grand_total,
+					'order_day'=>$isOrderType
+					);
 			
 					$customer_details=$this->Orders->Customers->find()
 					->where(['Customers.id' => $customer_id])->first();
@@ -731,80 +703,41 @@ curl_close($ch);
 					if(!empty($device_token1))
 					{
 					
-	$msg = array
-	(
-	'message' 	=> 'Thank You, your order place successfully',
-	'image' 	=> '',
-	'button_text'	=> 'Track Your Order',
-    'link' => 'jainthela://track_order?id='.$get_data->id,	
-    'notification_id'	=> 1,
-	);
+						$msg = array
+						(
+						'message' 	=> 'Thank You, your order place successfully',
+						'image' 	=> '',
+						'button_text'	=> 'Track Your Order',
+						'link' => 'jainthela://track_order?id='.$get_data->id,	
+						'notification_id'	=> 1,
+						);
 
-$url = 'https://fcm.googleapis.com/fcm/send';
-$fields = array
-(
-	'registration_ids' 	=> array($device_token1),
-	'data'			=> $msg
-);
-$headers = array
-(
-	'Authorization: key=' .$API_ACCESS_KEY,
-	'Content-Type: application/json'
-);
+							$url = 'https://fcm.googleapis.com/fcm/send';
+							$fields = array
+							(
+								'registration_ids' 	=> array($device_token1),
+								'data'			=> $msg
+							);
+							$headers = array
+							(
+								'Authorization: key=' .$API_ACCESS_KEY,
+								'Content-Type: application/json'
+							);
 
-  //echo json_encode($fields);
-  $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-$result001 = curl_exec($ch);
-if ($result001 === FALSE) {
-	die('FCM Send Error: ' . curl_error($ch));
-}
-curl_close($ch);
-
-
-
- /* $msg1 = array
-	(
-	'message' 	=> 'Due to festival season, our delivery is closed. We will resume our delivery services from 21st october 2017. Kindly place your order according to that. Team Jainthela',
-	'image' 	=> '',
-	'button_text'	=> 'Happy Diwali!',
-    'link' => 'jainthela://home',	
-    'notification_id'	=> 1,
-	);
-
-$url1 = 'https://fcm.googleapis.com/fcm/send';
-$fields1 = array
-(
-	'registration_ids' 	=> array($device_token1),
-	'data'			=> $msg1
-);
-$headers1 = array
-(
-	'Authorization: key=' .$API_ACCESS_KEY,
-	'Content-Type: application/json'
-);
-
-  //echo json_encode($fields);
-  $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $url1);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $headers1);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields1));
-$result001 = curl_exec($ch);
-if ($result001 === FALSE) {
-	die('FCM Send Error: ' . curl_error($ch));
-}
-curl_close($ch);  
- */
+							  //echo json_encode($fields);
+							  $ch = curl_init();
+							curl_setopt($ch, CURLOPT_URL, $url);
+							curl_setopt($ch, CURLOPT_POST, true);
+							curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+							curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+							curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+							curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+							curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+							$result001 = curl_exec($ch);
+							if ($result001 === FALSE) {
+								die('FCM Send Error: ' . curl_error($ch));
+							}
+							curl_close($ch);
 					}  
 									
 					if($get_data->driver_id>0)
@@ -833,102 +766,66 @@ curl_close($ch);
 					$billing_locality=$customer_address_details->locality;
 					$billing_house_no=$customer_address_details->house_no;
 			
-	if(!empty($exact_device_token))
-	{
-			$msg = array
-	(
-	'title' 	=> 'Jainthela',
-	'Message'	=> 'hello supplier',
-	'billing_address'	=> $billing_house_no.', '.$billing_address.', ' .$billing_locality,
-       'billing_name'	=> $billing_name,
-	'order_no'	=> $get_data->order_no,
-	'delivery_date'	=> $delivery_day_date,
-	'id'	=> $get_data->id,
-	'session_id'	=> $get_data->customer_id,
-	'time'	=> $time1,
-	'vibrate'	=> 1,
-	'sound'		=> 1,
-	);
+						if(!empty($exact_device_token))
+						{
+							$msg = array
+							(
+							'title' 	=> 'Jainthela',
+							'Message'	=> 'hello supplier',
+							'billing_address'	=> $billing_house_no.', '.$billing_address.', ' .$billing_locality,
+							   'billing_name'	=> $billing_name,
+							'order_no'	=> $get_data->order_no,
+							'delivery_date'	=> $delivery_day_date,
+							'id'	=> $get_data->id,
+							'session_id'	=> $get_data->customer_id,
+							'time'	=> $time1,
+							'vibrate'	=> 1,
+							'sound'		=> 1,
+							);
 
-$fields = array
-(
-	'registration_ids' 	=> array($exact_device_token),
-	'data'			=> array("msg" =>$msg)
-);
-$headers = array
-(
-	'Authorization: key=' .$API_ACCESS_KEY1,
-	'Content-Type: application/json'
-);
+							$fields = array
+							(
+								'registration_ids' 	=> array($exact_device_token),
+								'data'			=> array("msg" =>$msg)
+							);
+							$headers = array
+							(
+								'Authorization: key=' .$API_ACCESS_KEY1,
+								'Content-Type: application/json'
+							);
 
-$ch = curl_init();
-curl_setopt( $ch,CURLOPT_URL, 'https://android.googleapis.com/gcm/send' );
-curl_setopt( $ch,CURLOPT_POST, true );
-curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
-curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
-curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
-curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode($fields) );
-$result121 = curl_exec($ch );
-curl_close($ch);
-	}	 	$sms=str_replace(' ', '+', 'Thank You, Your order placed successfully. order no. is: '.$get_data->order_no.'. 
+							$ch = curl_init();
+							curl_setopt( $ch,CURLOPT_URL, 'https://android.googleapis.com/gcm/send' );
+							curl_setopt( $ch,CURLOPT_POST, true );
+							curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
+							curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
+							curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
+							curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode($fields) );
+							$result121 = curl_exec($ch );
+							curl_close($ch);
+						}	 
+
+				$sms=str_replace(' ', '+', 'Thank You, Your order placed successfully. order no. is: '.$get_data->order_no.'. 
 				Your order will be delivered on '.$delivery_day_date.' at '.$get_data->delivery_time.'. Bill Amount '.$pay_amount.' Please note amount of order may vary depending on the actual quantity delivered to you.');
 				
-				/* $diwaliSms=str_replace(' ', '+', 'Due to festival season, our delivery is closed. We will resume our delivery services from 21st october 2017. Kindly place your order according to that. Team Jainthela'); */
+			
 				
 				
 				$working_key='A7a76ea72525fc05bbe9963267b48dd96';
 				$sms_sender='JAINTE';
 				$sms=str_replace(' ', '+', $sms);
-			/* 	file_get_contents('http://alerts.sinfini.com/api/web2sms.php?workingkey='.$working_key.'&sender='.$sms_sender.'&to='.$mobile.'&message='.$sms.'');
-				file_get_contents('http://alerts.sinfini.com/api/web2sms.php?workingkey='.$working_key.'&sender='.$sms_sender.'&to='.$mobile_no.'&message='.$sms.''); */
-				
-				 /* file_get_contents('http://103.39.134.40/api/mt/SendSMS?user=phppoetsit&password=9829041695&senderid='.$sms_sender.'&channel=Trans&DCS=0&flashsms=0&number='.$mobile.'&text='.$diwaliSms.'&route=7');  */
+			
 				
 				
 				file_get_contents('http://103.39.134.40/api/mt/SendSMS?user=phppoetsit&password=9829041695&senderid='.$sms_sender.'&channel=Trans&DCS=0&flashsms=0&number='.$mobile.'&text='.$sms.'&route=7');
 				
 				file_get_contents('http://103.39.134.40/api/mt/SendSMS?user=phppoetsit&password=9829041695&senderid='.$sms_sender.'&channel=Trans&DCS=0&flashsms=0&number='.$mobile_no.'&text='.$sms.'&route=7');
 		
-		$status=true;
-		$error="Thank You, Your order has been placed.";
-        $this->set(compact('status', 'error','result'));
-        $this->set('_serialize', ['status', 'error', 'result']);
-		}else{
-			
-		$get_data = $this->Orders->find()
-		->order(['id'=>'DESC'])
-		->first();
-		    $delivery_day_date=date('D M j', strtotime($get_data->delivery_date));
-            $order_day_date=date('D M j, Y H:i a', strtotime($get_data->order_date));
-            $c_date=$curent_date;
-			$d_date=date('Y-m-d', strtotime($get_data->delivery_date));
-			
-			if($c_date==$d_date)
-			{
-				$isOrderType='Today';
-			}
-			else{
-				$isOrderType='Next day';
-			}
-			
-			$result=array('order_date'=>$order_day_date,
-			'delivery_date'=>$delivery_day_date,
-			'order_no'=>$get_data->order_no,
-			'pay_amount'=>$get_data->pay_amount,
-			'order_type'=>$get_data->order_type,
-			'grand_total'=>$get_data->grand_total,
-			'order_day'=>$isOrderType
-			);
-			$status=true;
-		$error="Thank You, Your order has been placed.";
-        $this->set(compact('status', 'error','result'));
-        $this->set('_serialize', ['status', 'error', 'result']);
-			
-		}
-		
-	    /////SMS AND NOTIFICATIONS///////////////////
-		
-    }
+				$status=true;
+				$error="Thank You, Your order has been placed.";
+				$this->set(compact('status', 'error','result'));
+				$this->set('_serialize', ['status', 'error', 'result']);
+	}
 	
 	public function pendingOrderList()
     {
