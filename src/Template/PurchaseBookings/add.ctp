@@ -58,8 +58,10 @@
 									<td>
 									<?php echo $this->Form->control('purchase_booking_details['.$grn_rows.'][item_id]',['value' => $grn_detail->item_id,'class'=>'form-control input-sm','label'=>false,'type'=>'hidden']); ?>
 									<?= $grn_detail->item->name ?>
+									<?php echo $this->Form->input('purchase_booking_details['.$grn_rows.'][item_variation_id]', ['label' => false,'class' => 'form-control input-sm number','placeholder'=>'Variation','value'=>$grn_detail->item_variation_id,'type'=>'hidden']); ?>
 										
 									</td>
+										
 									<td>
 									<?= $grn_detail->quantity ?>
 										<?php echo $this->Form->input('purchase_booking_details['.$grn_rows.'][quantity]', ['label' => false,'class' => 'form-control input-sm number','placeholder'=>'Quantity','value'=>$grn_detail->quantity,'type'=>'hidden']); ?>	

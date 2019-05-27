@@ -23,40 +23,44 @@
 						</select>
 					</div>
 				</div>
-
+			</br>
 				<div class="row">
 					<div class="col-md-10">
 						<label class=" control-label">Promo Code Name <span class="required" aria-required="true">*</span></label>
 						<?php echo $this->Form->control('code',['placeholder'=>'Promo Code Name','class'=>'form-control input-sm','label'=>false]); ?>
 					</div>
 				</div>
-
+			</br>
 				<div class="row">
 					<div class="col-md-10">
 						<label class=" control-label">Title<span class="required" aria-required="true">*</span></label>
 						<?php echo $this->Form->control('title',['placeholder'=>'Title','class'=>'form-control input-sm','label'=>false]); ?>
 					</div>
 				</div>
-
+			</br>
 				<div class="row">
 					<div class="col-md-10">
 						<div class="radio-list">
 							<label>Type</label>
-								<div class="radio-inline" style="padding-right: 1px;">
+								<div class="radio-inline form-control input-sm" style="padding-right: 1px;">
 									<input type="hidden" name="cash_back_flag" value=""><label for="cash-back-flag-no"><input type="radio" name="amount_type" value="percent" class="radio-task" checked="checked">Percent</label><label for="cash-back-flag-yes"><input type="radio" name="amount_type" value="amount" class="radio-task" checked="checked" >Amount</label>								</div>
 							</div>
 					</div>
 				</div>
-					<div class="row">
+			</br>
+				<div class="row">
 					<div class="col-md-10">
 						<label class=" control-label">Discount</label>
 						<?php echo $this->Form->control('discount_per',['placeholder'=>'Discount','class'=>'form-control input-sm','label'=>false]); ?>
-					</div></div>
-					<div class="row">
+					</div>
+				</div>
+			</br>
+				<div class="row">
 					<div class="col-md-10">
 						<?php echo $this->Form->control('item_category_id', ['empty'=>'-- select --','options' => $itemCategories,'class'=>'form-control input-sm select select2me select2','required']); ?>
 					</div>
 				</div>
+			</br>
 				<div class="row">
 					<div class="col-md-10">
 						<label class=" control-label">Item<span class="required" aria-required="true">*</span></label>
@@ -64,6 +68,7 @@
 
 					</div>
 				</div>
+			</br>
 				<div class="row">
 					<div class="col-md-10">
 						<?php echo $this->Form->input('is_freeship', array('type'=>'checkbox', 'label'=>'Is Free Ship','id'=>'freeship'));
@@ -71,24 +76,28 @@
 					</div>
 					
 				</div>
+			</br>
 				<div class="row">
 					<div class="col-md-10">
 						<label class=" control-label">Cart Value <span class="required" aria-required="true">*</span></label>
 						<?php echo $this->Form->control('cart_value',['placeholder'=>'Cart Value','class'=>'form-control input-sm','label'=>false]); ?>
 					</div>
 				</div>
+			</br>
 				<div class="row">
 					<div class="col-md-10">
 						<label class=" control-label">Description<span class="required" aria-required="true">*</span></label>
 						<textarea name="description" class="form-control"></textarea>
 					</div>
 				</div>
+			</br>
 				<div class="row">
 					<div class="col-md-10">
 						<label class=" control-label">Valid From</label>
 						<?php echo $this->Form->control('valid_from',['readonly','placeholder'=>'Valid From','class'=>'form-control input-sm date-time-range-picker select2','label'=>false]); ?>
 					</div>
 				</div>
+			</br>
 				<div class="row">
 					<div class="col-md-10">
 						<label class=" control-label">Valid To</label>

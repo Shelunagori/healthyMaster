@@ -96,7 +96,7 @@ margin-bottom: 0;
 			<tr>
 			<td><?=h(++$i)?></td>
 			<td><?= h($data->item->name) ?></td>
-			<td><?= h($data->item_variation->unit->longname) ?></td>
+			<td><?= h($data->item_variation->quantity_variation)." ". h($data->item_variation->unit->longname) ?></td>
 			<td ><?=h($data->quantity)?></td>
 			</tr>
 			

@@ -40,7 +40,7 @@ class PurchaseBookingsController extends AppController
     {
 		$this->viewBuilder()->layout('index_layout');
         $purchaseBooking = $this->PurchaseBookings->get($id, [
-	'contain' => ['Grns', 'Vendors','PurchaseBookingDetails'=>['Items'=>['Units']]]
+	'contain' => ['Grns', 'Vendors','PurchaseBookingDetails'=>['Items','ItemVariations'=>['Units']]]
         ]);
 			
         $this->set('purchaseBooking', $purchaseBooking);
@@ -56,7 +56,7 @@ class PurchaseBookingsController extends AppController
     {
 		$this->viewBuilder()->layout('index_layout');
 		$grn = $this->PurchaseBookings->Grns->get($grn_id, [
-            'contain' => ['GrnDetails'=>['Items'], 'Vendors', 'JainThelaAdmins']
+            'contain' => ['GrnDetails'=>['Items','ItemVariations'=>['Units']], 'Vendors', 'JainThelaAdmins']
         ]);
 		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
         $purchaseBooking = $this->PurchaseBookings->newEntity();
