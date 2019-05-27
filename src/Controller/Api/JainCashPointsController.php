@@ -5,24 +5,23 @@ class JainCashPointsController extends AppController
 {
     public function referral()
     {
-		$jain_thela_admin_id=$this->request->query('jain_thela_admin_id');
 		$customer_id=$this->request->query('customer_id');
 		
 		$referral_image = $this->JainCashPoints->Banners->find()
-		->select(['image_url' => $this->JainCashPoints->Banners->find()->func()->concat(['http://app.jainthela.in'.$this->request->webroot.'banners/','image' => 'identifier' ])])
+		->select(['image_url' => $this->JainCashPoints->Banners->find()->func()->concat(['http://healthymaster.in/healthymaster/banners/','image' => 'identifier' ])])
 		->where(['Banners.status'=>'Active','Banners.name'=>'referral'])
         ->autoFields(true)->first();
 								
 		$query = $this->JainCashPoints->find();
 		$totalInCase = $query->newExpr()
 			->addCase(
-				$query->newExpr()->add(['order_id' => '0']),
+				$query->newExpr()->add(['is_refered' => 'Yes']),
 				$query->newExpr()->add(['point']),
 				'integer'
 			);
 		$totalOutCase = $query->newExpr()
 			->addCase(
-				$query->newExpr()->add(['order_id' => '0']),
+				$query->newExpr()->add(['order_id !=' => '0']),
 				$query->newExpr()->add(['used_point']),
 				'integer'
 			);
@@ -37,7 +36,7 @@ class JainCashPointsController extends AppController
 		{
 			$points=$fetch_query->total_in;
 			$used_points=$fetch_query->total_out;
-			$jain_cash_points=$points-$used_points;
+			$redeemPoints=$points-$used_points;
 		}
 		$cart_count = $this->JainCashPoints->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
 		
@@ -46,8 +45,8 @@ class JainCashPointsController extends AppController
 		
 		$status=true;
 		$error="";
-        $this->set(compact('status', 'error', 'jain_cash_points','cart_count','referral_code','referral_image'));
-        $this->set('_serialize', ['status', 'error', 'jain_cash_points','cart_count','referral_code','referral_image']);
+        $this->set(compact('status', 'error', 'redeemPoints','cart_count','referral_code','referral_image'));
+        $this->set('_serialize', ['status', 'error', 'redeemPoints','cart_count','referral_code','referral_image']);
     }
 	
 	public function referralUpdate()
@@ -61,12 +60,13 @@ class JainCashPointsController extends AppController
 		if($referral_code_exist)
 		{
 			$gain_customer=$referral_code_exist->id;
-			$points='100';
+			$points='1';
 			$queryj = $this->JainCashPoints->query();
-					$queryj->insert(['customer_id', 'point'])
+					$queryj->insert(['customer_id', 'point','is_refered'])
 							->values([
 							'customer_id' => $gain_customer,
-							'point' => $points
+							'point' => $points,
+							'is_refered' =>'Yes'
 							])
 					->execute();
 			
@@ -91,9 +91,9 @@ class JainCashPointsController extends AppController
         $this->set('_serialize', ['status', 'error']);
     }
 	
-	public function jainCashDetails()
+	public function PointsList()
     {
-		$jain_thela_admin_id=$this->request->query('jain_thela_admin_id');
+		
 		$customer_id=$this->request->query('customer_id');
 		$jain_cash_details = $this->JainCashPoints->find()
 		->where(['JainCashPoints.customer_id'=>$customer_id])
@@ -105,9 +105,11 @@ class JainCashPointsController extends AppController
 			if(empty($jaincash_data->order_id))
 			{
 				$jaincash_data->transaction_type='Added';
+				$jaincash_data->title='Points Received';
             }
 			else if(!empty($jaincash_data->order_id)){
 				$jaincash_data->transaction_type='Deduct';
+				$jaincash_data->title='Paid for order';
 			}
         $jaincash_data->create_date=date('D M j, Y H:i a', strtotime($jaincash_data->updated_on));
 
@@ -115,13 +117,13 @@ class JainCashPointsController extends AppController
 		$query = $this->JainCashPoints->find();
 		$totalInCase = $query->newExpr()
 			->addCase(
-				$query->newExpr()->add(['order_id' => '0']),
+				$query->newExpr()->add(['is_refered' => 'Yes']),
 				$query->newExpr()->add(['point']),
 				'integer'
 			);
 		$totalOutCase = $query->newExpr()
 			->addCase(
-				$query->newExpr()->add(['order_id' => '0']),
+				$query->newExpr()->add(['order_id !=' => '0']),
 				$query->newExpr()->add(['used_point']),
 				'integer'
 			);
@@ -132,16 +134,20 @@ class JainCashPointsController extends AppController
 		->where(['JainCashPoints.customer_id' => $customer_id])
 		->group('customer_id')
 		->autoFields(true);
+		
+		//pr($query->toArray());exit;
+		
 		foreach($query as $fetch_query)
 		{
 			$points=$fetch_query->total_in;
 			$used_points=$fetch_query->total_out;
-			$jain_cash_points=$points-$used_points;
+			$redeemPoints=$points-$used_points;
 		}
 		
 		
 		if(empty($jain_cash_details->toArray()))
 		{
+			$list = (object)[];
 			$status=false;
 			$error="No Transaction details";
 			$this->set(compact('status', 'error'));
@@ -151,8 +157,9 @@ class JainCashPointsController extends AppController
 		{
 			$status=true;
 			$error="";
-			$this->set(compact('status', 'error','jain_cash_details', 'jain_cash_points'));
-			$this->set('_serialize', ['status', 'error','jain_cash_details','jain_cash_points']);
+			$list = $jain_cash_details;
+			$this->set(compact('status', 'error','list', 'redeemPoints'));
+			$this->set('_serialize', ['status', 'error','redeemPoints','list']);
 		}
 		
     }

@@ -5,7 +5,6 @@ class WalletsController extends AppController
 {
     public function walletDetails()
     {
-		$jain_thela_admin_id=$this->request->query('jain_thela_admin_id');
 		$customer_id=$this->request->query('customer_id');
 		$wallet_details = $this->Wallets->find()
 		->where(['Wallets.customer_id'=>$customer_id])

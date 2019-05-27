@@ -347,8 +347,8 @@ Router::prefix('api', function ($routes) {
 				   'action' => 'referral_update',
 				   'method' => 'GET'
 			   ],
-			   'jain_cash_details' => [
-				   'action' => 'jain_cash_details',
+			   'points_list' => [
+				   'action' => 'points_list',
 				   'method' => 'GET'
 			   ]
 		   ]
