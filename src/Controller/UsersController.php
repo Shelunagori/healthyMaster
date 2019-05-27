@@ -19,6 +19,34 @@ class UsersController extends AppController
         $this->Auth->allow([ 'logout', 'add']);
     }
 
+    public function changePassword()
+    {
+        $this->viewBuilder()->layout('index_layout');
+        if ($this->request->is('post')) 
+        {
+            $user = $this->Auth->identify();
+            if ($user) 
+            {
+                $user = $this->Users->get($user['id']);
+
+                $data['password'] = $this->request->getData('new_password');
+                $user = $this->Users->patchEntity($user,$data);
+                
+                if ($this->Users->save($user)) {
+                    $this->Flash->success(__('success'));
+                    $this->Auth->setUser($user);
+                }
+                else
+                {
+                    $success = false;
+                    $message = "Unable To Change Password";
+                }
+            }
+            else
+                $this->Flash->error(__('Old password is incorrect'));
+        }
+    }
+
 	public function logout()
 	{
 		return $this->redirect($this->Auth->logout());

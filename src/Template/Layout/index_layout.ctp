@@ -188,6 +188,9 @@
 									<?php echo $this->Html->link('<i class="fa  fa-file"></i> Stock Report','/itemLedgers/report_show',['escape'=>false]) ?>
 								</li>
 								<li>
+									<?php echo $this->Html->link('<i class="fa  fa-file"></i> Wallet Report','/Wallets/index',['escape'=>false]) ?>
+								</li>
+								<li>
 									<?php echo $this->Html->link('<i class="fa  fa-file"></i> WishList Report','/Wishlists/wishlist_report',['escape'=>false]) ?>
 								</li>
 								<li>
@@ -199,9 +202,9 @@
 								<!-- <li>
 									<?php echo $this->Html->link('<i class="fa fa-database"></i> Product Report','/itemLedgers/driver_report',['escape'=>false]) ?>
 								</li> -->
-								<li>
+								<!-- <li>
 									<?php echo $this->Html->link('<i class="fa fa-bar-chart-o"></i> Cash Back Details','/CashBacks/Index',['escape'=>false]) ?>
-								</li>
+								</li> -->
 								<?php if($login_user_id==3){ ?>
 								<li>
 									<?php echo $this->Html->link('<i class="fa fa-trophy"></i> Cash Back Winner','/CashBacks/CashBackWinner',['escape'=>false]) ?>
@@ -223,9 +226,9 @@
 								<li>
 									<?php echo $this->Html->link('<i class="fa fa-tag"></i> Item Wise Sales Report','/itemLedgers/itemSaleReports',['escape'=>false]) ?>
 								</li>
-								<li>
+								<!-- <li>
 									<?php echo $this->Html->link('<i class="fa fa-puzzle-piece"></i> Wastage Item Report','/itemLedgers/wastageReport?From='.$t_date.'&To='.$t_date,['escape'=>false]) ?>
-								</li>
+								</li> -->
 								<li>
 									<?php echo $this->Html->link('<i class="fa fa-globe"></i> Weight Variation Report','/itemLedgers/weightVariationReport?From='.$t_date.'&To='.$t_date,['escape'=>false]) ?>
 								</li>
@@ -238,12 +241,12 @@
 								<li>
 									<?php echo $this->Html->link('<i class="fa fa-edit"></i> Consolidate Report','/itemLedgers/averageReport?From='.$t_date.'&To='.$t_date,['escape'=>false]) ?>
 								</li>
-								<li>
+								<!-- <li>
 									<?php echo $this->Html->link('<i class="fa fa-trophy"></i> First Order Discount Report','/Orders/newCustomer',['escape'=>false]) ?>
-								</li>
-								<li>
+								</li> -->
+								<!-- <li>
 									<?php echo $this->Html->link('<i class="fa fa-database"></i> Stock Return Voucher Report','/StockReturnVouchers/',['escape'=>false]) ?>
-								</li>
+								</li> -->
 							</ul>
 						</li>
 					</ul>
@@ -268,6 +271,9 @@
 							<ul class="dropdown-menu dropdown-menu-default">
 								<li>									 
 									 <?php echo $this->Html->link('<i class="fa fa-key"></i> Log Out', array('controller' => 'Users', 'action' => 'logout'),['escape'=>false]);  ?>
+								</li>
+								<li>									 
+									 <?php echo $this->Html->link('<i class="fa fa-lock"></i> Change Password', array('controller' => 'Users', 'action' => 'changePassword'),['escape'=>false]);  ?>
 								</li>
 								<li>									 
 									 <?php echo $jain_thela_admin_id;  ?>
@@ -333,22 +339,22 @@
 							<li>
 								<?php echo $this->Html->link('<i class="fa fa-sitemap"></i> Stock Issue','/itemLedgers/add',['escape'=>false]) ?>
 							</li>
-							<li>
+							<!-- <li>
 								<?php echo $this->Html->link('<i class="fa fa-retweet"></i> Stock Return','/itemLedgers/stock_return',['escape'=>false]) ?>
-							</li>
+							</li> -->
 							<li>
 								<?php echo $this->Html->link('<i class="fa fa-asterisk"></i> Online Order','/Orders/add/Offline',['escape'=>false]) ?>
 							</li>
 							<li>
 								<?php echo $this->Html->link('<i class="fa fa-tasks"></i> Bulk Order','/Orders/add/Bulkorder',['escape'=>false]) ?>
 							</li>
-							<li>
+							<!-- <li>
 								<?php echo $this->Html->link('<i class="fa fa-life-ring"></i> Walkin Sales','/WalkinSales/index',['escape'=>false]) ?>
-							</li>
+							</li> -->
 							
-							<li>
+							<!-- <li>
 								<?php echo $this->Html->link('<i class="fa fa-gear"></i> Wastage Vouchers','/itemLedgers/wastageVouchers',['escape'=>false]) ?>
-							</li>
+							</li> -->
 							<li>
 								<?php echo $this->Html->link('<i class="fa fa-tree"></i> Combo Offer','/ComboOffers',['escape'=>false]) ?>
 							</li>
@@ -399,8 +405,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<div id="toast-container" class="toast-top-right" aria-live="polite" role="alert">
-								<!--div id="demo"></div-->
-									
+								
 									<?= $this->Flash->render() ?>
 								
 							</div>
