@@ -21,7 +21,7 @@ class PromoCodesController extends AppController
 		}else
 		{
 			$status=false;
-			$promo_codes = (object)[];
+			$promo_codes = [];
 			$error="No data found";			
 		}
 		$this->set(compact('status', 'error', 'promo_codes'));

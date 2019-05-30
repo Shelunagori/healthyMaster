@@ -199,6 +199,18 @@ Router::prefix('api', function ($routes) {
 		   ]
 		]
 	);
+
+
+	$routes->resources(
+		'AppNotifications', [
+		   'map' => [
+			   'notification_list' => [
+				   'action' => 'notification_list',
+				   'method' => 'GET'
+			   ]
+		   ]
+		]
+	);
 	
 	$routes->resources(
 		'Carts', [
