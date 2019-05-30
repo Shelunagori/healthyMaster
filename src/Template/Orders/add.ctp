@@ -110,6 +110,9 @@ background-color: #fff;}
 									<td width="30%">
 										<label>item<label>
 									</td>
+									<td width="70%">
+										<label>Variation<label>
+									</td>
 									<td width="20%">
 										<label>Quantity<label>
 									</td>
@@ -127,7 +130,7 @@ background-color: #fff;}
 							</tbody>
 							<tfoot>
 								<tr>
-									<td colspan="4" style="text-align:right;">
+									<td colspan="5" style="text-align:right;">
 									<a class="btn btn-default input-sm add_row" href="#" role="button"  style="float: left;"><i class="fa fa-plus"></i> Add Row</a>
 									 Total Amount</td>
 									<td>
@@ -136,7 +139,7 @@ background-color: #fff;}
 									<td></td>
 								</tr>
 								<tr>
-									<td colspan="4" style="text-align:right;">
+									<td colspan="5" style="text-align:right;">
 									Delivery Charge
 									</td>
 									<td>
@@ -145,12 +148,12 @@ background-color: #fff;}
 									<td></td>
 								</tr>
 								<tr>
-									<td colspan="4" style="text-align:right;">Grand Total</td>
+									<td colspan="5" style="text-align:right;">Grand Total</td>
 									<td><?php echo $this->Form->input('grand_total', ['label' => false,'class' => 'form-control input-sm number ','placeholder'=>'Total Amount','type'=>'text','readonly']); ?>
 									</td>
 								</tr>
 								<tr>
-									<td colspan="4" style="text-align:right;">
+									<td colspan="5" style="text-align:right;">
 									Amount From Wallet
 									</td>
 									<td>
@@ -160,7 +163,7 @@ background-color: #fff;}
 								</tr>
 								
 								<tr>
-									<td colspan="4" style="text-align:right;">
+									<td colspan="5" style="text-align:right;">
 									Paid Amount
 									</td>
 									<td>
@@ -183,8 +186,17 @@ background-color: #fff;}
 						<?php echo $this->Form->control('delivery_date',['placeholder'=>'dd-mm-yyyy','class'=>'form-control input-sm date-picker','data-date-format'=>'dd-mm-yyyy','label'=>false,'type'=>'text','value'=>date('d-m-Y')]); ?>
 					</div>
 					<div class="col-md-2">
-						<label class="control-label">Delivery Time <span class="required" aria-require>*</span></label>										
-						<?= $this->Form->input('delivery_time_id', ['empty'=>'--Select time--','class'=>'form-control input-sm select2me','id'=>'delivery_id','label'=>false]) ?>
+						<label class="control-label">Delivery Time <span class="required" aria-require>*</span></label>			
+						<?php
+						foreach($deliverytime_fetchs as $deliverytime_fetch){
+							$time_id=$deliverytime_fetch->id;
+							$time_from=$deliverytime_fetch->time_from;
+							$time_to=$deliverytime_fetch->time_to;
+							$delivery_time[]= ['value'=>$time_id,'text'=>$time_from. " - " .$time_to];?>
+			
+					<?php } ?>
+										
+						<?= $this->Form->input('delivery_time_id', ['empty'=>'--Select time--','class'=>'form-control input-sm select2me','id'=>'delivery_id','label'=>false,'options'=>$delivery_time]) ?>
 					</div>
 					<div class="col-md-1">
 						<?= $this->Form->input('delivery_time', ['class'=>'form-control','label'=>false,'type'=>'hidden','id'=>'del_time']) ?>
@@ -204,6 +216,36 @@ background-color: #fff;}
 <?php echo $this->Html->script('/assets/global/plugins/jquery.min.js'); ?>
 <script>
 $(document).ready(function() {
+
+	$(document).on('change','.item-id',function(){
+		//alert();
+        var input=$(this).val();
+        var master = $(this); 
+        master.closest('tr').find("td:nth-child(3) .varition option").remove();
+        if(input.length>0){
+            var m_data = new FormData();
+            var url ="<?php echo $this->Url->build(["controller" => "Orders", "action" => "options"]); ?>";
+         //   alert(url);
+            m_data.append('input',input); 
+            $.ajax({
+                url: url,
+                data: m_data,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                dataType:'text',
+                success: function(data)
+                { 
+                	//alert(data);
+
+					//$("#breeds").append('<option value=' + key + '>' + value + '</option>');
+					//master.closest('tr').find('td:nth-child(3) .varition').append('').select2();
+                    master.closest('tr').find('td:nth-child(3) .varition').append(data);
+                   	//master.css("background","#FFF");
+                }
+            });
+        }
+      });
 
 	 $(document).on('blur',".autocompleted",function(){ //alert("blur");
         $('.suggesstion-box').delay(1000).fadeOut(500);
@@ -310,7 +352,7 @@ $(document).ready(function() {
 			 $(this).closest('tr').remove();
 			 $("#main_table tbody#main_tbody tr.main_tr").each(function(){ 
 			 
-			total_amount+=parseFloat($(this).find("td:nth-child(5) input").val());
+			total_amount+=parseFloat($(this).find("td:nth-child(6) input").val());
 			
 		});
 		var amount_from_wallet=parseFloat($('input[name=amount_from_wallet]').val());
@@ -348,13 +390,15 @@ $(document).ready(function() {
 		$("#main_table tbody#main_tbody tr.main_tr").each(function(){ 
 		
 		var obj=$(this).closest('tr');
-		var qty=obj.find('td:nth-child(3) input').val();
-		var rate=obj.find('td:nth-child(4) input').val();
+		var qty=obj.find('td:nth-child(4) input').val();
+		//alert(qty);
+		var rate=obj.find('td:nth-child(5) input').val();
 		var amount=qty*rate;
-		var rate=Math.round(obj.find('td:nth-child(5) input').val(amount));
+		//alert(amount);
+		var rate=Math.round(obj.find('td:nth-child(6) input').val(amount));
 		var total_amount=0;
 		$("#main_table tbody#main_tbody tr.main_tr").each(function(){ 
-			total_amount+=parseFloat($(this).find("td:nth-child(5) input").val());
+			total_amount+=parseFloat($(this).find("td:nth-child(6) input").val());
 		});
 		var display_amount=Math.round(total_amount);
 		if($('input[name=discount_percent]').val())
@@ -384,13 +428,17 @@ $(document).ready(function() {
 	}
 	
 	function rename_rows(){
+		//alert();
 		var i=0; 
 		$("#main_table tbody#main_tbody tr.main_tr").each(function(){ 
 			$(this).find('td:nth-child(1)').html(i+1);
-			$(this).find("td:nth-child(2) .autocompleted").attr({name:"order_details["+i+"][item_id]", id:"order_details-"+i+"-item_id"}).rules('add', {
+			$(this).find("td:nth-child(2) select").select2().attr({name:"order_details["+i+"][item_id]", id:"order_details-"+i+"-item_id"}).rules('add', {
 						required: true
 					});
-			$(this).find("td:nth-child(3) input").attr({name:"order_details["+i+"][show_quantity]", id:"order_details-"+i+"-show_quantity"}).rules('add', {
+			$(this).find("td:nth-child(3) select").select2().attr({name:"order_details["+i+"][item_variation_id]"}).rules('add', {
+						required: true
+					});
+			$(this).find("td:nth-child(4) input").attr({name:"order_details["+i+"][show_quantity]", id:"order_details-"+i+"-show_quantity"}).rules('add', {
 						required: true
 					});
 			$(this).find(".mains").attr({name:"order_details["+i+"][quantity]", id:"order_details-"+i+"-quantity"}).rules('add', {
@@ -399,17 +447,17 @@ $(document).ready(function() {
 			$(this).find(".mainss").attr({name:"order_details["+i+"][actual_quantity]", id:"order_details-"+i+"-actual_quantity"}).rules('add', {
 						required: true
 					});
-			$(this).find("td:nth-child(4) input").attr({name:"order_details["+i+"][rate]", id:"order_details-"+i+"-rate"}).rules('add', {
+			$(this).find("td:nth-child(5) input").attr({name:"order_details["+i+"][rate]", id:"order_details-"+i+"-rate"}).rules('add', {
 				required: true
 			});
-			$(this).find("td:nth-child(5) input").attr({name:"order_details["+i+"][amount]", id:"order_details-"+i+"-amount"}).rules('add', {
+			$(this).find("td:nth-child(6) input").attr({name:"order_details["+i+"][amount]", id:"order_details-"+i+"-amount"}).rules('add', {
 				required: true
 			});
-			$(this).find("td:nth-child(6) input[type=hidden]").attr({name:"order_details["+i+"][is_combo]", id:"order_details-"+i+"-is_combo"});
+			$(this).find("td:nth-child(7) input[type=hidden]").attr({name:"order_details["+i+"][is_combo]", id:"order_details-"+i+"-is_combo"});
 			
 			i++;
 		});
-		calculate_total();
+		//calculate_total();
 	}
 	<?php
 	if($order_type=='Bulkorder')
@@ -677,8 +725,16 @@ function selectAutoCompleted1(value) {
 				<tr class="main_tr" class="tab">
 					<td align="center" width="1px"></td>
 				    <td>
-				    	<?php echo $this->Form->control('item_id',['empty'=>'--Select Item--','options' => $item,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','label'=>false]); ?>
+				    	<?php echo $this->Form->control('item_id',['empty'=>'--Select Item--','options' => $item,'class'=>'form-control input-sm chosen-select item-id','label'=>false]); ?>
 
+					</td>
+					<td>
+						<select name="variation" class="form-control input-sm varition">
+							
+							
+						</select>
+
+						<span class="msg_shw2" style="color:blue;font-size:12px;"></span>
 					</td>
 					<td>
 						<?php echo $this->Form->input('show_quantity', ['label' => false,'class' => 'form-control input-sm number cal_amount quant','placeholder'=>'Quantity','value'=>0]); ?>

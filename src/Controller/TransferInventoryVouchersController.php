@@ -18,6 +18,22 @@ class TransferInventoryVouchersController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
+
+    public function options(){
+        $item_id=$this->request->getData('input'); 
+
+            $items=$this->TransferInventoryVouchers->TransferInventoryVoucherRows->ItemVariations->find()->where(['ItemVariations.item_id '=>$item_id])->contain(['Units']);
+            ?>
+                    <option>--Select--</option>
+                    <?php foreach($items as $show){ ?>
+                        
+                        <option value="<?= $show->id ?>"><?= $show->quantity_variation." ".$show->unit->shortname ?></option>
+                    <?php } ?>
+            <?php
+        
+        exit;  
+    }
+
     public function index()
     {
 		$this->viewBuilder()->layout('index_layout'); 
@@ -26,7 +42,7 @@ class TransferInventoryVouchersController extends AppController
         $this->paginate = [
             'contain' => ['Items']
         ];
-        $transferInventoryVouchers = $this->paginate($this->TransferInventoryVouchers->find()->order(['TransferInventoryVouchers.voucher_no'=>'DESC'])->contain(['Items','ItemVariations']));
+        $transferInventoryVouchers = $this->paginate($this->TransferInventoryVouchers->find()->order(['TransferInventoryVouchers.voucher_no'=>'DESC'])->contain(['Items']));
 
         $this->set(compact('transferInventoryVouchers'));
         $this->set('_serialize', ['transferInventoryVouchers']);
@@ -135,14 +151,14 @@ class TransferInventoryVouchersController extends AppController
             }
             $this->Flash->error(__('The transfer inventory voucher could not be saved. Please, try again.'));
         }
-		$item_fetchs = $this->TransferInventoryVouchers->Items->find()->where(['Items.is_combo'=>'no', 'Items.is_virtual'=>'no', 'Items.freeze !='=>1])->contain(['Units']);
+		$item_fetchs = $this->TransferInventoryVouchers->Items->find()->where(['Items.is_combo'=>'no', 'Items.is_virtual'=>'no', 'Items.freeze !='=>1]);
 		foreach($item_fetchs as $item_fetch){
 			$item_name=$item_fetch->name;
 			$alias_name=$item_fetch->alias_name;
 			$print_quantity=$item_fetch->print_quantity;
-			$unit_name=$item_fetch->unit->unit_name;
+			//$unit_name=$item_fetch->unit->unit_name;
 			$minimum_quantity_factor=$item_fetch->minimum_quantity_factor;
-			$items[]= ['value'=>$item_fetch->id,'text'=>$item_name." (".$alias_name.")", 'print_quantity'=>$print_quantity, 'minimum_quantity_factor'=>$minimum_quantity_factor, 'unit_name'=>$unit_name];
+			$items[]= ['value'=>$item_fetch->id,'text'=>$item_name." (".$alias_name.")", 'print_quantity'=>$print_quantity, 'minimum_quantity_factor'=>$minimum_quantity_factor];
 		}
 		
 		

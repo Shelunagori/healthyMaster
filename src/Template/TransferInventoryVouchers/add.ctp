@@ -47,6 +47,9 @@
 												<td width="40%">
 													<label>Item<label>
 												</td>
+												<td width="70%">
+													<label>Variation<label>
+												</td>
 												<td width="20%">
 													<label>Quantity<label>
 												</td>
@@ -98,6 +101,36 @@
 <?php echo $this->Html->script('/assets/global/plugins/jquery.min.js'); ?>
 <script>
 $(document).ready(function() {
+
+
+	$(document).on('change','.item-id',function(){
+        var input=$(this).val();
+        var master = $(this); 
+        master.closest('tr').find("td:nth-child(3) .varition option").remove();
+        if(input.length>0){
+            var m_data = new FormData();
+            var url ="<?php echo $this->Url->build(["controller" => "Grns", "action" => "options"]); ?>";
+         //   alert(url);
+            m_data.append('input',input); 
+            $.ajax({
+                url: url,
+                data: m_data,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                dataType:'text',
+                success: function(data)
+                { 
+                	//alert(data);
+
+					//$("#breeds").append('<option value=' + key + '>' + value + '</option>');
+					//master.closest('tr').find('td:nth-child(3) .varition').append('').select2();
+                    master.closest('tr').find('td:nth-child(3) .varition').append(data);
+                   	//master.css("background","#FFF");
+                }
+            });
+        }
+      });
 
 	//--------- FORM VALIDATION
 	var form3 = $('#form_sample_3');
@@ -216,7 +249,10 @@ $(document).ready(function() {
 			$(this).find("td:nth-child(2) select").select2().attr({name:"transfer_inventory_voucher_rows["+i+"][item_id]", id:"transfer_inventory_voucher_rows-"+i+"-item_id"}).rules('add', {
 						required: true
 					});
-			$(this).find("td:nth-child(3) input").attr({name:"transfer_inventory_voucher_rows["+i+"][quantity]", id:"transfer_inventory_voucher_rows-"+i+"-quantity"}).rules('add', {
+			$(this).find("td:nth-child(3) select").select2().attr({name:"transfer_inventory_voucher_rows["+i+"][item_variation_id]"}).rules('add', {
+						required: true
+					});
+			$(this).find("td:nth-child(4) input").attr({name:"transfer_inventory_voucher_rows["+i+"][quantity]", id:"transfer_inventory_voucher_rows-"+i+"-quantity"}).rules('add', {
 						required: true
 					});
 			i++;
@@ -230,13 +266,13 @@ $(document).ready(function() {
 	function calculation(){
 		var grand_total = 0;		
 		$("#main_table tbody#main_tbody tr.main_tr").each(function(){
-			var quantity = parseFloat($(this).find("td:nth-child(3) input").val());
+			var quantity = parseFloat($(this).find("td:nth-child(4) input").val());
 			if(!quantity){ quantity=0; }			
-			var minimum_quantity_factor = parseFloat($(this).find("td:nth-child(3) input").attr("minimum_quantity_factor"));
+			var minimum_quantity_factor = parseFloat($(this).find("td:nth-child(4) input").attr("minimum_quantity_factor"));
 			if(!minimum_quantity_factor){ minimum_quantity_factor=0; }
 			var final_val=quantity*minimum_quantity_factor;
 			grand_total=grand_total+final_val;
-			$(this).find("td:nth-child(4) input").val(final_val.toFixed(2));
+			$(this).find("td:nth-child(5) input").val(final_val.toFixed(2));
 		});
 	var main_quantity = parseFloat($(".main_quantity").val());
 			if(!main_quantity){ main_quantity=0; }
@@ -326,6 +362,14 @@ $(document).ready(function() {
 						<?= $this->Form->input('item_id',array('options' => $items,'class'=>'form-control input-sm attribute','empty' => 'Select','label'=>false)) ?>
 						<span class="msg_shw" style="color:blue;font-size:12px;"></span>
 					
+					</td>
+					<td>
+						<select name="variation" class="form-control input-sm varition">
+							
+							
+						</select>
+
+						<span class="msg_shw2" style="color:blue;font-size:12px;"></span>
 					</td>
 					<td>
 						<?php echo $this->Form->input('quantity', ['label' => false,'class' => 'form-control input-sm number valid calculation_amount quant','placeholder'=>'Quantity','value'=>0]); ?>

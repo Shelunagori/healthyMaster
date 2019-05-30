@@ -68,9 +68,9 @@
 						<tr>
 							<td><?= h(++$page_no) ?></td>
 							<td>
-								<?= h($itemLedger->name).'('.$itemLedger->alias_name.')' .')'.$itemLedger->item_variation->quantity_variation .')'. $itemLedger->item_variation->item->shortname ?>
+								<?= h($itemLedger->name).'('.$itemLedger->alias_name.')' .')' ?>
 							</td>
-							<!-- <?php if(!empty(@$walkins_sales[$itemLedger->id])){ ?>
+							<?php if(!empty(@$walkins_sales[$itemLedger->id])){ ?>
 							<td>
 								<?php if(!empty($from_date)){ ?>
 								<?= $this->Html->link(@$walkins_sales[$itemLedger->id].$units[$itemLedger->id], ['controller' => 'WalkinSales', 'action' => 'walkinSaleDetails',$itemLedger->id,$from_date,$to_date ],array('escape'=>false,'target'=>'_blank')) ?>
@@ -82,7 +82,7 @@
 							<td>
 								<?php echo $this->Number->format(0,['places'=>2])?>
 							</td>
-								<?php } ?> -->
+								<?php } ?>
 								<?php if(!empty(@$order_online[$itemLedger->id])){ ?>
 							<td>
 								<?php if(!empty($from_date)){ ?>
@@ -121,10 +121,10 @@
 					<?php
 					} //}
 						endforeach;?>
-					<tr>
+					<!-- <tr>
 						<td align="right" colspan="6"><b>Total</b></td>
 						<td align="right"><b><?php echo $this->Number->format($amount_total,['places'=>2]); ?></b></td>
-					<tr>	
+					</tr> -->	
 					</tbody>
 				</table>
 			</div>

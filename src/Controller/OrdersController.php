@@ -21,6 +21,23 @@ class OrdersController extends AppController
 		$role_id=$this->Auth->User('role_id');
 		$this->set(compact(['role_id']));
 	}
+
+	public function options(){
+        $item_id=$this->request->getData('input'); 
+
+            $items=$this->Orders->OrderDetails->ItemVariations->find()->where(['ItemVariations.item_id '=>$item_id])->contain(['Units']);
+            ?>
+                    <option>--Select--</option>
+                    <?php foreach($items as $show){ ?>
+                        
+                        <option value="<?= $show->id ?>"><?= $show->quantity_variation." ".$show->unit->shortname ?></option>
+                    <?php } ?>
+            <?php
+        
+        exit;  
+    }
+
+
 	public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
@@ -908,12 +925,7 @@ class OrdersController extends AppController
 			$customers[]= ['value'=>$customer_fetch->id,'text'=>$customer_name." (".$customer_mobile.")"];
 		}
 		$deliverytime_fetchs = $this->Orders->DeliveryTimes->find('all');
-		foreach($deliverytime_fetchs as $deliverytime_fetch){
-			$time_id=$deliverytime_fetch->id;
-			$time_from=$deliverytime_fetch->time_from;
-			$time_to=$deliverytime_fetch->time_to;
-			$delivery_time[]= ['value'=>$time_id,'text'=>$time_from. " - " .$time_to];
-		}
+		
        // $promoCodes = $this->Orders->PromoCodes->find('list');
 	   if($order_type == 'Bulkorder'){
 		   $item_fetchs = $this->Orders->Items->find()->where(['Items.freeze'=>0,'is_combo'=>'no','is_virtual'=>'no']);
@@ -938,7 +950,7 @@ class OrdersController extends AppController
         $bulk_Details = $this->BulkBookingLeads->find()->where(['id' => $bulkorder_id])->toArray();
 		$warehouses = $this->Orders->Warehouses->find('list')->where(['jain_thela_admin_id' => $jain_thela_admin_id]);
 		$item = $this->Orders->items->find('list');
-        $this->set(compact('order', 'customers', 'items', 'order_type', 'bulk_Details', 'bulkorder_id','delivery_time','tax', 'warehouses','item'));
+        $this->set(compact('order', 'customers', 'items', 'order_type', 'bulk_Details', 'bulkorder_id','deliverytime_fetchs','tax', 'warehouses','item'));
         $this->set('_serialize', ['order', 'warehouses']);
     }
 	/**

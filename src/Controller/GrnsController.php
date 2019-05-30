@@ -49,9 +49,9 @@ class GrnsController extends AppController
     public function options(){
         $item_id=$this->request->getData('input'); 
 
-            $items=$this->Grns->GrnDetails->Items->ItemVariations->find()->where(['ItemVariations.item_id '=>$item_id])->contain(['Units']);
+            $items=$this->Grns->GrnDetails->ItemVariations->find()->where(['ItemVariations.item_id '=>$item_id])->contain(['Units']);
             ?>
-                    
+                    <option>--Select--</option>
                     <?php foreach($items as $show){ ?>
                         
                         <option value="<?= $show->id ?>"><?= $show->quantity_variation." ".$show->unit->shortname ?></option>

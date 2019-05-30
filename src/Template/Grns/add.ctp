@@ -245,8 +245,8 @@ $(this).closest('tr').find('.msg_shw').html("Selling Factor in : " +raw_attr_nam
 						<span class="msg_shw" style="color:blue;font-size:12px;"></span>
 					</td>
 					<td>
-						<select name="variation" class="form-control varition">
-							<option>--Select--</option>
+						<select name="variation" class="form-control input-sm varition">
+							
 							
 						</select>
 
