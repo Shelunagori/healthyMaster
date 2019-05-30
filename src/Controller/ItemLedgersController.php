@@ -563,30 +563,32 @@ class ItemLedgersController extends AppController
 				$query->newExpr()->add(['quantity']),
 				'integer'
 			);
-		$totalInDriverCase = $query->newExpr()
-			->addCase(
-				$query->newExpr()->add(['status' => 'In', 'driver_id']),
-				$query->newExpr()->add(['quantity']),
-				'integer'
-			);
-		$totalOutDriverCase = $query->newExpr()
-			->addCase(
-				$query->newExpr()->add(['status' => 'out', 'driver_id']),
-				$query->newExpr()->add(['quantity']),
-				'integer'
-			);
+		// $totalInDriverCase = $query->newExpr()
+		// 	->addCase(
+		// 		$query->newExpr()->add(['status' => 'In', 'driver_id']),
+		// 		$query->newExpr()->add(['quantity']),
+		// 		'integer'
+		// 	);
+		// $totalOutDriverCase = $query->newExpr()
+		// 	->addCase(
+		// 		$query->newExpr()->add(['status' => 'out', 'driver_id']),
+		// 		$query->newExpr()->add(['quantity']),
+		// 		'integer'
+		// 	);
 		$query->select([
 			'totalInWarehouse' => $query->func()->sum($totalInWarehouseCase),
-			'totalOutWarehouse' => $query->func()->sum($totalOutWarehouseCase),
-			'totalInDriver' => $query->func()->sum($totalInDriverCase),
-			'totalOutDriver' => $query->func()->sum($totalOutDriverCase),'id','item_id'
+			'totalOutWarehouse' => $query->func()->sum($totalOutWarehouseCase)
+			// 'totalInDriver' => $query->func()->sum($totalInDriverCase),
+			// 'totalOutDriver' => $query->func()->sum($totalOutDriverCase),'id','ItemLedgers.item_id'
 		])
 		->where(['ItemLedgers.jain_thela_admin_id'=>$jain_thela_admin_id])
-		->group('item_id')
+		->group('ItemLedgers.item_id')
 		->autoFields(true)
-		->contain(['Items'=>['Units','itemCategories']])->order(['Items.name' => 'ASC']);
+		->contain(['ItemVariations'=>['Units'],'Items'=>['itemCategories']])->order(['Items.name' => 'ASC']);
 
 		$itemLedgers=$query;
+
+		//pr($itemLedgers->toArray());exit;
 		$this->set(compact('itemLedgers','url'));
     }
 
@@ -629,7 +631,7 @@ class ItemLedgersController extends AppController
 		->where(['ItemLedgers.jain_thela_admin_id'=>$jain_thela_admin_id])
 		->group('item_id')
 		->autoFields(true)
-		->contain(['Items'=>['Units','itemCategories']])->order(['Items.name' => 'ASC']);
+		->contain(['ItemVariations'=>['Units','itemCategories','Items']])->order(['Items.name' => 'ASC']);
 
 		$itemLedgers=$query;
 

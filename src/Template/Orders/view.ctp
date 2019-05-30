@@ -61,6 +61,7 @@ echo $this->Html->link('Close',array(),['escape'=>false,'class'=>'btn  red hidde
 					<th style="text-align:right;">#</th>
 					<th style="text-align:center;">Image</th>
 					<th style="text-align:left;">Item Name</th>
+					<th style="text-align:left;">Variation</th>
 					<th style="text-align:center;">QTY</th>
 					<th style="text-align:center;">Actual QTY</th>
 					<th style="text-align:center;">Rate</th>
@@ -71,17 +72,18 @@ echo $this->Html->link('Close',array(),['escape'=>false,'class'=>'btn  red hidde
 				<?php
 				foreach($order->order_details as $order_detail ){ 
 					@$i++;
+					$show_variation=$order_detail->item_variation->quantity_variation.' '.$order_detail->item_variation->unit->shortname;
 					$quantity=$order_detail->quantity;
 					$actual_quantity=$order_detail->actual_quantity;
 					$minimum_quantity_factor=$order_detail->item->minimum_quantity_factor;
-					$unit_name=$order_detail->item->unit->unit_name;
+					$unit_name=$order_detail->item_variation->unit->unit_name;
 					$image=$order_detail->item->image;
 					$item_name=$order_detail->item->name;
 					$sales_rate=$order_detail->rate;
 					$alias_name=$order_detail->item->alias_name;
-					$show_quantity=$quantity.' '.$unit_name;
+					$show_quantity=$quantity;
 					if(!empty($actual_quantity)){
-					$show_actual_quantity=$actual_quantity.' '.$unit_name;
+					$show_actual_quantity=$actual_quantity;
 					}
 					else{
 					$show_actual_quantity='-';
@@ -99,6 +101,7 @@ echo $this->Html->link('Close',array(),['escape'=>false,'class'=>'btn  red hidde
 						<?php echo $this->Html->image('/img/item_images/'.$image, ['height' => '40px', 'width'=>'40px', 'class'=>'img-rounded img-responsive']); ?>
 					</td>
 					<td style="text-align:left;"><?= h($show_item) ?></td>
+					<td style="text-align:left;"><?= h($show_variation) ?></td>
 					<td style="text-align:center;"><?= h($show_quantity) ?></td>
 					<td style="text-align:center;"><?= h($show_actual_quantity) ?></td>
 					<td style="text-align:center;"><?= h($sales_rate) ?></td>
@@ -117,39 +120,39 @@ echo $this->Html->link('Close',array(),['escape'=>false,'class'=>'btn  red hidde
 				$discount_per=$order->discount_percent;
 				?>
 				<tr style="background-color:#fff; border-top:1px solid #000">
-					<td colspan="5">&nbsp;</td><td align="right"><b>Amount</b></td>
+					<td colspan="6">&nbsp;</td><td align="right"><b>Amount</b></td>
 					<td align="center"><b><?= h(@$order->total_amount) ?></b></td>
 				</tr>
 				
 				
 				<tr style="background-color:#fff;">
-					<td colspan="5">&nbsp;</td>
+					<td colspan="6">&nbsp;</td>
 					<td align="right"><b>Delivery Charge</b></td>
 					<td align="center"><b><?= h($delivery_charge) ?></b></td>
 				</tr>
 				
 				<?php if(!empty($discount_per)){ ?>
 				<tr style="background-color:#fff; border-top:1px solid #000">
-					<td colspan="5">&nbsp;</td>
+					<td colspan="6">&nbsp;</td>
 					<td align="right"><b>Discount</b></td>
 					<td align="center"><b><?= h($discount_per) ?><?php echo '%'; ?></b></td>
 				</tr>
 				<?php } ?>
 				
 				<tr style="background-color:#F5F5F5; border-top:1px solid #000; border-bottom:1px solid #000">
-					<td colspan="5">&nbsp;</td>
+					<td colspan="6">&nbsp;</td>
 					<td align="right"><b>Total Amount</b></td>
 					<td align="center"><b><?= h(@$order->grand_total) ?></b></td>
 				</tr>
 			
 				<?php if($order->order_type=="Bulkorder"){ ?>
 				<tr style="background-color:#fff; border-top:1px solid #000">
-					<td colspan="5">&nbsp;</td>
+					<td colspan="6">&nbsp;</td>
 					<td align="right"><b>CGST</b></td>
 					<td align="center"><b><?= h(0) ?></b></td>
 				</tr>
 				<tr style="background-color:#fff; border-top:1px solid #000">
-					<td colspan="5">&nbsp;</td>
+					<td colspan="6">&nbsp;</td>
 					<td align="right"><b>SGST</b></td>
 					<td align="center"><b><?= h(0) ?></b></td>
 				</tr>
@@ -158,7 +161,7 @@ echo $this->Html->link('Close',array(),['escape'=>false,'class'=>'btn  red hidde
 				
 				<?php if(!empty($amount_from_jain_cash)){ ?>
 				<tr style="background-color:#fff; border-top:1px solid #000">
-					<td colspan="5">&nbsp;</td>
+					<td colspan="6">&nbsp;</td>
 					<td align="right"><b>Jain Cash</b></td>
 					<td align="center"><b><?= h($amount_from_jain_cash) ?></b></td>
 				</tr>
@@ -166,7 +169,7 @@ echo $this->Html->link('Close',array(),['escape'=>false,'class'=>'btn  red hidde
 				
 				<?php if(!empty($online_amount)){ ?>
 				<tr style="background-color:#fff;">
-					<td colspan="5">&nbsp;</td>
+					<td colspan="6">&nbsp;</td>
 					<td align="right"><b>Online Payment</b></td>
 					<td align="center"><b><?= h($online_amount) ?></b></td>
 				</tr>
@@ -174,7 +177,7 @@ echo $this->Html->link('Close',array(),['escape'=>false,'class'=>'btn  red hidde
 				
 				<?php if(!empty($amount_from_wallet)){ ?>
 				<tr style="background-color:#fff;">
-					<td colspan="5">&nbsp;</td>
+					<td colspan="6">&nbsp;</td>
 					<td align="right"><b>Payment From Wallet </b></td>
 					<td align="center"><b><?= h($amount_from_wallet) ?></b></td>
 				</tr>
@@ -182,14 +185,14 @@ echo $this->Html->link('Close',array(),['escape'=>false,'class'=>'btn  red hidde
 				
 				<?php if(!empty($amount_from_promo_code)){ ?>
 				<tr style="background-color:#fff;">
-					<td colspan="5">&nbsp;</td>
+					<td colspan="6">&nbsp;</td>
 					<td align="right"><b>Promo code</b></td>
 					<td align="center"><b><?= h($amount_from_promo_code)?></b></td>
 				</tr>
 				<?php } ?>
 			
 				<tr style="background-color:#F5F5F5; border-top:1px solid #000; border-bottom:1px solid #000">
-					<td colspan="5">&nbsp;</td>
+					<td colspan="6">&nbsp;</td>
 					<td align="right">
 						<b>
 						<?php if(($status=='Delivered') || ($status==' Delivered')){ ?>

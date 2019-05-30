@@ -46,6 +46,7 @@
 					<tr>
 						<th>Sr</th>
 						<th>Code Name</th>
+						<th>Code Type</th>
 						<th>Discount</th>
 						<th>Item Category</th>
 						<th>Item</th>
@@ -53,8 +54,6 @@
 						<th>Free Shipping</th>
 						<th>Valid From</th>
 						<th>Valid To</th>
-						<th>Status</th>
-						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -67,6 +66,7 @@
 					<tr>
 						<td><?= $i ?></td>
 						<td><?= h(@$promoCode->code) ?></td>
+						<td><?= h(@$promoCode->promo_code_type) ?></td>
 						<td><?php 
 							$type=$promoCode->amount_type;
 							if($type == "percent")
@@ -97,12 +97,6 @@
 						<td><?= h(@$promoCode->valid_from) ?>
 						<td><?= h(@$promoCode->valid_to) ?>
 						<span id="status_id" style="display:none;"><?php echo $promoCode->id; ?></span>
-						</td>
-						<td>
-						<?php echo  $this->Form->control('status',['class'=>'form-control input-sm input-small status','options'=>['Active'=>'Active','Deactive'=>'Deactive'], 'value'=>$promoCode->status,'label'=>false]); ?>
-						</td>
-						<td class="actions">
-							<?= $this->Html->link(__('<span class="fa fa-pencil"></span>'), ['action' => 'edit', $promoCode->id],['class'=>'btn btn-primary  btn-condensed btn-sm','escape'=>false]) ?>
 						</td>
 						
 					</tr>

@@ -342,7 +342,7 @@ class OrdersController extends AppController
     {
 		$this->viewBuilder()->layout('index_layout');
         $order = $this->Orders->get($id, [
-            'contain' => ['Customers', 'CustomerAddresses', 'PromoCodes', 'OrderDetails'=>['Items'=>['Units']]]
+            'contain' => ['Customers', 'CustomerAddresses', 'PromoCodes', 'OrderDetails'=>['Items','ItemVariations'=>['Units']]]
         ]);
 	
         $this->set(compact('order', 'id', 'print'));
@@ -747,8 +747,10 @@ class OrdersController extends AppController
 		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
         $order = $this->Orders->newEntity();  
         if ($this->request->is('post')) {
-        	// $d=$this->request->getData();
-        	// pr($d);
+
+        //     $order_details_quantity=$this->request->getData('order_details.1.show_quantity');
+        //     //$qu=$order_details_quantity['show_quantity'];
+        // pr($order_details_quantity);exit;
             $order = $this->Orders->patchEntity($order, $this->request->getData());
             $order['transaction_order_no']=0;
             $order['amount_from_jain_cash']=0;
@@ -757,6 +759,8 @@ class OrdersController extends AppController
             $order['delivery_charge_id']=1;
             $order['promo_code_id']=0;
             $order['discount_percent']=0;
+            $order['actual_deliver_time']=$this->request->getData('delivery_time');
+            $order_details_quantity=$this->request->getData('order_details');
             $order['actual_deliver_time']=$this->request->getData('delivery_time');
             $order['cancel_id']=0;
             $order['payment_status']="Sucess";
@@ -888,12 +892,14 @@ class OrdersController extends AppController
 				
 					$ledgers = $this->Orders->Ledgers->newEntity();
 					$ledgers->ledger_account_id	 = $ledgerAccount->id;
+					$ledgers->purchase_booking_id = 0;
 					$ledgers->debit = $order->grand_total;
 					$ledgers->credit = '0';
 					$this->Orders->Ledgers->save($ledgers);
 
 					$ledgers = $this->Orders->Ledgers->newEntity();
 					$ledgers->ledger_account_id	 = 9;
+					$ledgers->purchase_booking_id = 0;
 					$ledgers->debit = $order->amount_from_wallet;
 					$ledgers->credit = '0';
 					if($order->amount_from_wallet > 0){
@@ -902,6 +908,7 @@ class OrdersController extends AppController
 					
 					$ledgers = $this->Orders->Ledgers->newEntity();
 					$ledgers->ledger_account_id	 = 8;
+					$ledgers->purchase_booking_id = 0;
 					$ledgers->debit = '0';
 					$ledgers->credit = ($order->grand_total+$order->amount_from_wallet);
 					$this->Orders->Ledgers->save($ledgers);
@@ -925,7 +932,7 @@ class OrdersController extends AppController
 			$customers[]= ['value'=>$customer_fetch->id,'text'=>$customer_name." (".$customer_mobile.")"];
 		}
 		$deliverytime_fetchs = $this->Orders->DeliveryTimes->find('all');
-		
+
        // $promoCodes = $this->Orders->PromoCodes->find('list');
 	   if($order_type == 'Bulkorder'){
 		   $item_fetchs = $this->Orders->Items->find()->where(['Items.freeze'=>0,'is_combo'=>'no','is_virtual'=>'no']);

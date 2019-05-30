@@ -193,7 +193,7 @@ background-color: #fff;}
 							$time_from=$deliverytime_fetch->time_from;
 							$time_to=$deliverytime_fetch->time_to;
 							$delivery_time[]= ['value'=>$time_id,'text'=>$time_from. " - " .$time_to];?>
-			
+
 					<?php } ?>
 										
 						<?= $this->Form->input('delivery_time_id', ['empty'=>'--Select time--','class'=>'form-control input-sm select2me','id'=>'delivery_id','label'=>false,'options'=>$delivery_time]) ?>
@@ -391,6 +391,9 @@ $(document).ready(function() {
 		
 		var obj=$(this).closest('tr');
 		var qty=obj.find('td:nth-child(4) input').val();
+
+		// var a=obj.find('td:nth-child(4) .mains').val(qty);
+		//  alert(a);
 		//alert(qty);
 		var rate=obj.find('td:nth-child(5) input').val();
 		var amount=qty*rate;
@@ -737,11 +740,11 @@ function selectAutoCompleted1(value) {
 						<span class="msg_shw2" style="color:blue;font-size:12px;"></span>
 					</td>
 					<td>
-						<?php echo $this->Form->input('show_quantity', ['label' => false,'class' => 'form-control input-sm number cal_amount quant','placeholder'=>'Quantity','value'=>0]); ?>
+						<?php echo $this->Form->input('show_quantity', ['label' => false,'class' => 'form-control input-sm number cal_amount quant show_quantity','placeholder'=>'Quantity']); ?>
 						
 						<span class="msg_shw2" style="color:blue;font-size:12px;"></span>
-							<?php echo $this->Form->input('quantity', ['label' => false,'class' => 'form-control input-sm number mains','value'=>0, 'type'=>'hidden']); ?>
-							<?php echo $this->Form->input('actual_quantity', ['label' => false,'class' => 'form-control input-sm number mainss','value'=>0, 'type'=>'hidden']); ?>
+							<?php echo $this->Form->input('quantity', ['label' => false,'class' => 'form-control input-sm number mains quantity','value'=>0, 'type'=>'hidden']); ?>
+							<?php echo $this->Form->input('actual_quantity', ['label' => false,'class' => 'form-control input-sm number mainss actual_quantity','value'=>0, 'type'=>'hidden']); ?>
 					</td>
 					<td>
 						<?php echo $this->Form->input('rate', ['label' => false,'class' => 'form-control input-sm number cal_amount rat_value','placeholder'=>'Rate','value'=>0]); ?>	

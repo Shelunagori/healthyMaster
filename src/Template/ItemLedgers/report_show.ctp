@@ -29,7 +29,7 @@
 										<label>Item<label>
 									</th>
 									<th width="20%">
-										<label>Driver Stock<label>
+										<label>Variation<label>
 									</th>
 									<th width="20%">
 										<label>Warehouse Stock<label>
@@ -46,11 +46,11 @@
 								if($item_freeze==1){
 									continue;
 								}
-								$driver_stock=number_format($itemLedger->totalInDriver-$itemLedger->totalOutDriver, 2);
+								// $driver_stock=number_format($itemLedger->totalInDriver-$itemLedger->totalOutDriver, 2);
 								$warehouse_stock=number_format($itemLedger->totalInWarehouse-$itemLedger->totalOutWarehouse, 2);
 								@$i++;
 								
-								if(($driver_stock!= 0) ||($warehouse_stock!= 0)) {
+								if($warehouse_stock!= 0) {
 								?>
 									<tr class="main_tr" class="tab">
 										<td width="1px"><?= $i ?>.</td>
@@ -58,13 +58,13 @@
 											<a href="#" role="button" class="stock_show" itm="<?= $itemLedger->item_id ?>"><?= $itemLedger->item->name ?></a>	
 										</td>
 										<td>
-											<?= $driver_stock.' '.$itemLedger->item->unit->shortname ?>
+											<?= $itemLedger->item_variation->quantity_variation.' '.$itemLedger->item_variation->unit->shortname ?>
 										</td>
 										<td>
-											<?= $warehouse_stock.' '.$itemLedger->item->unit->shortname ?>
+											<?= $warehouse_stock.' '.$itemLedger->item_variation->unit->shortname ?>
 										</td>
 										<td>
-											<?= number_format($driver_stock+$warehouse_stock, 2).' '.$itemLedger->item->unit->shortname ?>
+											<?= number_format($warehouse_stock, 2).' '.$itemLedger->item_variation->unit->shortname ?>
 										</td>
 									</tr>
 								<?php } 

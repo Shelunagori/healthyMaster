@@ -67,7 +67,6 @@ background-color: #fff;}
 							<th>Variation</th>
 							<th>Quantity</th>
 							<th>Rate</th>
-							<th>Amount</th>
 							<th>Is Combo</th>
 						</tr>
 					</thead>
@@ -86,7 +85,6 @@ background-color: #fff;}
 							<td><?= h(@$Cart->item_variation->quantity_variation) ." ".  h(@$Cart->item_variation->unit->shortname) ?></td>
 							<td><?= h(@$Cart->quantity) ?></td>
 							<td><?= h(@$Cart->rate) ?></td>
-							<td><?= h(@$Cart->amount) ?></td>
 							<td><?= h(@$Cart->is_combo) ?></td>
 							
 						</tr>

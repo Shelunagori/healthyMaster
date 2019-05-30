@@ -62,9 +62,8 @@ background-color: #fff;}
 						<tr>
 							<th>Sr</th>
 							<th>Customer</th>
-							<th>Quantity Variation</th>
-							<th>Unit</th>
 							<th>Item</th>
+							<th>Variation</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -77,9 +76,8 @@ background-color: #fff;}
 						<tr>
 							<td><?= $i ?></td>
 							<td><?= h(@$wishlist->customer->name) ?></td>
-							<td><?= h(@$wishlist->item_variation->quantity_variation) ?></td>
-							<td><?= h(@$wishlist->item_variation->unit->shortname) ?></td>
 							<td><?= h(@$wishlist->item->name) ?></td>
+							<td><?= h(@$wishlist->item_variation->quantity_variation).' '.$wishlist->item_variation->unit->shortname ?></td>
 							
 						</tr>
 						<?php endforeach; ?>
