@@ -29,7 +29,7 @@ class ItemCategoriesController extends AppController
 						->order(['total_rows'=>'DESC'])
 						->limit(10)
 						->contain(['Items'=>function($q) use($customer_id){
-							return $q->select(['name', 'image','ready_to_sale'])
+							return $q->select(['name', 'image','ready_to_sale','is_new'])
 							
 							->contain(['ItemVariations'=>
 								function($q) use($customer_id) {
@@ -61,7 +61,7 @@ class ItemCategoriesController extends AppController
 						->order(['total_rows'=>'DESC'])
 						->limit(10)
 						->contain(['Items'=>function($q) use($customer_id) {
-							return $q->select(['name', 'image','ready_to_sale'])
+							return $q->select(['name', 'image','ready_to_sale','is_new'])
 							->contain(['ItemVariations'=>
 								function($q) use($customer_id) {
 									return $q->where(['ready_to_sale' =>'Yes'])

@@ -61,7 +61,8 @@ class CartsController extends AppController
 				$exist_quantity=$fetch->quantity;
 				$exist_count=$fetch->cart_count;
 			}
-			$update_quantity=$item_add_quantity+$exist_quantity;
+			//$update_quantity=$item_add_quantity+$exist_quantity;
+			$update_quantity=$item_add_quantity;
 			$update_count=$exist_count+1;
 		
 			$cart=$this->Carts->get($update_id);	
@@ -174,7 +175,7 @@ class CartsController extends AppController
 				if(empty($fetchs->toArray()))
 				{
 					$query = $this->Carts->query();
-							$query->insert(['customer_id', 'item_id', 'quantity', 'cart_count', 'is_combo'])
+							$query->insert(['customer_id','item_variation_id', 'item_id', 'quantity', 'cart_count', 'is_combo'])
 									->values([
 									'customer_id' => $customer_id,
 									'item_id' => $item_id,
@@ -191,7 +192,8 @@ class CartsController extends AppController
 							$exist_quantity=$fetch->quantity;
 							$exist_count=$fetch->cart_count;
 						}
-						$update_quantity=$item_add_quantity+$exist_quantity;
+						//$update_quantity=$item_add_quantity+$exist_quantity;
+						$update_quantity=$item_add_quantity;
 						$update_count=$exist_count+1;					
 					
 					$cart=$this->Carts->get($update_id);
@@ -221,7 +223,8 @@ class CartsController extends AppController
 					$exist_quantity=$fetch->quantity;
 					$exist_count=$fetch->cart_count;
 				}
-				$update_quantity=$exist_quantity-$item_add_quantity;
+				//$update_quantity=$exist_quantity-$item_add_quantity;
+				$update_quantity=$item_add_quantity;
 				$update_count=$exist_count-1;
 			
 				if($exist_count==1)
@@ -402,10 +405,11 @@ class CartsController extends AppController
 				$delivery_charges = 'Free';
 				$isPromoApplied = true;
 			}
+			
 			else if($grand_total < $delivery_charges->amount)
 			{
-				$delivery_charges = $delivery_charges->charge;
 				$grand_total = $grand_total + $delivery_charges->charge;
+				$delivery_charges = $delivery_charges->charge;
 				$delivery_charges = round($delivery_charges);
 			}
 			else
@@ -416,6 +420,43 @@ class CartsController extends AppController
 			$subtotal = round($subtotal);
 			$grand_total = round($grand_total);			
 		}
+
+
+		$this->loadModel('JainCashPoints');
+
+		$queryPoints = $this->JainCashPoints->find();
+		$totalInCase = $queryPoints->newExpr()
+			->addCase(
+				$queryPoints->newExpr()->add(['is_refered' => 'Yes']),
+				$queryPoints->newExpr()->add(['point']),
+				'integer'
+			);
+		$totalOutCase = $queryPoints->newExpr()
+			->addCase(
+				$queryPoints->newExpr()->add(['order_id !=' => '0']),
+				$queryPoints->newExpr()->add(['used_point']),
+				'integer'
+			);
+			$queryPoints->select([
+			'total_in' => $queryPoints->func()->sum($totalInCase),
+			'total_out' => $queryPoints->func()->sum($totalOutCase),'id','customer_id'
+		])
+		->where(['JainCashPoints.customer_id' => $customer_id])
+		->group('customer_id')
+		->autoFields(true);
+
+		$redeemPoints = 0;
+
+		if(!empty($queryPoints->toArray()))
+		{
+			foreach($queryPoints as $fetch_query)
+			{
+				$points=$fetch_query->total_in;
+				$used_points=$fetch_query->total_out;
+				$redeemPoints=$points-$used_points;
+			}			
+		}
+
 		
 		if(empty($carts->toArray()))
 		{			
@@ -428,8 +469,8 @@ class CartsController extends AppController
 				
 			$status=true;
 			$error='';
-			$this->set(compact('status', 'error','address_available','grand_total','carts','delivery_charges','subtotal','discount_amount','isPromoApplied'));
-			$this->set('_serialize', ['status', 'error','subtotal','delivery_charges','discount_amount','isPromoApplied','grand_total','address_available','carts']);
+			$this->set(compact('status', 'error','address_available','grand_total','carts','delivery_charges','subtotal','discount_amount','isPromoApplied','redeemPoints'));
+			$this->set('_serialize', ['status', 'error','redeemPoints','subtotal','delivery_charges','discount_amount','isPromoApplied','grand_total','address_available','carts']);
 		}
 	}
 	
@@ -587,8 +628,8 @@ class CartsController extends AppController
 		}
 		else if($grand_total < $delivery_charges->amount)
 		{
-			$delivery_charges = $delivery_charges->charge;
 			$grand_total = $grand_total + $delivery_charges->charge;
+			$delivery_charges = $delivery_charges->charge;
 			$delivery_charges = round($delivery_charges);
 		}
 		else
@@ -606,7 +647,44 @@ class CartsController extends AppController
 		->order(['default_address' => 'DESC']);
 
 		if(empty($customer_addresses->toArray())) { $customer_addresses = []; }	
+		$temp_order_no=uniqid();
+		
+		$this->loadModel('JainCashPoints');
 
+		$queryPoints = $this->JainCashPoints->find();
+		$totalInCase = $queryPoints->newExpr()
+			->addCase(
+				$queryPoints->newExpr()->add(['is_refered' => 'Yes']),
+				$queryPoints->newExpr()->add(['point']),
+				'integer'
+			);
+		$totalOutCase = $queryPoints->newExpr()
+			->addCase(
+				$queryPoints->newExpr()->add(['order_id !=' => '0']),
+				$queryPoints->newExpr()->add(['used_point']),
+				'integer'
+			);
+			$queryPoints->select([
+			'total_in' => $queryPoints->func()->sum($totalInCase),
+			'total_out' => $queryPoints->func()->sum($totalOutCase),'id','customer_id'
+		])
+		->where(['JainCashPoints.customer_id' => $customer_id])
+		->group('customer_id')
+		->autoFields(true);
+
+		$redeemPoints = 0;
+
+		if(!empty($queryPoints->toArray()))
+		{
+			foreach($queryPoints as $fetch_query)
+			{
+				$points=$fetch_query->total_in;
+				$used_points=$fetch_query->total_out;
+				$redeemPoints=$points-$used_points;
+			}			
+		}		
+		
+		
 		if(empty($carts->toArray()))
 		{			
 			$status=false;
@@ -617,8 +695,8 @@ class CartsController extends AppController
 		else{
 			$status=true;
 			$error='';
-			$this->set(compact('status', 'error','grand_total','totalItems','carts','delivery_charges','subtotal','discount_amount','isPromoApplied','customer_addresses'));
-			$this->set('_serialize', ['status', 'error','subtotal','delivery_charges','discount_amount','isPromoApplied','grand_total','totalItems','carts','customer_addresses']);
+			$this->set(compact('status', 'error','redeemPoints','temp_order_no','grand_total','totalItems','carts','delivery_charges','subtotal','discount_amount','isPromoApplied','customer_addresses'));
+			$this->set('_serialize', ['status', 'error','temp_order_no','redeemPoints','subtotal','delivery_charges','discount_amount','isPromoApplied','grand_total','totalItems','carts','customer_addresses']);
 		}
     }
 
