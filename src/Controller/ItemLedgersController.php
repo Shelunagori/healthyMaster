@@ -713,12 +713,12 @@ class ItemLedgersController extends AppController
 			$where1['ItemLedgers.transaction_date <=']=$to_date;
 		}
 		if(!empty($where)){
-			$itemLedgers = $this->ItemLedgers->find()->contain(['Items'=> function ($q) {
-				return $q->where(['is_combo'=>'no','is_virtual'=>'no','freeze'=>0])->contain(['Units'])->order(['Items.name'=>'ASC']);
+			$itemLedgers = $this->ItemLedgers->find()->contain(['ItemVariations'=>['Units'],'Items'=> function ($q) {
+				return $q->where(['is_combo'=>'no','is_virtual'=>'no','freeze'=>0])->order(['Items.name'=>'ASC']);
 			}])->where(['ItemLedgers.jain_thela_admin_id'=>$jain_thela_admin_id])->where($where);
 		}else{
-			$itemLedgers = $this->ItemLedgers->find()->contain(['Items'=> function ($q) {
-				return $q->where(['is_combo'=>'no','is_virtual'=>'no','freeze'=>0])->contain(['Units'])->order(['Items.name'=>'ASC']);
+			$itemLedgers = $this->ItemLedgers->find()->contain(['ItemVariations'=>['Units'],'Items'=> function ($q) {
+				return $q->where(['is_combo'=>'no','is_virtual'=>'no','freeze'=>0])->order(['Items.name'=>'ASC']);
 			}])->where(['ItemLedgers.jain_thela_admin_id'=>$jain_thela_admin_id])->where($where1);
 		}	
 		$order_online = []; $order_online_name=[]; $order_bulk = []; $walkins_sales = []; $order_online_rate = [];

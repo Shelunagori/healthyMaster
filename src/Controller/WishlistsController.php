@@ -68,7 +68,9 @@ class WishlistsController extends AppController
         $this->viewBuilder()->layout('index_layout');
         $jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
         $Wishlist= $this->Wishlists->newEntity();
-        $Wishlists = $this->Wishlists->find()->contain(['Items','Customers','ItemVariations'=>['Units']]);
+        $Wishlists = $this->Wishlists->find()
+        ->contain(['Customers','Items','ItemVariations'=>['Units']]);
+        //pr($Wishlists->toArray());exit;
         if ($this->request->is('post')) {
             $datas = $this->request->getData();
             if(!empty($datas['customer_id']))
@@ -78,6 +80,7 @@ class WishlistsController extends AppController
              if(!empty($datas['Wishlists.item_id']))
             {
                 $Wishlists->where(['Wishlists.item_id'=>$datas['item_id']]);
+                pr($Wishlists->toArray());exit;
             }
             if(!empty($datas['From'])){
                 $from_date=date("Y-m-d",strtotime($datas['From']));

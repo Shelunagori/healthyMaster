@@ -26,7 +26,7 @@ class TransferInventoryVouchersController extends AppController
         $this->paginate = [
             'contain' => ['Items']
         ];
-        $transferInventoryVouchers = $this->paginate($this->TransferInventoryVouchers->find()->order(['TransferInventoryVouchers.voucher_no'=>'DESC'])->contain(['Items']));
+        $transferInventoryVouchers = $this->paginate($this->TransferInventoryVouchers->find()->order(['TransferInventoryVouchers.voucher_no'=>'DESC'])->contain(['Items','ItemVariations']));
 
         $this->set(compact('transferInventoryVouchers'));
         $this->set('_serialize', ['transferInventoryVouchers']);
@@ -135,7 +135,7 @@ class TransferInventoryVouchersController extends AppController
             }
             $this->Flash->error(__('The transfer inventory voucher could not be saved. Please, try again.'));
         }
-		$item_fetchs = $this->TransferInventoryVouchers->Items->find()->where(['Items.jain_thela_admin_id' => $jain_thela_admin_id, 'Items.is_combo'=>'no', 'Items.is_virtual'=>'no', 'Items.freeze !='=>1])->contain(['Units']);
+		$item_fetchs = $this->TransferInventoryVouchers->Items->find()->where(['Items.is_combo'=>'no', 'Items.is_virtual'=>'no', 'Items.freeze !='=>1])->contain(['Units']);
 		foreach($item_fetchs as $item_fetch){
 			$item_name=$item_fetch->name;
 			$alias_name=$item_fetch->alias_name;

@@ -43,6 +43,10 @@ class ItemLedgersTable extends Table
             'foreignKey' => 'jain_thela_admin_id',
             'joinType' => 'INNER'
         ]);
+         $this->belongsTo('ItemVariations', [
+            'foreignKey' => 'item_variation_id',
+            'joinType' => 'INNER'
+        ]);
         $this->belongsTo('Drivers', [
             'foreignKey' => 'driver_id',
             'joinType' => 'LEFT'

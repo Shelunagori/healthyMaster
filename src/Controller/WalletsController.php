@@ -22,7 +22,9 @@ class WalletsController extends AppController
     {
         $this->viewBuilder()->layout('index_layout');
 		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
-	  $wallets = $this->Wallets->find()->where(['WalkinSales.jain_thela_admin_id'=>$jain_thela_admin_id])->contain(['Customers', 'Plans', 'Orders']);
+	   $wallets = $this->Wallets->find()
+       //->where(['WalkinSales.jain_thela_admin_id'=>$jain_thela_admin_id])
+       ->contain(['Customers', 'Plans', 'Orders']);
 		$this->set(compact('wallets'));
         $this->set('_serialize', ['wallets']);
     }

@@ -184,7 +184,7 @@ background-color: #fff;}
 					</div>
 					<div class="col-md-2">
 						<label class="control-label">Delivery Time <span class="required" aria-require>*</span></label>										
-						<?= $this->Form->input('delivery_time_id', ['empty'=>'--Select time--','options' => $delivery_time,'class'=>'form-control input-sm select2me','id'=>'delivery_id','label'=>false]) ?>
+						<?= $this->Form->input('delivery_time_id', ['empty'=>'--Select time--','class'=>'form-control input-sm select2me','id'=>'delivery_id','label'=>false]) ?>
 					</div>
 					<div class="col-md-1">
 						<?= $this->Form->input('delivery_time', ['class'=>'form-control','label'=>false,'type'=>'hidden','id'=>'del_time']) ?>
