@@ -108,7 +108,7 @@ class OrdersController extends AppController
 		$customer_id=$this->request->query('customer_id');
 		
 		$orders_data = $this->Orders->find()
-		->where(['customer_id' => $customer_id, 'jain_thela_admin_id' => $jain_thela_admin_id, 'status IN' => ['Delivered','Cancel'] ])
+		->where(['customer_id' => $customer_id, 'jain_thela_admin_id' => $jain_thela_admin_id, 'status IN' => ['Delivered','Cancel','In Process'] ])
 		->order(['order_date' => 'DESC'])
 		->contain(['OrderDetails'=>function($q){
 				return $q->contain(['ItemVariations' =>['Items','Units']]);
@@ -142,7 +142,6 @@ class OrdersController extends AppController
 	
 	public function cancelOrder()
     {
-		$jain_thela_admin_id=$this->request->query('jain_thela_admin_id');
 		$customer_id=$this->request->query('customer_id');
 		$order_id=$this->request->query('order_id');
 		@$cancel_id=$this->request->query('cancel_id');
@@ -150,7 +149,8 @@ class OrdersController extends AppController
    
 				$odrer_datas=$this->Orders->get($order_id);
  				$o_date=$odrer_datas->order_date;
- 				$amount_from_wallet=$odrer_datas->amount_from_wallet;
+ 				//$amount_from_wallet=$odrer_datas->amount_from_wallet;
+				$amount_from_wallet = 0;
  				$amount_from_jain_cash=$odrer_datas->amount_from_jain_cash;
  				$amount_from_promo_code=$odrer_datas->amount_from_promo_code;
  				$online_amount=$odrer_datas->online_amount;
@@ -605,10 +605,7 @@ curl_close($ch);
 						$total_amount = $total_amount - $delivery_charge;
 					}	
 
-					if($jain_cash_amount > 0)
-					{
-						$total_amount = $total_amount - $jain_cash_amount;
-					}			
+							
 								
 					$order = $this->Orders->patchEntity($order, $this->request->getData());
 					$order->transaction_order_no=$order_no;
