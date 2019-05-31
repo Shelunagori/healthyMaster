@@ -80,7 +80,7 @@ class PurchaseBookingsController extends AppController
 				foreach($purchaseBooking->purchase_booking_details as $purchase_booking_detail)
 				{
 					$query = $this->PurchaseBookings->ItemLedgers->query();
-					$query->insert(['jain_thela_admin_id', 'driver_id', 'grn_id', 'item_id', 'warehouse_id', 'purchase_booking_id', 'rate', 'amount', 'status', 'quantity','rate_updated', 'transaction_date'])
+					$query->insert(['jain_thela_admin_id', 'driver_id', 'grn_id', 'item_id', 'warehouse_id', 'purchase_booking_id', 'rate', 'amount', 'status', 'quantity','rate_updated', 'transaction_date','item_variation_id'])
 					->values([
 						'jain_thela_admin_id' => $jain_thela_admin_id,
 						'driver_id' => 0,
@@ -89,6 +89,7 @@ class PurchaseBookingsController extends AppController
 						'warehouse_id' => $grn->warehouse_id,
 						'purchase_booking_id' => $purchaseBooking->id,
 						'rate' => $purchase_booking_detail->rate,
+						'item_variation_id' => $purchase_booking_detail->item_variation_id,
 						'amount' => $purchase_booking_detail->amount,
 						'status' => 'In',
 						'quantity' => $purchase_booking_detail->quantity,

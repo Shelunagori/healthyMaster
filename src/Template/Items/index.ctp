@@ -85,7 +85,7 @@
 								<?= h($stock_msg) ?>
 							</td> -->
 							<td><?= h($item->freeze) ?></td>
-							<td><img src="webroot/img/item_images/<?= $item->image ?>" height="20%"></td>
+							<td><img src="/healthyMaster/webroot/img/item_images/<?= $item->image ?>" height="10%"></td>
 							<td class="actions">
 								<?= $this->Html->link(__('Edit'), ['action' => 'edit', $item->id]) ?>
 								<?php if($status=='unfreeze' or $status==''){ ?>

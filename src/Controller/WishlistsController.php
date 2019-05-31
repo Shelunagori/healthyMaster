@@ -77,10 +77,10 @@ class WishlistsController extends AppController
             {
                 $Wishlists->where(['Wishlists.customer_id'=>$datas['customer_id']]);
             }
-             if(!empty($datas['Wishlists.item_id']))
+             if(!empty($datas['item_id']))
             {
                 $Wishlists->where(['Wishlists.item_id'=>$datas['item_id']]);
-                pr($Wishlists->toArray());exit;
+                //pr($Wishlists->toArray());exit;
             }
             if(!empty($datas['From'])){
                 $from_date=date("Y-m-d",strtotime($datas['From']));

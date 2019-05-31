@@ -709,6 +709,13 @@ $(document).ready(function() {
 				$('.amount_from_wallet').attr('max',response);
 			});
 	});
+
+	$('.show_quantity').on('change',function()
+	{
+		var show=$(this).val();
+		var quant=$(this).closest('td').find('.quantity').val(show);
+		alert(quant);
+	});
 });
 </script>
 <script>

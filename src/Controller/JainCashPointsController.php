@@ -36,6 +36,15 @@ class JainCashPointsController extends AppController
      * @return \Cake\Http\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
+
+    public function pointReport()
+    {
+        $this->viewBuilder()->layout('index_layout');
+
+        $jain_cash_point=$this->JainCashPoints->find()->contain(['Customers','Orders']);;
+         $this->set(compact('jain_cash_point'));
+    }
+
     public function view($id = null)
     {
         $jainCashPoint = $this->JainCashPoints->get($id, [

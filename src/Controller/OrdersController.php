@@ -746,11 +746,14 @@ class OrdersController extends AppController
 		$this->viewBuilder()->layout('index_layout');
 		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
         $order = $this->Orders->newEntity();  
-        if ($this->request->is('post')) {
+        if ($this->request->is('post')) 
+        {
 
         //     $order_details_quantity=$this->request->getData('order_details.1.show_quantity');
         //     //$qu=$order_details_quantity['show_quantity'];
         // pr($order_details_quantity);exit;
+        	// $R=$this->request->getData();
+        	// pr($R);exit;
             $order = $this->Orders->patchEntity($order, $this->request->getData());
             $order['transaction_order_no']=0;
             $order['amount_from_jain_cash']=0;

@@ -163,13 +163,13 @@ class CartsController extends AppController
             $datas = $this->request->getData();
             if(!empty($datas['customer_id']))
             {
-                $Carts->where(['customer_id'=>$datas['customer_id']]);
+                $Carts->where(['Carts.customer_id'=>$datas['customer_id']]);
                 //pr($datas['customer_id']);
                 //pr($Carts->toArray());exit;
             }
              if(!empty($datas['item_id']))
             {
-                $Carts->where(['item_id'=>$datas['item_id']]);
+                $Carts->where(['Carts.item_id'=>$datas['item_id']]);
             }
             if(!empty($datas['From'])){
                 $from_date=date("Y-m-d",strtotime($datas['From']));

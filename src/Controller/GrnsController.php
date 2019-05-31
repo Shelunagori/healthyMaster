@@ -99,13 +99,14 @@ class GrnsController extends AppController
 				
 				foreach($grn->grn_details as $grn_detail){
 					$query = $this->Grns->ItemLedgers->query();
-					$query->insert(['jain_thela_admin_id', 'driver_id', 'grn_id', 'item_id', 'warehouse_id', 'rate', 'status', 'quantity', 'transaction_date'])
+					$query->insert(['jain_thela_admin_id', 'driver_id', 'grn_id', 'item_id', 'warehouse_id', 'rate', 'status', 'quantity', 'transaction_date','item_variation_id'])
 						->values([
 							'jain_thela_admin_id' => $jain_thela_admin_id,
 							'driver_id' => 0,
 							'grn_id' => $grn->id,
 							'item_id' => $grn_detail->item_id,
-							'warehouse_id' => $grn->warehouse_id,
+                            'warehouse_id' => $grn->warehouse_id,
+							'item_variation_id' => $grn_detail->item_variation_id,
 							'rate' => 0,
 							'status' => 'In',
 							'quantity' => $grn_detail->quantity,

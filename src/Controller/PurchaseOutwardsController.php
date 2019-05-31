@@ -82,12 +82,13 @@ class PurchaseOutwardsController extends AppController
 					$fetch_rate=$outward_detail->rate;
 					
 				$query = $this->PurchaseOutwards->ItemLedgers->query();
-				$query->insert(['warehouse_id', 'transaction_date', 'item_id', 'quantity','status', 'jain_thela_admin_id', 'rate'])
+				$query->insert(['warehouse_id', 'transaction_date', 'item_id', 'quantity','status', 'jain_thela_admin_id', 'rate','item_variation_id'])
 						->values([
 						'warehouse_id' => $warehouse_id,
 						'transaction_date' => $transaction_date,
 						'item_id' => $fetch_item_id,
-						'quantity' => $fetch_quantity,
+                        'quantity' => $fetch_quantity,
+						'item_variation_id' => $outward_detail->item_variation_id,
 						'status' => 'out',
 						'jain_thela_admin_id' => $jain_thela_admin_id,
 						'rate' => $fetch_rate

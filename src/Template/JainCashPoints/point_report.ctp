@@ -16,70 +16,40 @@ background-color: #fff;}
 			<div class="portlet-title">
 				<div class="caption">
 					<i class=" fa fa-gift"></i>
-					<span class="caption-subject">Wishlist</span>
+					<span class="caption-subject">Cash Points</span>
 				</div>
 				<div class="actions">
 					<input type="text" class="form-control input-sm pull-right" placeholder="Search..." id="search3"  style="width: 200px;">
 				</div>
 			</div>
 			<div class="portlet-body">
-				<form method="post">
-						<table width="50%" class="table table-condensed">
-					<tbody>
-						<tr>
-							<td width="5%">
-								<label class=" control-label">Customer <span class="required" aria-required="true">*</span></label><!-- 
-						<?php echo $this->Form->control('customer_id',['empty'=>'--Select Customer--','options' => $customers,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','id'=>'customer_id','label'=>false]); ?> -->
-						<input type="text" name="customer" class="form-control input-sm selectedAutoCompleted autocompleted customer_id cstmr chosen-select" valueType="item_name"  autocomplete="off">
-						<input type="hidden" name="customer_id" id="customer_id">
-						
-						 <div class="suggesstion-box"></div>
-							</td>
-							
-							<td width="5%">
-								<label>Item</label>
-								<?php echo $this->Form->input('item_id', ['empty'=>'--Items--','options' => $items,'label' => false,'class' => 'form-control input-sm select2me','placeholder'=>'Category']); ?>
-							</td>
-							
-							<td width="5%">
-								<label>From</label>
-								<input type="text" name="From" class="form-control input-sm date-picker" placeholder="Transaction From"  data-date-format="dd-mm-yyyy">
-							</td>	
-							<td width="5%">
-								<label>To</label>
-								<input type="text" name="To" class="form-control input-sm date-picker" placeholder="Transaction To"   data-date-format="dd-mm-yyyy" >
-							</td>
-							<td width="10%">
-								<button type="submit" class="btn btn-success btn-sm" style="margin-top: 23px !important;"><i class="fa fa-filter"></i> Filter</button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				</form>
+				
 				<div>
 					<table class="table table-condensed table-hover table-bordered" id="main_tble">
 					<thead>
 						<tr>
 							<th>Sr</th>
+							<th>Order No</th>
 							<th>Customer</th>
-							<th>Item</th>
-							<th>Variation</th>
-							<th>Rate</th>
+							<!-- <th>Item Variation</th> -->
+							<th>Point</th>
+							<th>Used Point</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php
 						$i=0;
-						foreach ($Wishlists as $wishlist):
+						foreach ($jain_cash_point as $point):
 						$i++;
 
 						?>
 						<tr>
 							<td><?= $i ?></td>
-							<td><?= h(@$wishlist->customer->name) ?></td>
-							<td><?= h(@$wishlist->item->name) ?></td>
-							<td><?= h(@$wishlist->item_variation->quantity_variation).' '.$wishlist->item_variation->unit->shortname ?></td>
-							<td><?= h(@$wishlist->item_variation->sales_rate) ?></td>
+							<td><?= h(@$point->order->order_no) ?></td>
+							<td><?= h(@$point->customer->name) ?></td>
+							<!-- <td><?= h(@$point->item_variation->name) ?></td> -->
+							<td><?= h(@$point->point) ?></td>
+							<td><?= h(@$point->used_point) ?></td>
 							
 						</tr>
 						<?php endforeach; ?>
@@ -89,7 +59,7 @@ background-color: #fff;}
 			</div>
 		</div>
 	</div>
-	<?php echo $this->Html->script('/assets/global/plugins/jquery.min.js'); ?>
+		<?php echo $this->Html->script('/assets/global/plugins/jquery.min.js'); ?>
 <script>
 $(document).ready(function() {
 
@@ -103,7 +73,7 @@ $(document).ready(function() {
         var master = $(this); 
         if(input.length>0){
             var m_data = new FormData();
-            var url ="<?php echo $this->Url->build(["controller" => "Wishlists", "action" => "ajaxAutocompleted"]); ?>";
+            var url ="<?php echo $this->Url->build(["controller" => "Carts", "action" => "ajaxAutocompleted"]); ?>";
            //alert(url);
             m_data.append('input',input); 
             m_data.append('searchType',searchType); 

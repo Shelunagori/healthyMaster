@@ -23,6 +23,8 @@ class ItemsController extends AppController
 		$this->viewBuilder()->layout('index_layout');
 		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
         $items = $this->Items->find()->contain(['ItemCategories']);
+
+        //pr($items->toArray());exit;
 		if($status==''){ $status='unfreeze'; }
         if($status=='freeze')
 		{
