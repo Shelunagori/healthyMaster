@@ -22,12 +22,12 @@ class ItemVariationsController extends AppController
     public function defineSaleRate()
     {
         $this->viewBuilder()->layout('index_layout');
-        $jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
+       
         $itemvariation = $this->ItemVariations->newEntity();
         
         if ($this->request->is(['post', 'put'])) {
             $item_variation=$this->request->getData('itemVariations');
-            //pr($item_variation);exit;
+          //  pr($item_variation);exit;
             
             foreach($item_variation as $itemVariations){
                 //pr($itemVariations['print_rate']);exit;
@@ -49,9 +49,7 @@ class ItemVariationsController extends AppController
             $this->Flash->success(__('Item rates have updated successfully.'));
          }
         $item_variations = $this->ItemVariations->find()
-        ->group(['Items.name'])
-        //->Distinct(['ItemVariations.quantity_variation'])
-        ->contain(['Items'=>['ItemCategories'],'Units']);
+        ->group(['Items.name'])->contain(['Items'=>['ItemCategories'],'Units']);
         //pr($item_variations->toArray());exit;
         $this->set(compact('item_variations','itemvariation', 'itemCategories', 'units'));
         $this->set('_serialize', ['items']);
