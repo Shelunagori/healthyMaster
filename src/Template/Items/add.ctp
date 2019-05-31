@@ -92,7 +92,7 @@
                     <td style="vertical-align: bottom;" class="index"> </td>
                     <td style="vertical-align: bottom;"> <?php echo $this->Form->control('item_variations.0.quantity_variation',['class'=>'form-control quantity_variation','id'=>false,'label'=>false,'required']); ?></td>
                     <td style="vertical-align: bottom;">
-                    <?php echo $this->Form->control('item_variations.0.unit_id', ['empty'=>'--select--','options' => $unit_option,'class'=>'form-control unit','label'=>false]); ?>
+                    <?php echo $this->Form->control('item_variations.0.unit_id', ['empty'=>'--select--','options' => @$unit_option,'class'=>'form-control unit','label'=>false]); ?>
                     </td>
                     <td style="vertical-align: bottom;"> 
                     	<?php echo $this->Form->control('item_variations.0.minimum_stock',['class'=>'form-control minimum_stock','placeholder'=>'Minimum Stock','label'=>false]); ?>

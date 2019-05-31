@@ -152,11 +152,8 @@ class ItemsController extends AppController
 		{
 			$query=$this->Items->ItemLedgers->find();
 		$view_items=$query
-						->select(['total_rows' => $query->func()->count('ItemLedgers.id'),'item_id',])
 						->where(['inventory_transfer'=>'no','status'=>'out'])
 						->group(['ItemLedgers.item_id'])
-						->order(['total_rows'=>'DESC'])
-						->limit(1)
 						->contain(['Items'=>function($q) use($customer_id){
 							return $q->select(['name', 'image','ready_to_sale'])
 								->contain(['ItemVariations' => 
@@ -176,17 +173,14 @@ class ItemsController extends AppController
 									
 								])->autoFields(true);
 							}]);
-						$view_items->select(['image_url' => $view_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
+						
 		}
 		else if($type=='recently')
 		{
 				$querys=$this->Items->ItemLedgers->find();
 				$view_items=$querys
-						->select(['total_rows' => $querys->func()->count('ItemLedgers.id'),'item_id',])
 						->where(['inventory_transfer'=>'no','status'=>'out'])
 						->group(['ItemLedgers.item_id'])
-						->order(['total_rows'=>'DESC'])
-						->limit(5)
 						->contain(['Items'=>function($q) use($customer_id){
 							return $q->select(['name', 'image','ready_to_sale'])
 							->contain(['ItemVariations' => 
@@ -206,7 +200,7 @@ class ItemsController extends AppController
 									
 								])->autoFields(true);
 						}]);
-						$view_items->select(['image_url' => $view_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
+						
 		
 
 		}
@@ -214,11 +208,8 @@ class ItemsController extends AppController
 		{
         $querys=$this->Items->ItemLedgers->find();
 				$view_items=$querys
-						->select(['total_rows' => $querys->func()->count('ItemLedgers.id'),'item_id',])
 						->where(['inventory_transfer'=>'no','status'=>'out'])
 						->group(['ItemLedgers.item_id'])
-						->order(['total_rows'=>'DESC'])
-						->limit(5)
 						->contain(['Items'=>function($q) use($customer_id){
 						return $q->select(['name', 'image','ready_to_sale'])
 						->contain(['ItemVariations' => 
@@ -238,15 +229,25 @@ class ItemsController extends AppController
 									
 								])->autoFields(true);
 						}]);
-						$view_items->select(['image_url' => $view_items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])]);
+						
 		}
         
 		$cart_count = $this->Items->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
 		
+		$items = array();
+		if(!empty($view_items->toArray()))
+		{
+			foreach($view_items as $view_item)
+			{
+				$view_item->item->image_url = 'http://healthymaster.in'.$this->request->webroot.'img/item_images/'.$view_item->item->image;
+				$items [] =	$view_item->item;
+			}			
+		}			
+		
 		$status=true;
 		$error="";
-        $this->set(compact('status', 'error','cart_count', 'view_items'));
-        $this->set('_serialize', ['status', 'error','cart_count', 'view_items']);
+		$this->set(compact('status', 'error','cart_count', 'items'));
+        $this->set('_serialize', ['status', 'error','cart_count', 'items']);
     }
 	
 	public function searchItem()
