@@ -92,7 +92,7 @@ $(document).ready(function() {
 	 $(document).on('change','.item-id',function(){
         var input=$(this).val();
         var master = $(this); 
-        master.closest('tr').find("td:nth-child(3) .varition option").remove();
+        
         if(input.length>0){
             var m_data = new FormData();
             var url ="<?php echo $this->Url->build(["controller" => "Grns", "action" => "options"]); ?>";
@@ -107,12 +107,8 @@ $(document).ready(function() {
                 dataType:'text',
                 success: function(data)
                 { 
-                	//alert(data);
-
-					//$("#breeds").append('<option value=' + key + '>' + value + '</option>');
-					//master.closest('tr').find('td:nth-child(3) .varition').append('').select2();
-                    master.closest('tr').find('td:nth-child(3) .varition').append(data);
-                   	//master.css("background","#FFF");
+                	master.closest('tr').find("td:nth-child(3) .varition option").remove();
+					master.closest('tr').find('td:nth-child(3) .varition').append(data);
                 }
             });
         }
@@ -219,8 +215,8 @@ $(document).ready(function() {
 
 	$(".attribute").die().live('change',function(){
 		var raw_attr_name = $('option:selected', this).attr('unit_name');
-		$(this).closest('tr').find('.quant').attr('unit_name', ''+raw_attr_name+'');
-$(this).closest('tr').find('.msg_shw').html("Selling Factor in : " +raw_attr_name);
+		//$(this).closest('tr').find('.quant').attr('unit_name', ''+raw_attr_name+'');
+		//$(this).closest('tr').find('.msg_shw').html("Selling Factor in : " +raw_attr_name);
 	});
 	
 	$(".quant").die().live('keyup',function(){
@@ -249,8 +245,6 @@ $(this).closest('tr').find('.msg_shw').html("Selling Factor in : " +raw_attr_nam
 							
 							
 						</select>
-
-						<span class="msg_shw2" style="color:blue;font-size:12px;"></span>
 					</td>
 					<td>
 						<?php echo $this->Form->input('quantity', ['label' => false,'class' => 'form-control input-sm number quant','placeholder'=>'Quantity']); ?>

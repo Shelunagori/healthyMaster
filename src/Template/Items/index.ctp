@@ -61,31 +61,9 @@
 							<?php } ?>
 							<td><?= $item->alias_name?></td>
 							<td><?= h($item->item_category->name) ?></td>
-							<!-- <td>
-								<?php
-									$minimum_stock=$item->minimum_stock; 
-									$minimum_quantity_factor=$item->minimum_quantity_factor; 
-									$actual_stock=$minimum_stock*$minimum_quantity_factor;
-								?>
-								<?php echo $minimum_stock.' '.$unit_name; ?>
-							</td>
-							<td>
-								<?php //$this->Number->format($item->minimum_quantity_factor) ?>
-								<?= h($item->print_quantity) ?>
-							</td>
-							<td>
-								<?php 
-								$out_of_stock=$item->out_of_stock; 
-								if(!empty($out_of_stock)){
-									$stock_msg='Yes';
-								}else{
-									$stock_msg='No';
-								}
-								?>
-								<?= h($stock_msg) ?>
-							</td> -->
+							
 							<td><?= h($item->freeze) ?></td>
-							<td><img src="/healthyMaster/webroot/img/item_images/<?= $item->image ?>" height="10%"></td>
+							<td><img style="height:2%;" src="/healthyMaster/webroot/img/item_images/<?= $item->image ?>" ></td>
 							<td class="actions">
 								<?= $this->Html->link(__('Edit'), ['action' => 'edit', $item->id]) ?>
 								<?php if($status=='unfreeze' or $status==''){ ?>
