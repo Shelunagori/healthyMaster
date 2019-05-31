@@ -13,50 +13,61 @@ class ItemsController extends AppController
 	}
     public function item()
     {
-		$jain_thela_admin_id=$this->request->query('jain_thela_admin_id');
-		$item_category_id=$this->request->query('item_category_id');
-		$item_sub_category_id=$this->request->query('item_sub_category_id');
-		$customer_id=$this->request->query('customer_id');
-		$page=@$this->request->query('page');
-		$limit = 10;
-		if($item_sub_category_id=='0')
-		{
-			$where=['Items.item_category_id'=>$item_category_id, 'Items.is_combo'=>'no', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'];
-		}
-		else
-		{
-			$where=['Items.item_category_id'=>$item_category_id, 'Items.item_sub_category_id'=>$item_sub_category_id, 'Items.is_combo'=>'no', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'];
-		}
-		$items = $this->Items->find()
-					->where($where)
-					->order(['name'=>'ASC'])
-					->contain(['ItemVariations'=>
-						function($q) use($customer_id) {
-							return $q->where(['ready_to_sale' =>'Yes'])
-							->contain(['Units','Carts'=>
-								function($q) use($customer_id){
-									return $q->where(['customer_id'=>$customer_id]);
-							}]);
-						}
-					])->limit($limit)->page($page);
-					$items->select(['image_url' => $items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
-                    ->autoFields(true);
-					
-				//pr($items->toArray());	exit;
-					
-			
-/* 		foreach($items as $item){
-			if(!$item->cart){
-				$item->cart=(object)[];
-			}
-		}  */
+		$isViewAll=$this->request->query('isViewAll');
 		
-        
-		$cart_count = $this->Items->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
-		$status=true;
-		$error="";
-        $this->set(compact('status', 'error', 'items','cart_count'));
-        $this->set('_serialize', ['status', 'error', 'items','cart_count']);
+		if($isViewAll == 'true')
+		{
+			$this->viewAll();
+		}else
+		{
+			$jain_thela_admin_id=$this->request->query('jain_thela_admin_id');
+			$item_category_id=$this->request->query('item_category_id');
+			$item_sub_category_id=$this->request->query('item_sub_category_id');
+			$customer_id=$this->request->query('customer_id');
+			$page=@$this->request->query('page');
+			$limit = 10;
+			if($item_sub_category_id=='0')
+			{
+				$where=['Items.item_category_id'=>$item_category_id, 'Items.is_combo'=>'no', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'];
+			}
+			else
+			{
+				$where=['Items.item_category_id'=>$item_category_id, 'Items.item_sub_category_id'=>$item_sub_category_id, 'Items.is_combo'=>'no', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'];
+			}
+			$items = $this->Items->find()
+						->where($where)
+						->order(['name'=>'ASC'])
+						->contain(['ItemVariations'=>
+							function($q) use($customer_id) {
+								return $q->where(['ready_to_sale' =>'Yes'])
+								->contain(['Units','Carts'=>
+									function($q) use($customer_id){
+										return $q->where(['customer_id'=>$customer_id]);
+								}]);
+							}
+						])->limit($limit)->page($page);
+						$items->select(['image_url' => $items->func()->concat(['http://healthymaster.in'.$this->request->webroot.'img/item_images/','image' => 'identifier' ])])
+						->autoFields(true);
+						
+					//pr($items->toArray());	exit;
+						
+				
+			/*  foreach($items as $item){
+				if(!$item->cart){
+					$item->cart=(object)[];
+				}
+			}  */
+					
+			$cart_count = $this->Items->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
+			$status=true;
+			$error="";
+			$this->set(compact('status', 'error', 'items','cart_count'));
+			$this->set('_serialize', ['status', 'error', 'items','cart_count']);			
+		}
+		
+		
+		
+
     }
 
 	 public function itemdescription()
