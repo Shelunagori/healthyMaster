@@ -49,7 +49,7 @@ class ItemVariationsController extends AppController
             $this->Flash->success(__('Item rates have updated successfully.'));
          }
         $item_variations = $this->ItemVariations->find()
-        ->contain(['Items'=>['ItemCategories'],'Units']);
+        ->group(['Items.name'])->contain(['Items'=>['ItemCategories'],'Units']);
         //pr($item_variations->toArray());exit;
         $this->set(compact('item_variations','itemvariation', 'itemCategories', 'units'));
         $this->set('_serialize', ['items']);

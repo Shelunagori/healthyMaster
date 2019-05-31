@@ -81,6 +81,7 @@ class FeedbacksController extends AppController
         $feedback = $this->Feedbacks->newEntity();
         if ($this->request->is('post')) {
             $feedback = $this->Feedbacks->patchEntity($feedback, $this->request->getData());
+            $feedback->jain_thela_admin_id=$jain_thela_admin_id;
              if ($this->Feedbacks->save($feedback)) {
                 $this->Flash->success(__('The feedback has been saved.'));
                  return $this->redirect(['action' => 'index']);
