@@ -100,7 +100,7 @@ background-color: #fff;}
 				<div class="col-md-12"><br/></div>
 				<div class="row">
 					
-					<div class="col-md-8">
+					<div class="col-md-10">
 						<table id="main_table" class="table table-condensed table-bordered">
 							<thead>
 								<tr align="center">
@@ -110,7 +110,7 @@ background-color: #fff;}
 									<td width="30%">
 										<label>item<label>
 									</td>
-									<td width="70%">
+									<td width="20%">
 										<label>Variation<label>
 									</td>
 									<td width="20%">
@@ -236,12 +236,7 @@ $(document).ready(function() {
                 dataType:'text',
                 success: function(data)
                 { 
-                	//alert(data);
-
-					//$("#breeds").append('<option value=' + key + '>' + value + '</option>');
-					//master.closest('tr').find('td:nth-child(3) .varition').append('').select2();
-                    master.closest('tr').find('td:nth-child(3) .varition').append(data);
-                   	//master.css("background","#FFF");
+					master.closest('tr').find('td:nth-child(3) .varition').append(data);
                 }
             });
         }
@@ -438,7 +433,7 @@ $(document).ready(function() {
 			$(this).find("td:nth-child(2) select").select2().attr({name:"order_details["+i+"][item_id]", id:"order_details-"+i+"-item_id"}).rules('add', {
 						required: true
 					});
-			$(this).find("td:nth-child(3) select").select2().attr({name:"order_details["+i+"][item_variation_id]"}).rules('add', {
+			$(this).find("td:nth-child(3) select").attr({name:"order_details["+i+"][item_variation_id]"}).rules('add', {
 						required: true
 					});
 			$(this).find("td:nth-child(4) input").attr({name:"order_details["+i+"][show_quantity]", id:"order_details-"+i+"-show_quantity"}).rules('add', {

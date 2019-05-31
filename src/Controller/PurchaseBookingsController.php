@@ -73,7 +73,7 @@ class PurchaseBookingsController extends AppController
 			$purchaseBooking->vendor_id=$grn->vendor_id;
 			$purchaseBooking->grn_id=$grn->id;
 			
-			
+			//pr($purchaseBooking);exit;
             if ($this->PurchaseBookings->save($purchaseBooking)) {
 				
 				$this->PurchaseBookings->ItemLedgers->deleteAll(['grn_id' => $grn_id]);

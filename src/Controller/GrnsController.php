@@ -83,7 +83,7 @@ class GrnsController extends AppController
     public function add()
     {
 		$this->viewBuilder()->layout('index_layout');
-		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
+		$jain_thela_admin_id=1;
         $grn = $this->Grns->newEntity();
         if ($this->request->is('post')) {
             $grn = $this->Grns->patchEntity($grn, $this->request->getData());

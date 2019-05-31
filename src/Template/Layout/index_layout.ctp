@@ -218,10 +218,10 @@
 									$t_date = date('d-m-Y');
 									echo $this->Html->link('<i class="fa fa-book"></i> Invoice Report','/WalkinSales/invoiceReports?warehouse=&drivers=&From='.$t_date.'&To='.$t_date,['escape'=>false]) ?>
 								</li>
-								<li>
+								<!--<li>
 									<?php echo $this->Html->link('<i class="fa fa-life-ring"></i> Issue Return Report','/ItemLedgers/itemIssueReport',['escape'=>false]) ?>
 								</li>
-								<!--
+								
 								<li>
 									<?php echo $this->Html->link('<i class="fa fa-puzzle-piece"></i> Account Statement','/Ledgers/AccountStatements',['escape'=>false]) ?>
 								</li>
@@ -237,11 +237,11 @@
 								</li> -->
 									<!-- <li>
 									<?php echo $this->Html->link('<i class="fa fa-info"></i> Item Indent Report','/itemLedgers/orderEstimate',['escape'=>false]) ?>
-								</li> -->
+								</li> 
 								<li>
 									<?php echo $this->Html->link('<i class="fa fa-cubes"></i> Driver Location Report','/Drivers/driver_location',['escape'=>false]) ?>
 								</li>
-								<!-- <li>
+								 <li>
 									<?php echo $this->Html->link('<i class="fa fa-edit"></i> Consolidate Report','/itemLedgers/averageReport?From='.$t_date.'&To='.$t_date,['escape'=>false]) ?>
 								</li> -->
 								<!-- <li>
@@ -320,9 +320,9 @@
 							<li>
 								<?php echo $this->Html->link('<i class=" fa-file-text"></i> <span>Feedback</span>',array('controller'=>'Feedbacks'),['escape'=>false]); ?>
 							</li>
-							<li>
+							<!-- <li>
 								<?php echo $this->Html->link('<i class="fa fa-chain "></i> <span>Bulk Lead</span>',array('controller'=>'BulkBookingLeads/index/open'),['escape'=>false]); ?>
-							</li>
+							</li> -->
 
 
 							<li>
@@ -334,10 +334,10 @@
 							<!-- <li>
 								<?php echo $this->Html->link('<i class="fa fa-puzzle-piece"></i> Transfer Inventory','/TransferInventoryVouchers/',['escape'=>false]) ?>
 							</li> -->
-
+							<!--			
 							<li>
 								<?php echo $this->Html->link('<i class="fa fa-gear"></i> Purchase Outward','/PurchaseOutwards/',['escape'=>false]) ?>
-							</li>
+							</li>-->
 						
 							<li>
 								<?php echo $this->Html->link('<i class="fa fa-sitemap"></i> Stock Issue','/itemLedgers/add',['escape'=>false]) ?>
@@ -348,16 +348,16 @@
 							<li>
 								<?php echo $this->Html->link('<i class="fa fa-asterisk"></i> Online Order','/Orders/add/Offline',['escape'=>false]) ?>
 							</li>
-							<li>
+							<!--<li>
 								<?php echo $this->Html->link('<i class="fa fa-tasks"></i> Bulk Order','/Orders/add/Bulkorder',['escape'=>false]) ?>
 							</li>
-							<!-- <li>
+							 <li>
 								<?php echo $this->Html->link('<i class="fa fa-life-ring"></i> Walkin Sales','/WalkinSales/index',['escape'=>false]) ?>
 							</li> -->
 							
 							<!-- <li>
 								<?php echo $this->Html->link('<i class="fa fa-gear"></i> Wastage Vouchers','/itemLedgers/wastageVouchers',['escape'=>false]) ?>
-							</li> -->
+							</li> 
 							<li>
 								<?php echo $this->Html->link('<i class="fa fa-tree"></i> Combo Offer','/ComboOffers',['escape'=>false]) ?>
 							</li>
@@ -368,7 +368,7 @@
 
 							<li>
 								<?php echo $this->Html->link('<i class="fa fa-road"></i> Plans','/Plans',['escape'=>false]) ?>
-							</li>
+							</li> -->
 							<li>
 								<?php echo $this->Html->link('<i class="fa fa-rocket"></i> Promo Code','/PromoCodes',['escape'=>false]) ?>
 							</li>

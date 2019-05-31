@@ -47,13 +47,13 @@
 									<td>
 										<label>Sr<label>
 									</td>
-									<td width="70%">
+									<td>
 										<label>item<label>
 									</td>
-									<td width="70%">
+									<td>
 										<label>Variation<label>
 									</td>
-									<td width="20%">
+									<td>
 										<label>Quantity<label>
 									</td>
 									<td>
@@ -107,8 +107,9 @@ $(document).ready(function() {
                 dataType:'text',
                 success: function(data)
                 { 
+									//alert(data);
                 	master.closest('tr').find("td:nth-child(3) .varition option").remove();
-					master.closest('tr').find('td:nth-child(3) .varition').append(data);
+									master.closest('tr').find('td:nth-child(3) .varition').append(data);
                 }
             });
         }
@@ -203,7 +204,7 @@ $(document).ready(function() {
 			$(this).find("td:nth-child(2) select").select2().attr({name:"grn_details["+i+"][item_id]", id:"grn_details-"+i+"-item_id"}).rules('add', {
 						required: true
 					});
-			$(this).find("td:nth-child(3) select").select2().attr({name:"grn_details["+i+"][item_variation_id]"}).rules('add', {
+			$(this).find("td:nth-child(3) select").attr({name:"grn_details["+i+"][item_variation_id]"}).rules('add', {
 						required: true
 					});
 			$(this).find("td:nth-child(4) input").attr({name:"grn_details["+i+"][quantity]", id:"grn_details-"+i+"-quantity"}).rules('add', {
@@ -227,7 +228,7 @@ $(document).ready(function() {
 		var unit_name = $(this).attr('unit_name');
 		if(!unit_name){ unit_name=0; }
 		var g_total = quant*minimum_quantity_factor;
-		$(this).closest('tr').find('.msg_shw2').html(quant+" "+unit_name);
+		//$(this).closest('tr').find('.msg_shw2').html(quant+" "+unit_name);
 	});
 
 });
@@ -241,10 +242,7 @@ $(document).ready(function() {
 						<span class="msg_shw" style="color:blue;font-size:12px;"></span>
 					</td>
 					<td>
-						<select name="variation" class="form-control input-sm varition">
-							
-							
-						</select>
+						<select name="variation" class="form-control input-sm varition"></select>
 					</td>
 					<td>
 						<?php echo $this->Form->input('quantity', ['label' => false,'class' => 'form-control input-sm number quant','placeholder'=>'Quantity']); ?>
