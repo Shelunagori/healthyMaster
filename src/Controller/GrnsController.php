@@ -149,12 +149,16 @@ class GrnsController extends AppController
     public function edit($id = null)
     {
 		$this->viewBuilder()->layout('index_layout');
+        $jain_thela_admin_id=1;
 		$city_id=$this->Auth->User('city_id');
         $grn = $this->Grns->get($id, [
-            'contain' => []
+            'contain' => ['GrnDetails'=>['ItemVariations']]
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $grn = $this->Grns->patchEntity($grn, $this->request->getData());
+            //pr($this->request->getData());exit;
+             $grns=$this->Grns->get($id,['contain'=>['GrnDetails'=>['ItemVariations']]]);
+            $grn = $this->Grns->patchEntity($grns, $this->request->getData());
+           // pr($grn);exit;
             if ($this->Grns->save($grn)) {
                 $this->Flash->success(__('The grn has been saved.'));
 
@@ -162,9 +166,11 @@ class GrnsController extends AppController
             }
             $this->Flash->error(__('The grn could not be saved. Please, try again.'));
         }
+        $warehouses = $this->Grns->ItemLedgers->Warehouses->find('list')->where(['jain_thela_admin_id'=>$jain_thela_admin_id]);
         $vendors = $this->Grns->Vendors->find('list', ['limit' => 200]);
         $cities = $this->Grns->Cities->find('list', ['limit' => 200]);
-        $this->set(compact('grn', 'vendors', 'cities'));
+         $item=$this->Grns->GrnDetails->Items->find('list');
+        $this->set(compact('grn', 'vendors', 'cities','warehouses','item'));
         $this->set('_serialize', ['grn']);
     }
 

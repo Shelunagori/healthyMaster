@@ -100,6 +100,10 @@
 									<td width="30%">
 										<label>item<label>
 									</td>
+
+									<td width="20%">
+										<label>Variation<label>
+									</td>
 									<td width="20%">
 										<label>Quantity<label>
 									</td>
@@ -122,21 +126,30 @@
 									$fetch_rate=$OrderDetail->rate;
 									$fetch_amount=$OrderDetail->amount;
 									$fetch_combo=$OrderDetail->is_combo;
-									$minimum_quantity_factor=$OrderDetail->item->minimum_quantity_factor;
-									$unit_name=$OrderDetail->item->unit->unit_name;
+									$minimum_quantity_factor=$OrderDetail->item_variation->minimum_quantity_factor;
+									$quantity_variation=$OrderDetail->item_variation->quantity_variation;
+									$unit_name=$OrderDetail->item_variation->unit->shortname;
 									$actual_quantity=$fetch_quantity/$minimum_quantity_factor;
 									$msg_box_show=$actual_quantity*$minimum_quantity_factor;
 									?>
 									<tr class="main_tr" class="tab">
 										<td align="center" width="1px"></td>
 										<td>
-											<?php echo $this->Form->input('item_id', ['empty'=>'--Select-','options'=>$items,'label' => false,'class' => 'form-control input-sm attribute', 'value'=>$fetch_item_id]); ?>
+											<?php echo $this->Form->input('item_id', ['empty'=>'--Select-','options'=>$item,'label' => false,'class' => 'form-control input-sm attribute item_id', 'value'=>$fetch_item_id]); ?>
 											<span class="msg_shw" style="color:blue;font-size:12px;">selling factor in : <?php echo $minimum_quantity_factor.' '.$unit_name; ?></span>
 										</td>
 										<td>
-											<?php echo $this->Form->input('show_quantity', ['value'=> $fetch_quantity,'label' => false,'class' => 'form-control input-sm number cal_amount quant','value'=>$actual_quantity, 'minimum_quantity_factor'=>$minimum_quantity_factor, 'unit_name'=>$unit_name]); ?>
+											<select name="variation" class="form-control input-sm varition ">
+												<option value="<?=$OrderDetail->item_variation_id ?>"><?= $quantity_variation?></option>
+												
+											</select>
+
+											<span class="msg_shw2" style="color:blue;font-size:12px;"></span>
+										</td>
+										<td>
+											<?php echo $this->Form->input('show_quantity', ['value'=> $fetch_quantity,'label' => false,'class' => 'form-control input-sm number cal_amount quant','value'=>$fetch_quantity, 'minimum_quantity_factor'=>$minimum_quantity_factor, 'unit_name'=>$unit_name]); ?>
 											
-											<span class="msg_shw2" style="color:blue;font-size:12px;"><?php echo $msg_box_show.' '.$unit_name; ?></span>
+											<!-- <span class="msg_shw2" style="color:blue;font-size:12px;"><?php echo $msg_box_show.' '.$unit_name; ?></span> -->
 											<?php echo $this->Form->input('quantity', ['label' => false,'class' => 'form-control input-sm number mains', 'type'=>'hidden','value'=>$fetch_quantity]); ?>
 										</td>
 										<td>
@@ -157,14 +170,14 @@
 							<tfoot>
 								<?php if($order->discount_percent>0){ ?>
 								<tr id="discount">
-									<td colspan="4" style="text-align:right;">Discount in Percent</td>
+									<td colspan="5" style="text-align:right;">Discount in Percent</td>
 									<td><?php echo $this->Form->control('discount_percent',['placeholder'=>'Discount','class'=>'form-control input-sm','label'=>false,'type'=>'text','value'=>$order->discount_percent,'readonly']); ?>
 									
 									</td>
 								</tr>
 								<?php } ?>
 								<tr>
-									<td colspan="4" style="text-align:right;">
+									<td colspan="5" style="text-align:right;">
 									<a class="btn btn-default input-sm add_row" href="#" role="button"  style="float: left;"><i class="fa fa-plus"></i> Add Row</a>
 									Total Amount</td>
 									<td>
@@ -173,7 +186,7 @@
 									<td></td>	</tr>
 								
 								<tr>
-									<td colspan="4" style="text-align:right;">
+									<td colspan="5" style="text-align:right;">
 									Delivery Charge
 									</td>
 									<td>
@@ -183,11 +196,11 @@
 								</tr>
 								
 								<tr>
-									<td colspan="4" style="text-align:right;">Grand Total</td>
+									<td colspan="5" style="text-align:right;">Grand Total</td>
 									<td><?php echo $this->Form->input('grand_total', ['label' => false,'class' => 'form-control input-sm number ','placeholder'=>'Total Amount','type'=>'text','readonly']); ?>
 									</td>
 								</tr>
-									<td colspan="4" style="text-align:right;">
+									<td colspan="5" style="text-align:right;">
 									Amount From Wallet
 									</td>
 									<td>
@@ -199,7 +212,7 @@
 								
 								
 								<tr>
-									<td colspan="4" style="text-align:right;">
+									<td colspan="5" style="text-align:right;">
 									Paid Amount
 									</td>
 									<td>
@@ -240,7 +253,66 @@
 </div>
 <?php echo $this->Html->script('/assets/global/plugins/jquery.min.js'); ?>
 <script>
+
 $(document).ready(function() {
+
+	$(document).on('change','.item-id',function(){
+		alert();
+        var input=$(this).val();
+        var master = $(this); 
+        master.closest('tr').find("td:nth-child(3) .varition option").remove();
+        if(input.length>0){
+            var m_data = new FormData();
+            var url ="<?php echo $this->Url->build(["controller" => "Orders", "action" => "options"]); ?>";
+         //   alert(url);
+            m_data.append('input',input); 
+            $.ajax({
+                url: url,
+                data: m_data,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                dataType:'text',
+                success: function(data)
+                { 
+                	alert(data);
+					master.closest('tr').find('td:nth-child(3) .varition').append(data);
+                }
+            });
+        }
+      });
+
+	 $(document).on('blur',".autocompleted",function(){ //alert("blur");
+        $('.suggesstion-box').delay(1000).fadeOut(500);
+    }); 
+
+    $(document).on('keyup',".autocompleted",function(){// alert("keyup");
+        var searchType = $(this).attr('valueType');
+        var input=$(this).val();
+        var master = $(this); 
+        if(input.length>0){
+            var m_data = new FormData();
+            var url ="<?php echo $this->Url->build(["controller" => "Orders", "action" => "ajaxAutocompleted"]); ?>";
+         //   alert(url);
+            m_data.append('input',input); 
+            m_data.append('searchType',searchType); 
+            $.ajax({
+                url: url,
+                data: m_data,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                dataType:'text',
+                success: function(data)
+                { 
+                	//alert(data);
+                    master.closest('div').find('.suggesstion-box').show();
+                    master.closest('div').find('.suggesstion-box').html(data);
+                   	master.css("background","#FFF");
+                }
+            });
+        }
+    });
   //--------- FORM VALIDATION
   calculate_total();
 	var form3 = $('#form_sample_3');
@@ -312,7 +384,7 @@ $(document).ready(function() {
 			 $(this).closest('tr').remove();
 			 $("#main_table tbody#main_tbody tr.main_tr").each(function(){ 
 			 
-			total_amount+=parseFloat($(this).find("td:nth-child(5) input").val());
+			total_amount+=parseFloat($(this).find("td:nth-child(6) input").val());
 			
 		});
 		var amount_from_wallet=parseFloat($('input[name=amount_from_wallet]').val());
@@ -345,13 +417,13 @@ $(document).ready(function() {
 		$("#main_table tbody#main_tbody tr.main_tr").each(function(){ 
 		
 		var obj=$(this).closest('tr');
-		var qty=obj.find('td:nth-child(3) input').val();
-		var rate=obj.find('td:nth-child(4) input').val();
+		var qty=obj.find('td:nth-child(4) input').val();
+		var rate=obj.find('td:nth-child(5) input').val();
 		var amount=qty*rate;
-		var rate=obj.find('td:nth-child(5) input').val(amount);
+		var rate=obj.find('td:nth-child(6) input').val(amount);
 		var total_amount=0;
 		$("#main_table tbody#main_tbody tr.main_tr").each(function(){ 
-			total_amount+=parseFloat($(this).find("td:nth-child(5) input").val());
+			total_amount+=parseFloat($(this).find("td:nth-child(6) input").val());
 		});
 		var display_amount=Math.round(total_amount);
 		if($('input[name=discount_percent]').val())
@@ -388,19 +460,22 @@ $(document).ready(function() {
 			$(this).find("td:nth-child(2) select").select2().attr({name:"order_details["+i+"][item_id]", id:"order_details-"+i+"-item_id"}).rules('add', {
 						required: true
 					});
-			$(this).find("td:nth-child(3) input.quant").attr({name:"order_details["+i+"][show_quantity]", id:"order_details-"+i+"-show_quantity"}).rules('add', {
+			$(this).find("td:nth-child(3) select").attr({name:"order_details["+i+"][item_variation_id]"}).rules('add', {
 						required: true
 					});
-			$(this).find("td:nth-child(3) input.mains").attr({name:"order_details["+i+"][quantity]", id:"order_details-"+i+"-quantity"}).rules('add', {
+			$(this).find("td:nth-child(4) input.quant").attr({name:"order_details["+i+"][show_quantity]", id:"order_details-"+i+"-show_quantity"}).rules('add', {
 						required: true
 					});
-			$(this).find("td:nth-child(4) input").attr({name:"order_details["+i+"][rate]", id:"order_details-"+i+"-rate"}).rules('add', {
+			$(this).find("td:nth-child(4) input.mains").attr({name:"order_details["+i+"][quantity]", id:"order_details-"+i+"-quantity"}).rules('add', {
+						required: true
+					});
+			$(this).find("td:nth-child(5) input").attr({name:"order_details["+i+"][rate]", id:"order_details-"+i+"-rate"}).rules('add', {
 				required: true
 			});
-			$(this).find("td:nth-child(5) input").attr({name:"order_details["+i+"][amount]", id:"order_details-"+i+"-amount"}).rules('add', {
+			$(this).find("td:nth-child(6) input").attr({name:"order_details["+i+"][amount]", id:"order_details-"+i+"-amount"}).rules('add', {
 				required: true
 			});
-			$(this).find("td:nth-child(6) input[type=hidden]").attr({name:"order_details["+i+"][is_combo]", id:"order_details-"+i+"-is_combo"});
+			$(this).find("td:nth-child(7) input[type=hidden]").attr({name:"order_details["+i+"][is_combo]", id:"order_details-"+i+"-is_combo"});
 			
 			i++;
 		});
@@ -559,13 +634,33 @@ $(document).ready(function() {
 	});
 });
 </script>
+<script>
+function selectAutoCompleted(ids,value) { 
+	
+    $('.selectedAutoCompleted').val(value);
+    $('#customer_id').val(ids);
+    $(".suggesstion-box").hide();     
+}
+function selectAutoCompleted1(value) {  
+    $('.selectedAutoCompleted1').val(value);
+    $(".suggesstion-box").hide();     
+}
+</script>
 <table id="sample_table" style="display:none;" >
 			<tbody>
 				<tr class="main_tr" class="tab">
 					<td align="center" width="1px"></td>
 				    <td>
-						<?php echo $this->Form->input('item_id', ['empty'=>'--Select-','options'=>$items,'label' => false,'class' => 'form-control input-sm attribute']); ?>
+						<?php echo $this->Form->input('item_id', ['empty'=>'--Select-','options'=>$item,'label' => false,'class' => 'form-control input-sm attribute item_id']); ?>
 						<span class="msg_shw" style="color:blue;font-size:12px;"></span>
+					</td>
+					<td>
+						<select name="variation" class="form-control input-sm varition varition">
+							
+							
+						</select>
+
+						<span class="msg_shw2" style="color:blue;font-size:12px;"></span>
 					</td>
 					<td>
 						<?php echo $this->Form->input('show_quantity', ['label' => false,'class' => 'form-control input-sm number cal_amount quant','placeholder'=>'Quantity','value'=>0]); ?>

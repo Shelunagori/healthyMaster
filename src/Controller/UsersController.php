@@ -22,29 +22,21 @@ class UsersController extends AppController
     public function changePassword()
     {
         $this->viewBuilder()->layout('index_layout');
-        if ($this->request->is('post')) 
-        {
-            $user = $this->Auth->identify();
-            if ($user) 
-            {
-                $user = $this->Users->get($user['id']);
-
-                $data['password'] = $this->request->getData('new_password');
-                $user = $this->Users->patchEntity($user,$data);
-                
-                if ($this->Users->save($user)) {
-                    $this->Flash->success(__('success'));
-                    $this->Auth->setUser($user);
+        $loginId=$this->Auth->User('id');
+        if ($this->request->is('post')) {
+            $Users = $this->Users->find()->where(['id' => $loginId])->first();
+            $verify = (new \Cake\Auth\DefaultPasswordHasher)->check($this->request->data['old_password'], $Users->password);
+            if($verify) {
+                $result = $this->Users->patchEntity($Users, ['password' => $this->request->data['password']]);
+                if ($this->Users->save($result)) {
+                    $this->Flash->success(__('Your password has been changed successfully.'));
+                    return $this->redirect(['action' => 'changePassword']);
                 }
-                else
-                {
-                    $success = false;
-                    $message = "Unable To Change Password";
-                }
+            } else {
+                $this->Flash->error(__('Current Password does not matched.'));
+                return $this->redirect(['action' => 'changePassword']);
             }
-            else
-                $this->Flash->error(__('Old password is incorrect'));
-        }
+        }       
     }
 
 	public function logout()
@@ -58,6 +50,7 @@ class UsersController extends AppController
         if ($this->request->is('post')) 
 		{
             $user = $this->Auth->identify();
+            //pr($user);exit;
             if ($user) 
 			{
                 $this->Auth->setUser($user);

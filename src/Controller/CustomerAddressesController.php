@@ -52,6 +52,7 @@ class CustomerAddressesController extends AppController
 
 	public function saveAddress($customer_id,$name,$mobile,$house_no,$address,$locality,$default_address){
 		
+        //pr($customer_id);exit;
 		
 		$customerAddressexists = $this->CustomerAddresses->find()->where(['customer_id'=>$customer_id]);
 		

@@ -22,6 +22,13 @@ class OrdersController extends AppController
 		$this->set(compact(['role_id']));
 	}
 
+	public function getPrice(){
+        $item_variation_id=$this->request->getData('input'); 
+            $items=$this->Orders->OrderDetails->ItemVariations->find()->where(['ItemVariations.id '=>$item_variation_id])->first();
+            	echo $items->sales_rate;	
+        exit;  
+    }
+
 	public function options(){
         $item_id=$this->request->getData('input'); 
 
@@ -746,6 +753,7 @@ class OrdersController extends AppController
 		$this->viewBuilder()->layout('index_layout');
 		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
         $order = $this->Orders->newEntity();  
+        //pr($this->request->getData());exit;
         if ($this->request->is('post')) 
         {
 
@@ -1035,9 +1043,9 @@ class OrdersController extends AppController
         }
 		
 		if($order->order_type == 'Bulkorder'){
-		   $item_fetchs = $this->Orders->Items->find()->where(['Items.jain_thela_admin_id' => $jain_thela_admin_id, 'Items.freeze'=>0,'is_combo'=>'no','is_virtual'=>'no'])->contain(['Units']);
+		   $item_fetchs = $this->Orders->Items->find()->where(['Items.freeze'=>0,'is_combo'=>'no','is_virtual'=>'no']);
 	   }else{
-		$item_fetchs = $this->Orders->Items->find()->where(['Items.jain_thela_admin_id' => $jain_thela_admin_id, 'Items.freeze'=>0, 'Items.ready_to_sale' => 'Yes'])->contain(['Units']);
+		$item_fetchs = $this->Orders->Items->find()->where(['Items.freeze'=>0, 'Items.ready_to_sale' => 'Yes']);
 	   }
 
 		foreach($item_fetchs as $item_fetch){
@@ -1066,10 +1074,10 @@ class OrdersController extends AppController
 			$delivery_time[]= ['value'=>$time_id,'text'=>$time_from." - ".$time_to];
 		}
         $promoCodes = $this->Orders->PromoCodes->find('list', ['limit' => 200]);
-
-        $OrderDetails = $this->Orders->OrderDetails->find()->where(['order_id'=>$id])->contain(['Items'=>['Units']]);
+        $item=$this->Orders->Items->find('list')->where(['Items.freeze'=>0]);
+        $OrderDetails = $this->Orders->OrderDetails->find()->where(['order_id'=>$id])->contain(['ItemVariations'=>['Units'],'Items']);
 		$warehouses = $this->Orders->Warehouses->find('list')->where(['jain_thela_admin_id' => $jain_thela_admin_id]);
-        $this->set(compact('order', 'customers', 'promoCodes', 'OrderDetails', 'items','delivery_time', 'warehouses'));
+        $this->set(compact('order', 'customers', 'promoCodes', 'OrderDetails', 'items','item','delivery_time', 'warehouses'));
         $this->set('_serialize', ['order', 'warehouses']);
 
     }

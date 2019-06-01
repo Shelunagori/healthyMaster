@@ -103,6 +103,8 @@ class GrnDetailsController extends AppController
      */
     public function delete($id = null)
     {
+
+        pr("helo");exit;
         $this->request->allowMethod(['post', 'delete']);
         $grnDetail = $this->GrnDetails->get($id);
         if ($this->GrnDetails->delete($grnDetail)) {

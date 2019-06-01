@@ -217,6 +217,32 @@ background-color: #fff;}
 <script>
 $(document).ready(function() {
 
+	$(document).on('change','.varition',function(){
+		var input=$(this).val();
+
+        var master = $(this); 
+		//alert(input);
+		if(input.length>0){
+            var m_data = new FormData();
+            var url ="<?php echo $this->Url->build(["controller" => "Orders", "action" => "getprice"]); ?>";
+         //   alert(url);
+            m_data.append('input',input); 
+            $.ajax({
+                url: url,
+                data: m_data,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                dataType:'text',
+                success: function(response)
+                { 
+                	alert(response);
+					master.closest('tr').find('td:nth-child(5) .rat_value').val(response);
+                }
+            });
+            }
+	});
+
 	$(document).on('change','.item-id',function(){
 		//alert();
         var input=$(this).val();
@@ -558,7 +584,8 @@ $(document).ready(function() {
     });
 	
 	$('.add_address').on("click",function() {
-			var customer_id=$('select[name="customer_id"]').val();
+			var customer_id=$('#customer_id').val();
+			alert(customer_id);
 			if(customer_id == ""){
 				alert("Please Select Customer First");
 			}else{
@@ -579,7 +606,7 @@ $(document).ready(function() {
 					$("#form1").submit(function(e) {
 						e.preventDefault();
 					});
-					var customer_id=$('select[name="customer_id"]').val();
+					var customer_id=$('#customer_id').val();
 					if(customer_id == ""){
 						alert("Please Select Customer First");
 					}
@@ -595,14 +622,14 @@ $(document).ready(function() {
 						url: url,
 					}).done(function(response) {
 						$('#address').hide();
-						var customer_id=$('select[name="customer_id"] option:selected').val();
+						var customer_id=$('#customer_id').val();
 						var url="<?php echo $this->Url->build(['controller'=>'Customers','action'=>'defaultAddress']); ?>";
 						url=url+'/'+customer_id,	
 						$.ajax({
 							url: url,
 						}).done(function(response) { 
 							$('textarea[name="customer_address"]').val(response);
-							var customer_id=$('select[name="customer_id"] option:selected').val();
+							var customer_id=$('#customer_id').val();
 							var url="<?php echo $this->Url->build(['controller'=>'Customers','action'=>'defaultAddress1']); ?>";
 							url=url+'/'+customer_id,
 							$.ajax({
@@ -620,7 +647,7 @@ $(document).ready(function() {
 	
 	
 	function open_address(){
-		var customer_id=$('select[name="customer_id"]').val();
+		var customer_id=$('#customer_id').val();
 		$("#result_ajax").html('<div align="center"><?php echo $this->Html->image('/img/wait.gif', ['alt' => 'wait']); ?> Loading</div>');
 		var url="<?php echo $this->Url->build(['controller'=>'Customers','action'=>'addressList']); ?>";
 		url=url+'/'+customer_id,
@@ -671,7 +698,7 @@ $(document).ready(function() {
 		});
 	});
 	$('.customer_id').on("change",function() {
-		var customer_id=$('select[name="customer_id"] option:selected').val();
+		var customer_id=$('#customer_id').val();
 		
 		var url="<?php echo $this->Url->build(['controller'=>'Customers','action'=>'defaultAddress1']); ?>";
 		url=url+'/'+customer_id,
@@ -693,7 +720,7 @@ $(document).ready(function() {
 	});
 	///wallet
 	$('.cstmr').on("click",function() {
-		var customer_id=$('select[name="customer_id"] option:selected').val();
+		var customer_id=$('customer_id').val();
 	
 		var url="<?php echo $this->Url->build(['controller'=>'Wallets','action'=>'checksubtract']); ?>";
 		url=url+'/'+customer_id,
@@ -709,7 +736,7 @@ $(document).ready(function() {
 	{
 		var show=$(this).val();
 		var quant=$(this).closest('td').find('.quantity').val(show);
-		alert(quant);
+		//alert(quant);
 	});
 });
 </script>
@@ -749,7 +776,7 @@ function selectAutoCompleted1(value) {
 							<?php echo $this->Form->input('actual_quantity', ['label' => false,'class' => 'form-control input-sm number mainss actual_quantity','value'=>0, 'type'=>'hidden']); ?>
 					</td>
 					<td>
-						<?php echo $this->Form->input('rate', ['label' => false,'class' => 'form-control input-sm number cal_amount rat_value','placeholder'=>'Rate','value'=>0]); ?>	
+						<?php echo $this->Form->input('rate', ['label' => false,'class' => 'form-control input-sm number cal_amount rat_value']); ?>	
 					</td>
 					<td>
 						<?php echo $this->Form->input('amount', ['label' => false,'class' => 'form-control input-sm number cal_amount show_amount','placeholder'=>'Amount','readonly','value'=>0]); ?>	

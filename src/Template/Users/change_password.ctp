@@ -1,62 +1,99 @@
-<div class="row">
-	<div class="col-md-6">
-        <div class="portlet light bordered">
-            <div class="portlet-title">
-                <div class="caption">
-                    <i class="fa fa-gift"></i>
-                    <span class="caption-subject"><?= __('Change Password') ?></span>
+<?php echo $this->Html->script('/assets/plugins/jquery/jquery-2.2.3.min.js'); ?>
+<style>
+#Content{ width:90% !important; margin-left: 5%;}
+input:focus {background-color:#FFF !important;}
+input[type="password"]:focus {background-color:#FFF !important;}
+div.error { display: block !important; } 
+label { font-weight:100 !important;}
+fieldset
+{
+    border-radius: 7px;
+    box-shadow: 0 3px 9px rgba(0,0,0,0.25), 0 2px 5px rgba(0,0,0,0.22);
+}
+</style>
+
+<section class="content">
+<div class="col-md-12"></div>
+      <div class="row">
+        <div class="col-md-12">
+         <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">Change Password</h3>
+            </div>
+            
+            <?php  echo $this->Form->create("Users", ['id'=>"UserRegisterForm"]); ?>
+            <div class="box-body">
+                <div class="col-md-offset-3 col-md-6">
+              
+                <div class="">
+                    <div class="form-group ">
+                      <label>Current Password</label>
+                      <input type="password" class="form-control" name="old_password" id="old_password" value=""  placeholder="Current Password">
+                    </div>
                 </div>
-            </div>
-            <div class="portlet-body">
-                <?= $this->Form->create() ?>
-                    <div class="form-body">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <?= $this->Form->label('Current Password', null, ['class'=>'control-label']) ?>
-                                    <?= $this->Form->control('password',['label'=>false,'class'=>'form-control current_password','type'=>'password']); ?>
-                                    <input type="hidden" name="username" value="admin">
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <?= $this->Form->label('New Password', null, ['class'=>'control-label']) ?>
-                                    <?= $this->Form->control('new_password',['label'=>false,'class'=>'form-control','type'=>'password']); ?>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-group">
-                                    <?= $this->Form->label('Confirm Password', null, ['class'=>'control-label']) ?>
-                                    <?= $this->Form->control('confirm_password',['label'=>false,'class'=>'form-control','type'=>'password']); ?>
-                                </div>
-                            </div>
-                        </div>
+                <div class="">
+                    <div class="form-group  ">
+                      <label>New Password</label>
+                      <input type="password" class="form-control" name="password" id="password" value=""  placeholder="New Password">
                     </div>
-                    <div class="form-actions text-center">
-                        <?= $this->Form->button(__('Submit'),['class'=>'btn btn-success']) ?>
-                    </div>
-                <?= $this->Form->end() ?>
+                </div>
+                <div class="">
+                     <div class="form-group  ">
+                      <label>Confirm New Password</label>
+                      <input type="password" class="form-control" name="cpassword" id="cpassword" value=""  placeholder="Confirm New Password">
+                    </div>              
+                </div>
+              <div class="col-md-12">
+                <hr></hr>
+                <center>
+                    <button type="submit" class="btn btn-info">Update Password</button>
+                </center>   
+              </div>                
+                        
+                </div>              
             </div>
+            </form>
+          </div>            
         </div>
-    </div>
+       </div>
+   </section>
+<div class="loader-wrapper" style="width: 100%;height: 100%;  display: none;  position: fixed; top: 0px; left: 0px;    background: rgba(0,0,0,0.25); display: none; z-index: 1000;" id="loader-1">
+<div id="loader"></div>
 </div>
-<!-- <?php 
-	$js="
-		$(document).on('change','.current_password',function(){
-			var current_password=$(this).val();
-			$.ajax({
-            url: '".$this->Url->build(['controller'=>'users','action'=>'changePassword.json'])."',
-            type: 'post',
-            data: {current_password: current_password},
-            success: function (result) {
-                if(result['success'] == 1)
-                {
-                    
-                }
-            }
-            });
-        });
-			});
-	";
-$this->Html->scriptBlock($js,['block'=>'scriptBottom']);
-?> -->
+ <?php echo $this->Html->script(['jquery.validate']);?>   
+<script>
+ 
+$('#UserRegisterForm').validate({
+    rules: {
+        "old_password": {
+            required: true
+        },
+        "password": {
+            required: true
+        },
+        "cpassword": {
+            required: true,
+            equalTo: "#password"
+        }
+    },
+    messages: {
+        "old_password": {
+            required: "Please enter current password."
+        },
+        "password": {
+            required: "Please enter password."
+        },
+        "cpassword": {
+            required: "Please enter confirm password.",
+            equalTo: "Confirm password should be equal to password."
+        }
+    },
+    ignore: ":hidden:not(select)",
+    submitHandler: function (form) {
+        $("#loader-1").show();
+        form[0].submit(); 
+    }
+    
+});
+
+</script>  

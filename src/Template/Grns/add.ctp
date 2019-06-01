@@ -109,7 +109,7 @@ $(document).ready(function() {
                 { 
 									//alert(data);
                 	master.closest('tr').find("td:nth-child(3) .varition option").remove();
-									master.closest('tr').find('td:nth-child(3) .varition').append(data);
+					master.closest('tr').find('td:nth-child(3) .varition').append(data);
                 }
             });
         }
