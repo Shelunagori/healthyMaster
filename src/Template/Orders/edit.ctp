@@ -683,7 +683,7 @@ function selectAutoCompleted1(value) {
 					<td align="center" width="1px"></td>
 				    <td>
 						<?php echo $this->Form->input('item_id', ['empty'=>'--Select-','options'=>$item,'label' => false,'class' => 'form-control input-sm attribute item_id']); ?>
-						<span class="msg_shw" style="color:blue;font-size:12px;"></span>
+						<span class="" style="color:blue;font-size:12px;"></span>
 					</td>
 					<td>
 						<select name="variation" class="form-control input-sm varition varition">
@@ -691,12 +691,12 @@ function selectAutoCompleted1(value) {
 							
 						</select>
 
-						<span class="msg_shw2" style="color:blue;font-size:12px;"></span>
+						<span class="" style="color:blue;font-size:12px;"></span>
 					</td>
 					<td>
 						<?php echo $this->Form->input('show_quantity', ['label' => false,'class' => 'form-control input-sm number cal_amount quant show_quantity','placeholder'=>'Quantity','value'=>0]); ?>
 						
-						<span class="msg_shw2" style="color:blue;font-size:12px;"></span>
+						<span class="" style="color:blue;font-size:12px;"></span>
 							<?php echo $this->Form->input('quantity', ['label' => false,'class' => 'form-control input-sm number mains','value'=>0, 'type'=>'hidden']); ?>
 						
 					</td>
