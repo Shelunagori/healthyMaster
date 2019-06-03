@@ -174,11 +174,19 @@ class PurchaseBookingsController extends AppController
      */
     public function edit($id = null)
     {
+    	$this->viewBuilder()->layout('index_layout');
         $purchaseBooking = $this->PurchaseBookings->get($id, [
-            'contain' => []
+	'contain' => ['Grns', 'Vendors','PurchaseBookingDetails'=>['Items','ItemVariations'=>['Units']]]
         ]);
+       // pr($purchaseBooking);exit;
+        
+         
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $purchaseBooking = $this->PurchaseBookings->patchEntity($purchaseBooking, $this->request->getData());
+        	 $purchaseBookings = $this->PurchaseBookings->get($id, [
+	'contain' => ['Grns', 'Vendors','PurchaseBookingDetails'=>['Items','ItemVariations'=>['Units']]]
+        ]);
+            $purchaseBooking = $this->PurchaseBookings->patchEntity($purchaseBookings, $this->request->getData());
+            //pr($purchaseBooking);exit;
             if ($this->PurchaseBookings->save($purchaseBooking)) {
                 $this->Flash->success(__('The purchase booking has been saved.'));
 
@@ -189,7 +197,7 @@ class PurchaseBookingsController extends AppController
         $grns = $this->PurchaseBookings->Grns->find('list', ['limit' => 200]);
         $vendors = $this->PurchaseBookings->Vendors->find('list', ['limit' => 200]);
         $jainThelaAdmins = $this->PurchaseBookings->JainThelaAdmins->find('list', ['limit' => 200]);
-        $this->set(compact('purchaseBooking', 'grns', 'vendors', 'jainThelaAdmins'));
+        $this->set(compact('purchaseBooking', 'grns','vendors', 'jainThelaAdmins'));
         $this->set('_serialize', ['purchaseBooking']);
     }
 

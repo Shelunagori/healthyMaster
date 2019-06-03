@@ -997,7 +997,11 @@ class OrdersController extends AppController
         $order = $this->Orders->get($id, [
             'contain' => ['Customers'=>['CustomerAddresses']]
         ]);
-		 
+
+        $data=$this->request->getData();
+        //pr($data['order_details']);exit;
+
+		 //pr($data);exit;
 		//pr($order->customer->customer_addresses[0]['address']); exit;
 		$amount_from_wallet=$order->amount_from_wallet;
 		$amount_from_jain_cash=$order->amount_from_jain_cash;
@@ -1008,7 +1012,7 @@ class OrdersController extends AppController
 		$discount_perc=$order->discount_percent;
 		$paid_amount=$amount_from_wallet+$amount_from_jain_cash+$amount_from_promo_code+$online_amount;
         if ($this->request->is(['patch', 'post', 'put'])) {
-             $order = $this->Orders->patchEntity($order, $this->request->getData());
+             $order = $this->Orders->patchEntity($order, $data);
 			$total_amount=$this->request->data['total_amount'];
 			$delivery_charge=$this->request->data['delivery_charge'];
 			$grand_total=$this->request->data['grand_total'];
@@ -1074,7 +1078,7 @@ class OrdersController extends AppController
 			$delivery_time[]= ['value'=>$time_id,'text'=>$time_from." - ".$time_to];
 		}
         $promoCodes = $this->Orders->PromoCodes->find('list', ['limit' => 200]);
-        $item=$this->Orders->Items->find('list')->where(['Items.freeze'=>0]);
+        $item=$this->Orders->Items->find('list');
         $OrderDetails = $this->Orders->OrderDetails->find()->where(['order_id'=>$id])->contain(['ItemVariations'=>['Units'],'Items']);
 		$warehouses = $this->Orders->Warehouses->find('list')->where(['jain_thela_admin_id' => $jain_thela_admin_id]);
         $this->set(compact('order', 'customers', 'promoCodes', 'OrderDetails', 'items','item','delivery_time', 'warehouses'));

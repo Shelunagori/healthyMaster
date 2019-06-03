@@ -217,6 +217,15 @@ background-color: #fff;}
 <script>
 $(document).ready(function() {
 
+
+	$(document).on('change','.show_quantity',function(){
+		//alert();
+		var quantity=$(this).val();
+		var master = $(this); 
+		master.closest('tr').find('td:nth-child(4) input.mains').val(quantity);
+		
+	});
+
 	$(document).on('change','.varition',function(){
 		var input=$(this).val();
 
@@ -236,7 +245,7 @@ $(document).ready(function() {
                 dataType:'text',
                 success: function(response)
                 { 
-                	alert(response);
+                	//alert(response);
 					master.closest('tr').find('td:nth-child(5) .rat_value').val(response);
                 }
             });
@@ -532,7 +541,7 @@ $(document).ready(function() {
 		$(this).closest('tr').find('.quant').val(1);
 		
 		$(this).closest('tr').find('.msg_shw2').html(raw_attr_minimum_quantity_factor+" "+raw_attr_unit_name3);
-		$(this).closest('tr').find('.mains').val(raw_attr_minimum_quantity_factor);
+		//$(this).closest('tr').find('.mains').val(raw_attr_minimum_quantity_factor);
 		$(this).closest('tr').find('.mainss').val(raw_attr_minimum_quantity_factor);
 		$(this).closest('tr').find('.quant').attr('minimum_quantity_factor', +raw_attr_minimum_quantity_factor);
 		$(this).closest('tr').find('.quant').attr('unit_name', ''+raw_attr_unit_name3+'');
@@ -550,7 +559,7 @@ $(document).ready(function() {
 		if(!unit_name){ unit_name=0; }
 		var g_total = quant*minimum_quantity_factor;
 		$(this).closest('tr').find('.msg_shw2').html(g_total.toFixed(2)+" "+unit_name);
-		$(this).closest('tr').find('.mains').val(g_total.toFixed(2));
+		//$(this).closest('tr').find('.mains').val(g_total.toFixed(2));
 		$(this).closest('tr').find('.mainss').val(g_total.toFixed(2));
 		calculate_total();
 	});
@@ -732,12 +741,6 @@ $(document).ready(function() {
 			});
 	});
 
-	$('.show_quantity').on('change',function()
-	{
-		var show=$(this).val();
-		var quant=$(this).closest('td').find('.quantity').val(show);
-		//alert(quant);
-	});
 });
 </script>
 <script>

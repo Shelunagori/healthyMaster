@@ -114,7 +114,6 @@
 										<label>Amount<label>
 									</td>
 									<td width="0%"></td>
-									<td></td>
 								</tr>
 							</thead>
 								<tbody id='main_tbody' class="tab">
@@ -122,6 +121,7 @@
 								foreach($OrderDetails as $OrderDetail){
 									$fetch_id=$OrderDetail->id;
 									$fetch_item_id=$OrderDetail->item_id;
+									//pr($fetch_item_id);exit;
 									$fetch_quantity=$OrderDetail->quantity;
 									$fetch_rate=$OrderDetail->rate;
 									$fetch_amount=$OrderDetail->amount;
@@ -129,36 +129,33 @@
 									$minimum_quantity_factor=$OrderDetail->item_variation->minimum_quantity_factor;
 									$quantity_variation=$OrderDetail->item_variation->quantity_variation;
 									$unit_name=$OrderDetail->item_variation->unit->shortname;
-									$actual_quantity=$fetch_quantity/$minimum_quantity_factor;
-									$msg_box_show=$actual_quantity*$minimum_quantity_factor;
+									//$actual_quantity=$fetch_quantity/$minimum_quantity_factor;
+									//$msg_box_show=$actual_quantity*$minimum_quantity_factor;
 									?>
 									<tr class="main_tr" class="tab">
 										<td align="center" width="1px"></td>
 										<td>
 											<?php echo $this->Form->input('item_id', ['empty'=>'--Select-','options'=>$item,'label' => false,'class' => 'form-control input-sm attribute item_id', 'value'=>$fetch_item_id]); ?>
-											<span class="msg_shw" style="color:blue;font-size:12px;">selling factor in : <?php echo $minimum_quantity_factor.' '.$unit_name; ?></span>
+											<!-- <span class="msg_shw" style="color:blue;font-size:12px;">selling factor in : <?php echo $unit_name; ?></span> -->
+											
 										</td>
 										<td>
 											<select name="variation" class="form-control input-sm varition ">
-												<option value="<?=$OrderDetail->item_variation_id ?>"><?= $quantity_variation?></option>
+												<option value="<?=$OrderDetail->item_variation_id ?>"><?= $quantity_variation.''.$unit_name?></option>
 												
 											</select>
 
 											<span class="msg_shw2" style="color:blue;font-size:12px;"></span>
 										</td>
 										<td>
-											<?php echo $this->Form->input('show_quantity', ['value'=> $fetch_quantity,'label' => false,'class' => 'form-control input-sm number cal_amount quant','value'=>$fetch_quantity, 'minimum_quantity_factor'=>$minimum_quantity_factor, 'unit_name'=>$unit_name]); ?>
-											
-											<!-- <span class="msg_shw2" style="color:blue;font-size:12px;"><?php echo $msg_box_show.' '.$unit_name; ?></span> -->
+											<?php echo $this->Form->input('show_quantity', ['value'=> $fetch_quantity,'label' => false,'class' => 'form-control input-sm number cal_amount quant show_quantity','value'=>$fetch_quantity, 'minimum_quantity_factor'=>$minimum_quantity_factor, 'unit_name'=>$unit_name]); ?>
 											<?php echo $this->Form->input('quantity', ['label' => false,'class' => 'form-control input-sm number mains', 'type'=>'hidden','value'=>$fetch_quantity]); ?>
 										</td>
 										<td>
-											<?php echo $this->Form->input('rate', ['label' => false,'class' => 'form-control input-sm number cal_amount rat_value','placeholder'=>'Rate','value'=>$fetch_rate]); ?>	
+											<?php echo $this->Form->input('rate', ['label' => false,'class' => 'form-control input-sm number cal_amount rat_value','placeholder'=>'Rate','value'=>$fetch_rate,'readonly']); ?>	
 										</td>
 										<td>
 											<?php echo $this->Form->input('amount', ['label' => false,'class' => 'form-control input-sm number cal_amount','placeholder'=>'Amount','readonly','value'=>$fetch_amount]); ?>	
-										</td>
-										<td>
 										<?php echo $this->Form->input('is_combo', ['label' => false,'class' => 'form-control input-sm is_combo','type'=>'hidden','value'=>$fetch_combo]); ?>	
 										</td>
 										<td>
@@ -198,7 +195,7 @@
 								<tr>
 									<td colspan="5" style="text-align:right;">Grand Total</td>
 									<td><?php echo $this->Form->input('grand_total', ['label' => false,'class' => 'form-control input-sm number ','placeholder'=>'Total Amount','type'=>'text','readonly']); ?>
-									</td>
+									</td><td></td>
 								</tr>
 									<td colspan="5" style="text-align:right;">
 									Amount From Wallet
@@ -256,8 +253,42 @@
 
 $(document).ready(function() {
 
-	$(document).on('change','.item-id',function(){
-		alert();
+
+	$(document).on('change','.show_quantity',function(){
+		//alert();
+		var quantity=$(this).val();
+		var master = $(this); 
+		master.closest('tr').find('td:nth-child(4) input.mains').val(quantity);
+		
+	});
+	$(document).on('change','.varition',function(){
+		var input=$(this).val();
+
+        var master = $(this); 
+		//alert(input);
+		if(input.length>0){
+            var m_data = new FormData();
+            var url ="<?php echo $this->Url->build(["controller" => "Orders", "action" => "getprice"]); ?>";
+         //   alert(url);
+            m_data.append('input',input); 
+            $.ajax({
+                url: url,
+                data: m_data,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                dataType:'text',
+                success: function(response)
+                { 
+                	//alert(response);
+					master.closest('tr').find('td:nth-child(5) .rat_value').val(response);
+                }
+            });
+            }
+	});
+
+	$(document).on('change','.item_id',function(){
+		//alert();
         var input=$(this).val();
         var master = $(this); 
         master.closest('tr').find("td:nth-child(3) .varition option").remove();
@@ -275,7 +306,7 @@ $(document).ready(function() {
                 dataType:'text',
                 success: function(data)
                 { 
-                	alert(data);
+                	//alert(data);
 					master.closest('tr').find('td:nth-child(3) .varition').append(data);
                 }
             });
@@ -663,19 +694,18 @@ function selectAutoCompleted1(value) {
 						<span class="msg_shw2" style="color:blue;font-size:12px;"></span>
 					</td>
 					<td>
-						<?php echo $this->Form->input('show_quantity', ['label' => false,'class' => 'form-control input-sm number cal_amount quant','placeholder'=>'Quantity','value'=>0]); ?>
+						<?php echo $this->Form->input('show_quantity', ['label' => false,'class' => 'form-control input-sm number cal_amount quant show_quantity','placeholder'=>'Quantity','value'=>0]); ?>
 						
 						<span class="msg_shw2" style="color:blue;font-size:12px;"></span>
 							<?php echo $this->Form->input('quantity', ['label' => false,'class' => 'form-control input-sm number mains','value'=>0, 'type'=>'hidden']); ?>
 						
 					</td>
 					<td>
-						<?php echo $this->Form->input('rate', ['label' => false,'class' => 'form-control input-sm number cal_amount rat_value','placeholder'=>'Rate','value'=>0]); ?>	
+						<?php echo $this->Form->input('rate', ['label' => false,'class' => 'form-control input-sm number cal_amount rat_value','placeholder'=>'Rate','value'=>0,'readonly']); ?>	
 					</td>
 					<td>
 						<?php echo $this->Form->input('amount', ['label' => false,'class' => 'form-control input-sm number cal_amount','placeholder'=>'Amount','readonly','value'=>0]); ?>	
-					</td>
-					<td>
+					
 						<?php echo $this->Form->input('is_combo', ['label' => false,'class' => 'form-control input-sm is_combo','type'=>'hidden']); ?>	
 					</td>
                     <td>
