@@ -159,9 +159,6 @@
 								<?php echo $this->Html->link('<i class="fa fa-user"></i> Pincodes','/Pincodes',['escape'=>false]) ?>
 								</li>
 								<li>
-									<?php echo $this->Html->link('<i class="fa fa-truck"></i> Drivers','/Drivers/add',['escape'=>false]) ?>
-								</li>
-								<li>
 									<?php echo $this->Html->link('<i class="fa fa-users"></i> Vendors','/Vendors',['escape'=>false]) ?>
 								</li>
 								<li>
@@ -186,9 +183,6 @@
 							<ul class="dropdown-menu" >
 								<li>
 									<?php echo $this->Html->link('<i class="fa  fa-file"></i> Stock Report','/itemLedgers/report_show',['escape'=>false]) ?>
-								</li>
-								<li>
-									<?php echo $this->Html->link('<i class="fa  fa-file"></i> Wallet Report','/Wallets/index',['escape'=>false]) ?>
 								</li>
 								<li>
 									<?php echo $this->Html->link('<i class="fa  fa-file"></i> WishList Report','/Wishlists/wishlist_report',['escape'=>false]) ?>
@@ -339,9 +333,9 @@
 								<?php echo $this->Html->link('<i class="fa fa-gear"></i> Purchase Outward','/PurchaseOutwards/',['escape'=>false]) ?>
 							</li>-->
 						
-							<li>
+							<!-- <li>
 								<?php echo $this->Html->link('<i class="fa fa-sitemap"></i> Stock Issue','/itemLedgers/add',['escape'=>false]) ?>
-							</li>
+							</li> -->
 							<!-- <li>
 								<?php echo $this->Html->link('<i class="fa fa-retweet"></i> Stock Return','/itemLedgers/stock_return',['escape'=>false]) ?>
 							</li> -->

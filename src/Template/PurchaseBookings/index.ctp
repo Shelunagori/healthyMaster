@@ -20,8 +20,8 @@
 				<table class="table table-condensed table-hover table-bordered" id="main_tble">
 						<thead>
 						<tr>
-							<th scope="col">Sr. No.</th>
-							<th scope="col">Voucher No.</th>
+							<th scope="col">Sr. No.</th><!-- 
+							<th scope="col">Voucher No.</th> -->
 							<th scope="col">Grn No.</th>
 							
 							<th scope="col">Transaction Date</th>
@@ -35,7 +35,7 @@
             <?php $sr_no=0; foreach ($purchaseBookings as $purchaseBooking): ?>
             <tr>
                 <td><?= ++$sr_no ?></td>
-				<td><?= h('#'.str_pad($this->Number->format($purchaseBooking->voucher_no), 4, '0', STR_PAD_LEFT)) ?></td>
+				<!-- <td><?= h('#'.str_pad($this->Number->format($purchaseBooking->voucher_no), 4, '0', STR_PAD_LEFT)) ?></td> -->
                 <td><?= h('#'.str_pad($this->Number->format($purchaseBooking->grn->grn_no), 4, '0', STR_PAD_LEFT)) ?></td>
                 <td><?= h($purchaseBooking->transaction_date) ?></td>
                 <td><?= $purchaseBooking->vendor->name ?></td>

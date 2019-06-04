@@ -48,7 +48,7 @@
 							<td width="2%">
 								<?php echo $this->Form->input('customer', ['empty'=>'--Customers--','options' => $Customer_data,'label' => false,'class' => 'form-control input-sm select2me','placeholder'=>'Category','value'=> h(@$customer_id) ]); ?>
 							</td>
-							<?php if(@$cur_type){ ?>
+							<!-- <?php if(@$cur_type){ ?>
 								<td width="2%">
 									<?php echo $this->Form->input('order_type', ['empty'=>'--Type--','options' => $order_type,'label' => false,'class' => 'form-control input-sm select2me','placeholder'=>'Category','value'=> h(@$cur_type) ]); ?>
 								</td>
@@ -60,7 +60,7 @@
 								<td width="2%">
 									<?php echo $this->Form->input('order_type', ['empty'=>'--Type--','options' => $order_type,'label' => false,'class' => 'form-control input-sm select2me','placeholder'=>'Category','value'=> h(@$order_types) ]); ?>
 								</td>
-							<?php  } ?>	
+							<?php  } ?>	 -->
 							<?php if(@$cur_status){ ?>
 							<td width="2%">
 								<?php echo $this->Form->input('orderstatus', ['empty'=>'--Status--','options' => $OrderStatus,'label' => false,'class' => 'form-control input-sm select2me','placeholder'=>'Category','value'=> h(@$cur_status) ]); ?>

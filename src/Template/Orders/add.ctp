@@ -42,8 +42,8 @@ background-color: #fff;}
 						 <div class="suggesstion-box"></div>
 					</div>
 					<div class="col-md-3">
-						<label class=" control-label">Warehouse <span class="required" aria-required="true">*</span></label>
-						<?php echo $this->Form->control('warehouse_id',['options' => $warehouses,'class'=>'form-control input-sm','id'=>'customer_id','label'=>false]); ?>
+						<!-- <label class=" control-label">Warehouse <span class="required" aria-required="true">*</span></label> -->
+						<?php echo $this->Form->control('warehouse_id',['options' => $warehouses,'class'=>'form-control input-sm','id'=>'customer_id','label'=>false,'type'=>'hidden']); ?>
 					</div>
 					
 					<div class="col-md-3">
@@ -594,7 +594,7 @@ $(document).ready(function() {
 	
 	$('.add_address').on("click",function() {
 			var customer_id=$('#customer_id').val();
-			alert(customer_id);
+			//alert(customer_id);
 			if(customer_id == ""){
 				alert("Please Select Customer First");
 			}else{
