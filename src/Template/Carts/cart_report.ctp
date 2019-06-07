@@ -67,7 +67,7 @@ background-color: #fff;}
 							<th>Variation</th>
 							<th>Quantity</th>
 							<th>Rate</th>
-							<th>Is Combo</th>
+							
 						</tr>
 					</thead>
 					<tbody>
@@ -84,9 +84,7 @@ background-color: #fff;}
 							<td><?= h(@$Cart->item->name) ?></td>
 							<td><?= h(@$Cart->item_variation->quantity_variation) ." ".  h(@$Cart->item_variation->unit->shortname) ?></td>
 							<td><?= h(@$Cart->quantity) ?></td>
-							<td><?= h(@$Cart->rate) ?></td>
-							<td><?= h(@$Cart->is_combo) ?></td>
-							
+							<td><?= h(@$Cart->item_variation->rate) ?></td>
 						</tr>
 						<?php endforeach; ?>
 					</tbody>

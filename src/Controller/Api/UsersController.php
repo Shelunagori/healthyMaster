@@ -13,7 +13,7 @@ class UsersController extends AppController
 		$supplier_areas = $this->Users->SupplierAreas->find()->order(['area_name' => 'ASC']);
 		
 		$status=true;
-		$error="";
+		$error="Data found successfully";
 		$promo_code_to_be=false;
 		$this->set(compact('status', 'error', 'faq', 'privacy', 'tcs', 'aboutus', 'company_details', 'supplier_areas', 'promo_code_to_be'));
 		$this->set('_serialize', ['status', 'error', 'faq', 'privacy', 'tcs', 'aboutus', 'company_details', 'supplier_areas', 'promo_code_to_be']);
@@ -26,7 +26,7 @@ class UsersController extends AppController
 		if($api_version==$curent_version)
 		{
 			$status=true;
-			$error="Yes";
+			$error="Current version found";
 			$data = $version;
 		}
 		else{

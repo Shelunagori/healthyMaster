@@ -27,7 +27,7 @@ class PincodesController extends AppController
 		else
 		{
 			$status=true;
-			$error="";
+			$error="List found successfully";
 			$this->set(compact('status', 'error', 'pin_codes'));
 			$this->set('_serialize', ['status', 'error', 'pin_codes']); 
         }

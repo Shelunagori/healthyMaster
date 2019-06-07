@@ -7,22 +7,23 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Pincodes Model
+ * PromoCodes Model
  *
- * @property \App\Model\Table\StatesTable|\Cake\ORM\Association\BelongsTo $States
- * @property \App\Model\Table\CitiesTable|\Cake\ORM\Association\BelongsTo $Cities
+ * @property \App\Model\Table\ItemCategoriesTable|\Cake\ORM\Association\BelongsTo $ItemCategories
+ * @property \App\Model\Table\JainThelaAdminsTable|\Cake\ORM\Association\BelongsTo $JainThelaAdmins
+ * @property \App\Model\Table\OrdersTable|\Cake\ORM\Association\HasMany $Orders
  *
- * @method \App\Model\Entity\Pincode get($primaryKey, $options = [])
- * @method \App\Model\Entity\Pincode newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Pincode[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Pincode|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Pincode saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Pincode patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Pincode[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Pincode findOrCreate($search, callable $callback = null, $options = [])
+ * @method \App\Model\Entity\PromoCode get($primaryKey, $options = [])
+ * @method \App\Model\Entity\PromoCode newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\PromoCode[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\PromoCode|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\PromoCode patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\PromoCode[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\PromoCode findOrCreate($search, callable $callback = null, $options = [])
  */
-class PincodesTable extends Table
+class PromoCodesTable extends Table
 {
+
     /**
      * Initialize method
      *
@@ -33,17 +34,24 @@ class PincodesTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('pincodes');
-        $this->setDisplayField('id');
+        $this->setTable('promo_codes');
+        $this->setDisplayField('code');
         $this->setPrimaryKey('id');
 
-        $this->belongsTo('States', [
-            'foreignKey' => 'state_id',
+        $this->belongsTo('ItemCategories', [
+            'foreignKey' => 'item_category_id',
+            'joinType' => 'LEFT'
+        ]);
+        $this->belongsTo('JainThelaAdmins', [
+            'foreignKey' => 'jain_thela_admin_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Cities', [
-            'foreignKey' => 'city_id',
-            'joinType' => 'INNER'
+        $this->hasMany('Orders', [
+            'foreignKey' => 'promo_code_id'
+        ]);
+        $this->belongsTo('Items', [
+            'foreignKey' => 'item_id',
+            'joinType' => 'LEFT'
         ]);
     }
 
@@ -55,14 +63,33 @@ class PincodesTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
-        // $validator
-        //     ->integer('id')
-        //     ->allowEmptyString('id', 'create');
+        $validator
+            ->integer('id')
+            ->allowEmpty('id', 'create');
 
-        // $validator
-        //     ->integer('pincode')
-        //     ->requirePresence('pincode', 'create')
-        //     ->allowEmptyString('pincode', false);
+        $validator
+            ->requirePresence('code', 'create')
+            ->notEmpty('code');
+
+        $validator
+            ->decimal('discount_per')
+            ->requirePresence('discount_per', 'create')
+            ->notEmpty('discount_per');
+
+        $validator
+            ->dateTime('valid_from')
+            ->requirePresence('valid_from', 'create')
+            ->notEmpty('valid_from');
+
+        $validator
+            ->dateTime('valid_to')
+            ->requirePresence('valid_to', 'create')
+            ->notEmpty('valid_to');
+
+        /* $validator
+            ->dateTime('created_on')
+            ->requirePresence('created_on', 'create')
+            ->notEmpty('created_on'); */
 
         return $validator;
     }
@@ -76,8 +103,8 @@ class PincodesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['state_id'], 'States'));
-        $rules->add($rules->existsIn(['city_id'], 'Cities'));
+       // $rules->add($rules->existsIn(['item_category_id'], 'ItemCategories'));
+       // $rules->add($rules->existsIn(['jain_thela_admin_id'], 'JainThelaAdmins'));
 
         return $rules;
     }

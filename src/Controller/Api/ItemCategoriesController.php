@@ -89,7 +89,7 @@ class ItemCategoriesController extends AppController
 				$cart_count = $this->ItemCategories->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();						
 
 		$status=true;
-		$error="";
+		$error="Data found successfully";
         $this->set(compact('status', 'error', 'dynamic', 'banners','cart_count'));
         $this->set('_serialize', ['status', 'error','cart_count','banners','dynamic']);
     }
@@ -102,7 +102,7 @@ class ItemCategoriesController extends AppController
 		
 		$cart_count = $this->ItemCategories->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();	
 		$status=true;
-		$error="";
+		$error="Category List Successfully";
         $this->set(compact('status', 'error', 'categoryList','cart_count'));
         $this->set('_serialize', ['status', 'error', 'categoryList','cart_count']);		
 	}

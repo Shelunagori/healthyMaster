@@ -44,7 +44,7 @@ class JainCashPointsController extends AppController
 		$referral_code=$referral_array->referral_code;
 		
 		$status=true;
-		$error="";
+		$error="Data found successfully";
         $this->set(compact('status', 'error', 'redeemPoints','cart_count','referral_code','referral_image'));
         $this->set('_serialize', ['status', 'error', 'redeemPoints','cart_count','referral_code','referral_image']);
     }
@@ -156,7 +156,7 @@ class JainCashPointsController extends AppController
 		else
 		{
 			$status=true;
-			$error="";
+			$error="Data found successfully";
 			$list = $jain_cash_details;
 			$this->set(compact('status', 'error','list', 'redeemPoints'));
 			$this->set('_serialize', ['status', 'error','redeemPoints','list']);

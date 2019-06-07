@@ -16,7 +16,7 @@ class FaqsController extends AppController
               if(!empty($faqData->toArray()))
               {
                 $status = true;
-                $error = 'Data Found Successfully';
+                $error = 'Faq Found Successfully';
               }else {
                 $status = false;
                 $error = 'No Data Found';

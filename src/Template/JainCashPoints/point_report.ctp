@@ -5,12 +5,20 @@
 .error{
 	color:#a94442;
 }
+
+a:hover {
+    color: #23527c;
+}
+
 #item-list{list-style:none;margin-left: 1px;padding:0;width:91%; margin-top: 10px;    position: absolute;
 z-index: 1000;
 background-color: #fff;}
 #item-list li{padding: 7px; background: #d8d4d41a ; border: 1px solid #bbb9b933;}
 #item-list li:hover{background:#d8d4d4;cursor: pointer;}
 </style>
+
+
+
 <div class="col-md-12">
 		<div class="portlet light bordered">
 			<div class="portlet-title">
@@ -29,11 +37,11 @@ background-color: #fff;}
 					<thead>
 						<tr>
 							<th>Sr</th>
-							<th>Order No</th>
+							<th>Transaction Date</th>
 							<th>Customer</th>
-							<!-- <th>Item Variation</th> -->
-							<th>Point</th>
+						    <th>Point</th>
 							<th>Used Point</th>
+							<th>Order No</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -45,12 +53,18 @@ background-color: #fff;}
 						?>
 						<tr>
 							<td><?= $i ?></td>
-							<td><?= h(@$point->order->order_no) ?></td>
-							<td><?= h(@$point->customer->name) ?></td>
-							<!-- <td><?= h(@$point->item_variation->name) ?></td> -->
-							<td><?= h(@$point->point) ?></td>
+					    	<td><?= h(date('d-m-Y',strtotime($point->updated_on))) ?></td>
+					    	<td><?= h(@$point->customer->name) ?></td>
+					    	<td><?= h(@$point->point) ?></td>
 							<td><?= h(@$point->used_point) ?></td>
-							
+							<td>
+								<?php 
+									if(!empty(@$point->order->order_no))
+									{
+										echo $this->Html->link(@$point->order->order_no,['controller'=>'Orders','action' => 'view', $point->order->id, 'print'],['target'=>'_blank']);									
+									}
+								?>							
+							</td>
 						</tr>
 						<?php endforeach; ?>
 					</tbody>

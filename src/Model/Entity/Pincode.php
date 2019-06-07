@@ -30,6 +30,7 @@ class Pincode extends Entity
         'city_id' => true,
         'pincode' => true,
         'state' => true,
-        'city' => true
+        'city' => true,
+		'we_deliver' => true
     ];
 }

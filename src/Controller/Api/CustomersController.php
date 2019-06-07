@@ -45,6 +45,7 @@ class CustomersController extends AppController
 					$customerDetails->user_img = $img_name;
 					$this->Customers->save($customerDetails);
 					$status=true;
+					$error="Customer registration successfully.";
 				}else{
 					
 					$customerDetails = $this->Customers->find()->where(['mobile'=>$mobile_no,'status'=>'incompleted'])->first();
@@ -66,6 +67,7 @@ class CustomersController extends AppController
 						$customerDetails->user_img = $img_name;
 						$this->Customers->save($customerDetails);
 						$status=true;	
+						$error="Customer registration successfully.";
 					}
 					else{
 							$customer = $this->Customers->newEntity();
@@ -280,7 +282,7 @@ class CustomersController extends AppController
 		}
 		
 		$status=true;
-		$error="";
+		$error="Profile Updated Successfully";
         $this->set(compact('status', 'error','jain_cash_points','wallet_balance','profiles'));
         $this->set('_serialize', ['status', 'error','jain_cash_points','wallet_balance','profiles']);
 		}
@@ -366,7 +368,7 @@ class CustomersController extends AppController
 		}
 		}
 		$status=true;
-		$error="";
+		$error="Data found successfully";
         $this->set(compact('status', 'error','jain_cash_points','wallet_balance','profiles'));
         $this->set('_serialize', ['status', 'error','jain_cash_points','wallet_balance','profiles']);
     }

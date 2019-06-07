@@ -77,7 +77,7 @@ class AppNotificationsController extends AppController
 				$ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
 				$arr_ext = array('jpg', 'jpeg', 'png'); //set allowed extensions
 				$setNewFileName = uniqid();
-				$appNotification->image = 'http://app.jainthela.in'.$this->request->webroot.'Notify_images/'.$setNewFileName . '.' .$ext;
+				$appNotification->image = 'http://healthymaster.in/healthymaster'.$this->request->webroot.'Notify_images/'.$setNewFileName . '.' .$ext;
 				
 				if (in_array($ext, $arr_ext))
 				{
@@ -87,7 +87,7 @@ class AppNotificationsController extends AppController
 			}
 
 			else{
-					$appNotification->image = 'http://app.jainthela.in'.$this->request->webroot.'Notify_images/jainthela.jpg';
+					$appNotification->image = 'http://healthymaster.in/healthymaster'.$this->request->webroot.'Notify_images/jainthela.jpg';
 			}
 			
 
@@ -156,7 +156,7 @@ class AppNotificationsController extends AppController
 		$customers = $this->AppNotifications->Customers->find();
 		$this->loadModel('Items');
 		$item_fetchs=$this->Items->find()->where(['freeze'=>0,'ready_to_sale'=>'Yes']);
-		$path = 'http://app.jainthela.in'.$this->request->webroot.'img/item_images/';
+		$path = 'http://healthymaster.in/healthymaster'.$this->request->webroot.'img/item_images/';
 		foreach($item_fetchs as $item_fetch){
 			$item_name=$item_fetch->name;
 			$alias_name=$item_fetch->alias_name;

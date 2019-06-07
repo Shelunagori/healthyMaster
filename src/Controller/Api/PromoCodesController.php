@@ -17,7 +17,7 @@ class PromoCodesController extends AppController
 		if(!empty($promo_codes->toArray()))
 		{
 			$status=true;
-			$error="Promo List";			
+			$error="Promo List Found Successfully";			
 		}else
 		{
 			$status=false;
@@ -49,7 +49,7 @@ class PromoCodesController extends AppController
 		else
 		{
 			$status=true;
-			$error="";
+			$error="Verified Successfully";
 			$this->set(compact('status', 'error', 'promo_codes'));
 			$this->set('_serialize', ['status', 'error', 'promo_codes']); 
         }

@@ -57,7 +57,7 @@
 			</br>
 				<div class="row">
 					<div class="col-md-10">
-						<?php echo $this->Form->control('item_category_id', ['empty'=>'-- select --','options' => $itemCategories,'class'=>'form-control input-sm select select2me select2','required']); ?>
+						<?php echo $this->Form->control('item_category_id', ['empty'=>'-- select --','options' => $itemCategories,'class'=>'form-control input-sm select select2me select2']); ?>
 					</div>
 				</div>
 			</br>
@@ -101,7 +101,9 @@
 				<div class="row">
 					<div class="col-md-10">
 						<label class=" control-label">Valid To</label>
-						<?php echo $this->Form->control('valid_to',['readonly','placeholder'=>'Valid To','class'=>'form-control input-sm','label'=>false]); ?>
+						
+						<?php echo $this->Form->control('valid_to',['readonly','placeholder'=>'Valid From','class'=>'form-control input-sm date-time-range-picker select2','label'=>false]); ?>
+						
 					</div>
 				</div>
 				<br/>

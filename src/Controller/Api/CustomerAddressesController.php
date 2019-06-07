@@ -45,7 +45,7 @@ class CustomerAddressesController extends AppController
 							'default_address' => 1
 							])
 					->execute();
-					
+			$error="Added Successfully";			
 		}
 		if($tag=='edit'){
 			$query = $this->CustomerAddresses->query();
@@ -71,6 +71,7 @@ class CustomerAddressesController extends AppController
 							])
 					->where(['id' => $customer_address_id])
 					->execute();
+				$error="Address Update Successfully";	
 		}
 		if($tag=='delete'){
 		
@@ -78,6 +79,7 @@ class CustomerAddressesController extends AppController
 				$result = $query->delete()
 					->where(['id' => $customer_address_id])
 					->execute();
+			$error="Address deleted Successfully";		
 		}
 		if($tag=='default'){
 			$query = $this->CustomerAddresses->query();
@@ -91,6 +93,7 @@ class CustomerAddressesController extends AppController
                     ->set(['default_address' => 1])
 					->where(['id' => $customer_address_id])
 					->execute();
+			$error="Address marked selected";		
 		}
 		
 		$customer_addresses=$this->CustomerAddresses->find()
@@ -115,7 +118,7 @@ class CustomerAddressesController extends AppController
 		if(!empty($customer_addresses->toArray()))
 		{
 			$status=true;
-			$error="";			
+			$error="Address List found successfully";			
 		}
 		else{
 			$status=false;

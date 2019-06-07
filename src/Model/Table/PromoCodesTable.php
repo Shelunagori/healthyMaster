@@ -103,8 +103,8 @@ class PromoCodesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['item_category_id'], 'ItemCategories'));
-        $rules->add($rules->existsIn(['jain_thela_admin_id'], 'JainThelaAdmins'));
+       // $rules->add($rules->existsIn(['item_category_id'], 'ItemCategories'));
+       // $rules->add($rules->existsIn(['jain_thela_admin_id'], 'JainThelaAdmins'));
 
         return $rules;
     }

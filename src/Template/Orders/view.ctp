@@ -162,7 +162,7 @@ echo $this->Html->link('Close',array(),['escape'=>false,'class'=>'btn  red hidde
 				<?php if(!empty($amount_from_jain_cash)){ ?>
 				<tr style="background-color:#fff; border-top:1px solid #000">
 					<td colspan="6">&nbsp;</td>
-					<td align="right"><b>Jain Cash</b></td>
+					<td align="right"><b>Redeem Points</b></td>
 					<td align="center"><b><?= h($amount_from_jain_cash) ?></b></td>
 				</tr>
 				<?php } ?>

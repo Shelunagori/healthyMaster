@@ -967,7 +967,7 @@ class OrdersController extends AppController
 		
         $bulk_Details = $this->BulkBookingLeads->find()->where(['id' => $bulkorder_id])->toArray();
 		$warehouses = $this->Orders->Warehouses->find('list')->where(['jain_thela_admin_id' => $jain_thela_admin_id]);
-		$item = $this->Orders->items->find('list');
+		$item = $this->Orders->items->find('list')->where(['Items.freeze'=>0]);
         $this->set(compact('order', 'customers', 'items', 'order_type', 'bulk_Details', 'bulkorder_id','deliverytime_fetchs','tax', 'warehouses','item'));
         $this->set('_serialize', ['order', 'warehouses']);
     }

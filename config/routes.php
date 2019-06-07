@@ -177,16 +177,7 @@ Router::prefix('api', function ($routes) {
 	);
 	
 	
-	$routes->resources(
-		'WishLists', [
-		   'map' => [
-			   'add_wish_list' => [
-				   'action' => 'add_wish_list',
-				   'method' => 'POST'
-			   ]
-		   ]
-		]
-	);	
+	
 
 
 	$routes->resources(
@@ -394,7 +385,7 @@ Router::prefix('api', function ($routes) {
 	);
 
 	$routes->resources(
-		'WishLists', [
+		'Wishlists', [
 		   'map' => [
 			   'add_wish_list' => [
 				   'action' => 'add_wish_list',
@@ -404,7 +395,6 @@ Router::prefix('api', function ($routes) {
 		]
 	);
 
-	
 	$routes->resources(
 		'ItemSubCategories', [
 		   'map' => [

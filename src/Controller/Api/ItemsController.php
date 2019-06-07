@@ -59,8 +59,18 @@ class ItemsController extends AppController
 			}  */
 					
 			$cart_count = $this->Items->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
-			$status=true;
-			$error="";
+			
+			if(!empty($items->toArray()))
+			{
+				$status=true;
+				$error="Item list found successfully";				
+			}else
+			{
+				$status=false;
+				$error="No data found";				
+			}
+			
+
 			$this->set(compact('status', 'error', 'items','cart_count'));
 			$this->set('_serialize', ['status', 'error', 'items','cart_count']);			
 		}
@@ -137,7 +147,7 @@ class ItemsController extends AppController
 						$cart_count = $this->Items->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
 			 
 		$status=true;
-		$error="";
+		$error="Item Description found successfully";
         $this->set(compact('status', 'error', 'item_description', 'customer_also_bought','cart_count'));
         $this->set('_serialize', ['status', 'error', 'item_description', 'customer_also_bought','cart_count']);
     }
@@ -151,7 +161,7 @@ class ItemsController extends AppController
 		if($type=='Popular Items')
 		{
 			$query=$this->Items->ItemLedgers->find();
-		$view_items=$query
+		    $view_items=$query
 						->where(['inventory_transfer'=>'no','status'=>'out'])
 						->group(['ItemLedgers.item_id'])
 						->contain(['Items'=>function($q) use($customer_id){
@@ -241,11 +251,16 @@ class ItemsController extends AppController
 			{
 				$view_item->item->image_url = 'http://healthymaster.in'.$this->request->webroot.'img/item_images/'.$view_item->item->image;
 				$items [] =	$view_item->item;
-			}			
+			}
+			$status=true;
+			$error="List found successfully";			
+		}else
+		{
+			$status=false;
+			$error="No data found";				
 		}			
 		
-		$status=true;
-		$error="";
+		
 		$this->set(compact('status', 'error','cart_count', 'items'));
         $this->set('_serialize', ['status', 'error','cart_count', 'items']);
     }
@@ -264,12 +279,17 @@ class ItemsController extends AppController
 			foreach($search_items_data as $search_item){
 				$search_items[] = ['item_id' =>$search_item->id,'name' => $search_item->name,'category_id' =>$search_item->item_category_id,'category_name' => $search_item->item_category->name,'image' => 'http://healthymaster.in'.$this->request->webroot.'img/item_images/'.$search_item->image];	
 			}
+			$status=true;
+			$error="Data found successfully";			
+		}else
+		{
+			$status=false;
+			$error="No data found";			
 		}
 		
 		
 		$cart_count = $this->Items->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
-		$status=true;
-		$error="";
+
         $this->set(compact('status', 'error', 'cart_count', 'search_items'));
         $this->set('_serialize', ['status', 'error', 'cart_count', 'search_items']);
      }
@@ -316,9 +336,17 @@ class ItemsController extends AppController
 				->where($where);				
 			}
 			
+			if(!empty($searchResult->toArray()))
+			{
+				foreach($searchResult as $search)
+				{
+					$search->image_url='http://healthymaster.in'.$this->request->webroot.'img/item_images/'.$search->image;
+				}				
+			}
+			
 			$totalItems = sizeof($searchResult);
 			$status=true;
-			$error="";			
+			$error="Data found successfully";			
 		}else
 		{
 			$totalItems = 0;
@@ -372,7 +400,7 @@ class ItemsController extends AppController
 			
 			$totalItem = sizeof($wishlist->toArray());
 			$status=true;
-			$error="";			
+			$error="Wish list found successfully";			
 		}else
 		{
 			$totalItem = 0;

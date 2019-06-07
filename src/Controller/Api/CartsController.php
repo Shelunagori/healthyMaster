@@ -14,10 +14,10 @@ class CartsController extends AppController
 		$item_variation_id=$this->request->data('item_variation_id');
 			
 		$this->loadModel('Wishlists');
-		$exists = $this->WishLists->exists(['id'=>$id]);
+		$exists = $this->Wishlists->exists(['id'=>$id]);
 		if($exists==1){
-			$WishListItems = $this->WishLists->get($id);
-			$this->WishLists->delete($WishListItems);
+			$WishListItems = $this->Wishlists->get($id);
+			$this->Wishlists->delete($WishListItems);
 			$success = true;
 			$message = 'removed from wish list';
 			$this->plusAddToCart();
@@ -79,7 +79,7 @@ class CartsController extends AppController
 		$cart_count = $this->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
 
 		$status=true;
-		$error="";
+		$error="Item successfully added";
         $this->set(compact('status', 'error','carts','cart_count'));
         $this->set('_serialize', ['status', 'error', 'carts','cart_count']);
     }
@@ -150,7 +150,7 @@ class CartsController extends AppController
 		}
 		
 		$status=true;
-		$error="";
+		$error="Item successfully removed";
         $this->set(compact('status', 'error','carts','cart_count'));
         $this->set('_serialize', ['status', 'error', 'carts','cart_count']);
     }
@@ -163,6 +163,7 @@ class CartsController extends AppController
 		$promocode=$this->request->data('promocode');
 		$redeem_points=$this->request->data('redeem_points');
 		$tag=$this->request->data('tag');
+		$customer_address_id=$this->request->data('customer_address_id');
 		$isPointsRedeem = false;
 		if($tag=='add'){
 			$items = $this->Carts->Items->get($item_id);
@@ -478,7 +479,7 @@ class CartsController extends AppController
 		else{
 				
 			$status=true;
-			$error='';
+			$error='Cart data found successfully';
 			$this->set(compact('status', 'error','address_available','grand_total','carts','delivery_charges','subtotal','discount_amount','isPromoApplied','totalPoints','remaningPoints','redeem_points','isPointsRedeem'));
 			$this->set('_serialize', ['status', 'error','isPointsRedeem','totalPoints','redeem_points','remaningPoints','subtotal','delivery_charges','discount_amount','isPromoApplied','grand_total','address_available','carts']);
 		}
@@ -714,7 +715,7 @@ class CartsController extends AppController
 		}
 		else{
 			$status=true;
-			$error='';
+			$error='Cart reviewed successfully';
 			$this->set(compact('status', 'error','totalPoints','temp_order_no','grand_total','totalItems','carts','delivery_charges','subtotal','discount_amount','isPromoApplied','customer_addresses','remaningPoints','redeem_points','isPointsRedeem'));
 			$this->set('_serialize', ['status', 'error','temp_order_no','isPointsRedeem','totalPoints','redeem_points','remaningPoints','subtotal','delivery_charges','discount_amount','isPromoApplied','grand_total','totalItems','carts','customer_addresses']);
 		}
