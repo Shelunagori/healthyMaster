@@ -18,7 +18,7 @@ class ItemCategoriesController extends AppController
 		
 		array_push($dynamic,$Category);
 		
-	    $banners = $this->ItemCategories->Banners->find('All')->where(['link_name'=>'offer', 'Banners.status'=>'Active']);
+	    $banners = $this->ItemCategories->Banners->find('All')->where(['Banners.status'=>'Active']);
 		$banners->select(['image_url' => $banners->func()->concat(['http://healthymaster.in'.$this->request->webroot.'banners/','image' => 'identifier' ])])->autoFields(true);
 
 		$query=$this->ItemCategories->Items->ItemLedgers->find();

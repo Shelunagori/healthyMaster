@@ -26,6 +26,11 @@ class ItemsController extends AppController
 			$customer_id=$this->request->query('customer_id');
 			$page=@$this->request->query('page');
 			$limit = 10;
+			
+			$categoryImage_nw = $this->Items->ItemCategories->find()->where(['is_deleted'=>0,'id' => $item_category_id])->first();			
+			
+			$categoryImage = 'http://healthymaster.in'.$this->request->webroot.'itemcategories/'.$categoryImage_nw->image;
+			
 			if($item_sub_category_id=='0')
 			{
 				$where=['Items.item_category_id'=>$item_category_id, 'Items.is_combo'=>'no', 'Items.freeze'=>0, 'Items.ready_to_sale'=>'Yes'];
@@ -71,13 +76,9 @@ class ItemsController extends AppController
 			}
 			
 
-			$this->set(compact('status', 'error', 'items','cart_count'));
-			$this->set('_serialize', ['status', 'error', 'items','cart_count']);			
+			$this->set(compact('status', 'error', 'items','categoryImage','cart_count'));
+			$this->set('_serialize', ['status', 'error','cart_count','categoryImage','items']);			
 		}
-		
-		
-		
-
     }
 
 	 public function itemdescription()
@@ -152,7 +153,7 @@ class ItemsController extends AppController
         $this->set('_serialize', ['status', 'error', 'item_description', 'customer_also_bought','cart_count']);
     }
 	
-	 public function viewAll()
+	public function viewAll()
     {
 		$jain_thela_admin_id=$this->request->query('jain_thela_admin_id');
 		$type=$this->request->query('type');
@@ -160,6 +161,8 @@ class ItemsController extends AppController
 
 		if($type=='Popular Items')
 		{
+			$categoryImage = 'http://healthymaster.in'.$this->request->webroot.'item_list_category_image/popularitem.png';
+			
 			$query=$this->Items->ItemLedgers->find();
 		    $view_items=$query
 						->where(['inventory_transfer'=>'no','status'=>'out'])
@@ -187,6 +190,7 @@ class ItemsController extends AppController
 		}
 		else if($type=='recently')
 		{
+			$categoryImage = 'http://healthymaster.in'.$this->request->webroot.'item_list_category_image/recently.png';
 				$querys=$this->Items->ItemLedgers->find();
 				$view_items=$querys
 						->where(['inventory_transfer'=>'no','status'=>'out'])
@@ -216,6 +220,7 @@ class ItemsController extends AppController
 		}
 		else if($type='Top Selling Product')
 		{
+			$categoryImage = 'http://healthymaster.in'.$this->request->webroot.'item_list_category_image/topselling.png';
         $querys=$this->Items->ItemLedgers->find();
 				$view_items=$querys
 						->where(['inventory_transfer'=>'no','status'=>'out'])
@@ -261,8 +266,8 @@ class ItemsController extends AppController
 		}			
 		
 		
-		$this->set(compact('status', 'error','cart_count', 'items'));
-        $this->set('_serialize', ['status', 'error','cart_count', 'items']);
+		$this->set(compact('status', 'error','cart_count','categoryImage','items'));
+        $this->set('_serialize', ['status', 'error','cart_count','categoryImage','items']);
     }
 	
 	public function searchItem()

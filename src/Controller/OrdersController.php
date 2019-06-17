@@ -642,7 +642,7 @@ class OrdersController extends AppController
 					'message'     => 'Thank you, Your order has been successfully placed.',
 					'image'     => '',
 					'button_text'    => 'Track Your Order',
-					'link' => 'jainthela://track_order?id='.$send_data,
+					'link' => 'jainthela://order?id='.$send_data,
 					'notification_id'    => 1,
 					);
 
@@ -858,7 +858,7 @@ class OrdersController extends AppController
 					'message'     => 'Thank you, Your order has been successfully placed.',
 					'image'     => '',
 					'button_text'    => 'Track Your Order',
-					'link' => 'jainthela://track_order?id='.$send_data,
+					'link' => 'jainthela://order?id='.$send_data,
 					'notification_id'    => 1,
 					);
 					

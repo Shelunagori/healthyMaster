@@ -163,7 +163,7 @@ class CartsController extends AppController
 		$promocode=$this->request->data('promocode');
 		$redeem_points=$this->request->data('redeem_points');
 		$tag=$this->request->data('tag');
-		$customer_address_id=$this->request->data('customer_address_id');
+		$pincode=$this->request->data('pincode');
 		$isPointsRedeem = false;
 		if($tag=='add'){
 			$items = $this->Carts->Items->get($item_id);
@@ -189,7 +189,7 @@ class CartsController extends AppController
 							->execute();
 				}else{
 					
-			foreach($fetchs as $fetch){
+						foreach($fetchs as $fetch){
 							$update_id=$fetch->id;
 							$exist_quantity=$fetch->quantity;
 							$exist_count=$fetch->cart_count;
@@ -400,7 +400,7 @@ class CartsController extends AppController
 			
 			$delivery_charges = '0';
 			$this->loadModel('DeliveryCharges');
-			$delivery_charges=$this->DeliveryCharges->find()->order(['id' =>'DESC'])->first();
+			$delivery_charges=$this->DeliveryCharges->find()->where(['pincode' => $pincode])->order(['id' =>'DESC'])->first();
 			
 			if($isFreeShipping == 'Yes')
 			{
@@ -408,7 +408,7 @@ class CartsController extends AppController
 				$isPromoApplied = true;
 			}
 			
-			else if($grand_total < $delivery_charges->amount)
+			else if(!empty($delivery_charges) && $grand_total < $delivery_charges->amount)
 			{
 				$grand_total = $grand_total + $delivery_charges->charge;
 				$delivery_charges = $delivery_charges->charge;
@@ -490,6 +490,7 @@ class CartsController extends AppController
 		$customer_id=$this->request->query('customer_id');
 		$promocode=$this->request->query('promocode');
 		$redeem_points=$this->request->query('redeem_points');
+		$pincode=$this->request->query('pincode');
 		$isPointsRedeem = false;
 /* 		$carts=$this->Carts->find()
 			->where(['customer_id' => $customer_id])
@@ -632,14 +633,16 @@ class CartsController extends AppController
 
 		$delivery_charges = '0';
 		$this->loadModel('DeliveryCharges');
-		$delivery_charges=$this->DeliveryCharges->find()->order(['id' =>'DESC'])->first();
+		$delivery_charges=$this->DeliveryCharges->find()->where(['pincode' => $pincode])->order(['id' =>'DESC'])->first();
+		
 		if($isFreeShipping == 'Yes')
 		{
 			$delivery_charges = 'Free';
 			$isPromoApplied = true;
 		}
-		else if($grand_total < $delivery_charges->amount)
+		else if(!empty($delivery_charges) && $grand_total < $delivery_charges->amount)
 		{
+			
 			$grand_total = $grand_total + $delivery_charges->charge;
 			$delivery_charges = $delivery_charges->charge;
 			$delivery_charges = round($delivery_charges);

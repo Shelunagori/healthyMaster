@@ -134,7 +134,7 @@ class CustomersController extends AppController
 				    $customerDetails->first_time_win_status='No';
 				    $customerDetails->new_scheme='Yes';
 				    $customerDetails->created_on=$today;
-					$customerDetails->notification_key='AAAAXmNqxY4:APA91bG0X6RHVhwJKXUQGNSSCas44hruFdR6_CFd6WHPwx9abUr-WsrfEzsFInJawElgrp24QzaE4ksfmXu6kmIL6JG3yP487fierMys5byv-I1agRtMPIoSqdgCZf8R0iqsnds-u4CU';
+					$customerDetails->notification_key='AAAA_7MR4qc:APA91bEB4PE2YzC9zlsb3qnMhTn7WzPqJhnHxqjr_--YdowERJkq2hVCCQXAMEQoHvIo22ymzuYGCJLpe1jJUDlgcPo9eCvoF4jGV92i1ldpTrYHSF7jc7QU-W1B5dhTDA1PpD9DENy7';
 					$customerDetails->referral_code=$customerDetails->id;
 					$customerDetails->user_img = $img_name;
 					$this->Customers->save($customerDetails);

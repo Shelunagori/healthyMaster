@@ -610,14 +610,14 @@ curl_close($ch);
 					$total_amount = $grand_total;
 					if($discount_amount > 0)
 					{
-						$total_amount = $total_amount - $discount_amount;
+						$total_amount = $total_amount + $discount_amount;
 					}
 					
 					if($delivery_charge > 0)
 					{
 						$total_amount = $total_amount - $delivery_charge;
 					}	
-
+					
 							
 								
 					$order = $this->Orders->patchEntity($order, $this->request->getData());
@@ -639,7 +639,7 @@ curl_close($ch);
 					//$order->discount_percent=$discount_percent;
 					$order->status='In Process';
 					$order->curent_date=$curent_date;
-					//$order->get_auto_no=$get_auto_no;
+					$order->get_auto_no=$get_auto_no;
 					$order->delivery_date=$deliverydate;
 					$order->payment_status=$payment_status;
 					$order->order_from=$order_from;
@@ -689,7 +689,7 @@ curl_close($ch);
 								'message' 	=> 'Thank You, your order place successfully',
 								'image' 	=> '',
 								'button_text'	=> 'Track Your Order',
-								'link' => 'healthymaster://track_order?id='.$order->id,	
+								'link' => 'healthymaster://order?id='.$order->id,	
 								'notification_id'	=> 1,
 								);
 
@@ -727,7 +727,7 @@ curl_close($ch);
 						$sms_sender='JAINTE';
 						$sms=str_replace(' ', '+', $sms);
 					
-						file_get_contents('http://103.39.134.40/api/mt/SendSMS?user=phppoetsit&password=9829041695&senderid='.$sms_sender.'&channel=Trans&DCS=0&flashsms=0&number='.$mobile.'&text='.$sms.'&route=7');
+						//file_get_contents('http://103.39.134.40/api/mt/SendSMS?user=phppoetsit&password=9829041695&senderid='.$sms_sender.'&channel=Trans&DCS=0&flashsms=0&number='.$mobile.'&text='.$sms.'&route=7');
 							
 						$status=true;
 						$error="Thank You, Your order has been placed.";
@@ -932,7 +932,7 @@ curl_close($ch);
     'message'     => 'Your order has been ready to delivery',
     'image'     => '',
     'button_text'    => 'Track Your Order',
-    'link' => 'jainthela://track_order?id='.$order_id,
+    'link' => 'jainthela://order?id='.$order_id,
     'notification_id'    => 1,
     );
 
