@@ -21,16 +21,19 @@ class PromoCodesController extends AppController
     public function index()
     {
        $this->viewBuilder()->layout('index_layout');
-		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
-		$promoCode = $this->PromoCodes->newEntity();
+    	$promoCode = $this->PromoCodes->newEntity();
         if ($this->request->is(['patch', 'post', 'put'])) {
             $promoCode = $this->PromoCodes->patchEntity($promoCode, $this->request->getData());
-			$promoCode->jain_thela_admin_id=$jain_thela_admin_id;
+			$promoCode->jain_thela_admin_id=1;
 			$promoCode->status='Active';
+			
+		
+			
             if ($this->PromoCodes->save($promoCode)) {
                 $this->Flash->success(__('The promo code has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
+
             $this->Flash->error(__('The promo code could not be saved. Please, try again.'));
         }
         $promoCodes = $this->PromoCodes->find()->contain(['ItemCategories']);
@@ -45,7 +48,7 @@ class PromoCodesController extends AppController
      public function promoCodeReport()
     {
         $this->viewBuilder()->layout('index_layout');
-        $jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
+        $jain_thela_admin_id=1;
         $promoCode = $this->PromoCodes->newEntity();
         $promoCodes = $this->PromoCodes->find()->where(['PromoCodes.jain_thela_admin_id'=>$jain_thela_admin_id])->contain(['Items', 'ItemCategories']);
         if ($this->request->is('post')) {
@@ -53,10 +56,12 @@ class PromoCodesController extends AppController
             if(!empty($datas['code']))
             {
                 $promoCodes->where(['code'=>$datas['code']]);
+				$code = $datas['code'];
             }
              if(!empty($datas['item_id']))
             {
                 $promoCodes->where(['item_id'=>$datas['item_id']]);
+				$item_id = $datas['item_id'];
             }
            if(!empty($datas['From'])){
                 $from_date=date("Y-m-d",strtotime($datas['From']));
@@ -68,12 +73,12 @@ class PromoCodesController extends AppController
             }
         }
         
-        //pr($promoCodes->toArray());exit
+        //pr($promoCodes->toArray());exit;
         $itemCategories = $this->PromoCodes->ItemCategories->find('list', ['limit' => 200])->where(['jain_thela_admin_id'=>$jain_thela_admin_id]);
         $items = $this->PromoCodes->Items->find('list', ['limit' => 200]);
-        $this->set(compact('promoCode', 'promoCodes', 'itemCategories','items'));
+        $this->set(compact('promoCode', 'promoCodes', 'itemCategories','items','code','item_id','from_date','to_date'));
         $this->set('_serialize', ['promoCode']);
-        $this->set('_serialize', ['promoCodes']);
+        $this->set('_serialize', ['promoCodes','code','item_id','from_date','to_date']);
     }
 
 	public function ajaxStatusPromoCode($status,$status_id)
@@ -112,11 +117,13 @@ class PromoCodesController extends AppController
         $promoCode = $this->PromoCodes->newEntity();
         if ($this->request->is('post')) {
             $promoCode = $this->PromoCodes->patchEntity($promoCode, $this->request->getData());
+		
             if ($this->PromoCodes->save($promoCode)) {
                 $this->Flash->success(__('The promo code has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
+           
             $this->Flash->error(__('The promo code could not be saved. Please, try again.'));
         }
         $itemCategories = $this->PromoCodes->ItemCategories->find('list', ['limit' => 200]);

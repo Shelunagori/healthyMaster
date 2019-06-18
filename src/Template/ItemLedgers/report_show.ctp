@@ -57,9 +57,8 @@
 										<td>
 											<?= $itemLedger->item_variation->quantity_variation.' '.$itemLedger->item_variation->unit->shortname ?>
 										</td>
-										
 										<td>
-											<?= number_format($warehouse_stock, 2).' '.$itemLedger->item_variation->unit->shortname ?>
+											<?= number_format($warehouse_stock, 2).' Packet'; ?>
 										</td>
 									</tr>
 								<?php } 

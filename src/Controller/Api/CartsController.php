@@ -14,10 +14,10 @@ class CartsController extends AppController
 		$item_variation_id=$this->request->data('item_variation_id');
 			
 		$this->loadModel('Wishlists');
-		$exists = $this->WishLists->exists(['id'=>$id]);
+		$exists = $this->Wishlists->exists(['id'=>$id]);
 		if($exists==1){
-			$WishListItems = $this->WishLists->get($id);
-			$this->WishLists->delete($WishListItems);
+			$WishListItems = $this->Wishlists->get($id);
+			$this->Wishlists->delete($WishListItems);
 			$success = true;
 			$message = 'removed from wish list';
 			$this->plusAddToCart();
@@ -79,7 +79,7 @@ class CartsController extends AppController
 		$cart_count = $this->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();
 
 		$status=true;
-		$error="";
+		$error="Item successfully added";
         $this->set(compact('status', 'error','carts','cart_count'));
         $this->set('_serialize', ['status', 'error', 'carts','cart_count']);
     }
@@ -150,7 +150,7 @@ class CartsController extends AppController
 		}
 		
 		$status=true;
-		$error="";
+		$error="Item successfully removed";
         $this->set(compact('status', 'error','carts','cart_count'));
         $this->set('_serialize', ['status', 'error', 'carts','cart_count']);
     }
@@ -163,6 +163,7 @@ class CartsController extends AppController
 		$promocode=$this->request->data('promocode');
 		$redeem_points=$this->request->data('redeem_points');
 		$tag=$this->request->data('tag');
+		$pincode=$this->request->data('pincode');
 		$isPointsRedeem = false;
 		if($tag=='add'){
 			$items = $this->Carts->Items->get($item_id);
@@ -188,7 +189,7 @@ class CartsController extends AppController
 							->execute();
 				}else{
 					
-			foreach($fetchs as $fetch){
+						foreach($fetchs as $fetch){
 							$update_id=$fetch->id;
 							$exist_quantity=$fetch->quantity;
 							$exist_count=$fetch->cart_count;
@@ -399,7 +400,7 @@ class CartsController extends AppController
 			
 			$delivery_charges = '0';
 			$this->loadModel('DeliveryCharges');
-			$delivery_charges=$this->DeliveryCharges->find()->order(['id' =>'DESC'])->first();
+			$delivery_charges=$this->DeliveryCharges->find()->where(['pincode' => $pincode])->order(['id' =>'DESC'])->first();
 			
 			if($isFreeShipping == 'Yes')
 			{
@@ -407,7 +408,7 @@ class CartsController extends AppController
 				$isPromoApplied = true;
 			}
 			
-			else if($grand_total < $delivery_charges->amount)
+			else if(!empty($delivery_charges) && $grand_total < $delivery_charges->amount)
 			{
 				$grand_total = $grand_total + $delivery_charges->charge;
 				$delivery_charges = $delivery_charges->charge;
@@ -478,7 +479,7 @@ class CartsController extends AppController
 		else{
 				
 			$status=true;
-			$error='';
+			$error='Cart data found successfully';
 			$this->set(compact('status', 'error','address_available','grand_total','carts','delivery_charges','subtotal','discount_amount','isPromoApplied','totalPoints','remaningPoints','redeem_points','isPointsRedeem'));
 			$this->set('_serialize', ['status', 'error','isPointsRedeem','totalPoints','redeem_points','remaningPoints','subtotal','delivery_charges','discount_amount','isPromoApplied','grand_total','address_available','carts']);
 		}
@@ -489,6 +490,7 @@ class CartsController extends AppController
 		$customer_id=$this->request->query('customer_id');
 		$promocode=$this->request->query('promocode');
 		$redeem_points=$this->request->query('redeem_points');
+		$pincode=$this->request->query('pincode');
 		$isPointsRedeem = false;
 /* 		$carts=$this->Carts->find()
 			->where(['customer_id' => $customer_id])
@@ -631,14 +633,16 @@ class CartsController extends AppController
 
 		$delivery_charges = '0';
 		$this->loadModel('DeliveryCharges');
-		$delivery_charges=$this->DeliveryCharges->find()->order(['id' =>'DESC'])->first();
+		$delivery_charges=$this->DeliveryCharges->find()->where(['pincode' => $pincode])->order(['id' =>'DESC'])->first();
+		
 		if($isFreeShipping == 'Yes')
 		{
 			$delivery_charges = 'Free';
 			$isPromoApplied = true;
 		}
-		else if($grand_total < $delivery_charges->amount)
+		else if(!empty($delivery_charges) && $grand_total < $delivery_charges->amount)
 		{
+			
 			$grand_total = $grand_total + $delivery_charges->charge;
 			$delivery_charges = $delivery_charges->charge;
 			$delivery_charges = round($delivery_charges);
@@ -714,7 +718,7 @@ class CartsController extends AppController
 		}
 		else{
 			$status=true;
-			$error='';
+			$error='Cart reviewed successfully';
 			$this->set(compact('status', 'error','totalPoints','temp_order_no','grand_total','totalItems','carts','delivery_charges','subtotal','discount_amount','isPromoApplied','customer_addresses','remaningPoints','redeem_points','isPointsRedeem'));
 			$this->set('_serialize', ['status', 'error','temp_order_no','isPointsRedeem','totalPoints','redeem_points','remaningPoints','subtotal','delivery_charges','discount_amount','isPromoApplied','grand_total','totalItems','carts','customer_addresses']);
 		}

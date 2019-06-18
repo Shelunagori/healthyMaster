@@ -88,55 +88,6 @@
 							</div>
 						</div>
 					</div>
-					
-					<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-						<div class="dashboard-stat red-intense">
-							<div class="caption">
-								<i class="icon-bar-chart font-green-sharp hide"></i>
-								<?php echo $this->Html->link('<i class="m-icon-swapright m-icon-white"></i><b> Bulk Order</b>','/Orders/index?
-									status=&type=bulkorder&From='.$from_date.'&To='.$to_date,array('escape'=>false,'class'=>'more')); ?>
-							</div>
-							
-							<div class="portlet-body">
-								<div class="desc" >
-									<table class="table table-condensed" style="color:white;">
-											<thead>
-											<tr>
-												<th></th>
-												<td>Order</td>
-												<td>Amount</td>
-											</tr>										
-											</thead>
-											<tbody>
-											<tr>
-												<td><b>In Process</b></td>
-												<td><?php echo $bulkOrderInProcess->count;?></td>
-												<td><?php if($bulkOrderInProcess->total_amount) { echo '<i class="fa fa-rupee"> </i>' .' '.  $bulkOrderInProcess->total_amount; } else { echo  '0';}?></td>
-											</tr>
-											<tr>
-												<td><b>Delivered</b></td>
-												<td><?php echo $bulkOrderdelivered->count; ?></td>
-												<td><?php if($bulkOrderdelivered->total_amount) { echo '<i class="fa fa-rupee"> </i>' .' '.  $bulkOrderdelivered->total_amount; } else { echo  '0';}?></td>
-											</tr>
-											<tr>
-												<td><b>Cancel</b></td>
-												<td><?php echo $cancelBulkOrder->count;?></td>
-												<td><?php if($cancelBulkOrder->total_amount) { echo '<i class="fa fa-rupee"> </i>' .' '.  $cancelBulkOrder->total_amount; } else { echo  '0';}?></td>
-											</tr>
-											</tbody>
-											<tfoot>
-											<tr>
-												<td><b>Total</b></td>
-												<td><?php echo $totalBulkOrder->count;?></td>
-												<td><?php if($totalBulkOrder->total_amount) { echo '<i class="fa fa-rupee"> </i>' .' '.  $totalBulkOrder->total_amount; } else { echo  '0';}?></td>
-											</tr>
-											</tfoot>
-									</table>	
-								</div>
-							</div>
-						</div>
-					</div>
-						
 					<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
 						<div class="dashboard-stat purple-soft">
 							<div class="caption">
@@ -176,64 +127,7 @@
 							</div>
 						</div>
 					</div>
-					
-					
-					<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-						<div class="dashboard-stat green-haze">
-							<div class="caption">
-								<i class="icon-bar-chart font-green-sharp hide"></i>
-								<?php echo $this->Html->link('<i class="m-icon-swapright m-icon-white"></i> <b>WalkinSales / Next Day Order</b>','/WalkinSales/index?
-								status=yes&From='.$from_date.'&To='.$to_date,array('escape'=>false,'class'=>'more')); ?>
-							</div>
-							
-							<div class="portlet-body" >
-								<div class="desc" >
-									<table class="table table-condensed" style="color:white;">
-											<thead>
-											<tr>
-												<th></th>
-												<td>Order</td>
-												<td>Amount</td>
-											</tr>										
-											</thead>
-											<tbody>
-											<tr>
-												<td><b> Total Walkin Sales</b></td>
-												<td><?php echo $walkinsales->count;?></td>
-												<td><?php if($walkinsales->total_amount) { echo '<i class="fa fa-rupee"> </i>' .' '.  $walkinsales->total_amount; } else { echo  '0';}?></td>
-											</tr>
-											
-											<tr>
-												<td><b>Next Day Online Order</b></td>
-												<td><?php echo $inProcessnextdayOrder->count;?></td>
-												<td><?php if($inProcessnextdayOrder->total_amount) { echo '<i class="fa fa-rupee"> </i>' .' '.  $inProcessnextdayOrder->total_amount; } else { echo  '0';}?></td>
-											
-											</tr>
-											<tr>
-												<td><b>Next Day Bulk Order</b></td>
-												<td><?php echo $inProcessnextdayBulk->count;?></td>
-												<td><?php if($inProcessnextdayBulk->total_amount) { echo '<i class="fa fa-rupee"> </i>' .' '.  $inProcessnextdayBulk->total_amount; } else { echo  '0';}?></td>
-											
-											</tr>
-											<tr >
-												<td ><b></b></td>
-												<td></td>
-												<td><br>
-											</td>
-											
-											</tr>
-											
-											</tbody>
-									</table>	
-								</div>
-							</div>
-						</div>
-					</div>
 				</div>
-				
 			</div>
-		</div>
-		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-			<a href="http://app.jainthela.in/orders/firstOrderDiscount" class="btn green btn-md pull-left" >Add 100 Rs Cashback to Customer Wallet</a>
 		</div>
 </div>

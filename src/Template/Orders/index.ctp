@@ -119,7 +119,7 @@
 							<th scope="col">Order Type</th>
 							<th scope="col">Order Date</th>
 							<th scope="col">Delivery Date</th>
-							<th scope="col">Delivery Time</th>
+							
 							<th scope="col">Status</th>
 							<th scope="col" class="actions"><?= __('Actions') ?></th>
 							<th scope="col">Edit</th>
@@ -163,7 +163,6 @@
 							<td><?= h($order->order_type) ?></td>
 							<td><?php $q=explode(' ',$order->order_date); ?> <span style="font-size:11px;"><?php echo $q[0] ?></span></td>
 							<td><span style="font-size:11px;"><?= h($date_show) ?></span></td>
-							<td><span style="font-size:11px;"><?= h($order->delivery_time) ?></span></td>
 							<td><?= h($status) ?></td>
 							
 							<td class="actions">

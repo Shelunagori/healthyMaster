@@ -60,14 +60,14 @@ class AppNotificationsController extends AppController
 		if($page=="viewcart")
 		{
 		
-		$deepLinks = $this->AppNotifications->DeepLinks->find()->where(['id'=>5])->first();}
+			$deepLinks = $this->AppNotifications->DeepLinks->find()->where(['id'=>5])->first();}
 		if($page=="specialoffers")
 		{
-		
-		$deepLinks = $this->AppNotifications->DeepLinks->find()->where(['id'=>6])->first();}
+			$deepLinks = $this->AppNotifications->DeepLinks->find()->where(['id'=>6])->first();
+		}
 		
         if ($this->request->is('post'))
-			{
+		{
 				$appNotification = $this->AppNotifications->patchEntity($appNotification, $this->request->data);
 				$file = $this->request->data['image'];
 				$file_name=$file['name'];
@@ -77,7 +77,7 @@ class AppNotificationsController extends AppController
 				$ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
 				$arr_ext = array('jpg', 'jpeg', 'png'); //set allowed extensions
 				$setNewFileName = uniqid();
-				$appNotification->image = 'http://app.jainthela.in'.$this->request->webroot.'Notify_images/'.$setNewFileName . '.' .$ext;
+				$appNotification->image = 'http://healthymaster.in'.$this->request->webroot.'Notify_images/'.$setNewFileName . '.' .$ext;
 				
 				if (in_array($ext, $arr_ext))
 				{
@@ -87,14 +87,17 @@ class AppNotificationsController extends AppController
 			}
 
 			else{
-					$appNotification->image = 'http://app.jainthela.in'.$this->request->webroot.'Notify_images/jainthela.jpg';
+					$appNotification->image = 'http://healthymaster.in'.$this->request->webroot.'Notify_images/healthy.png';
 			}
 			
 
 			$appNotification->app_link = $deepLinks->link_url;
 			$appNotification->screen_type = $deepLinks->link_name; 
+			
+			//pr($appNotification);exit;
+			
 			if ($push_data=$this->AppNotifications->save($appNotification))
-			  {
+			{
 				  if($page=="viewcart")
 				  {
 				  $this->loadModel('Carts');
@@ -139,7 +142,7 @@ class AppNotificationsController extends AppController
 			else {
 				$this->Flash->error(__('The app notification could not be saved. Please, try again.'));
 				}
-			}
+		}
 			$this->set('page', $page);
 		$this->set('appNotification', $appNotification);
         $this->set('_serialize', ['appNotification']);
@@ -156,7 +159,7 @@ class AppNotificationsController extends AppController
 		$customers = $this->AppNotifications->Customers->find();
 		$this->loadModel('Items');
 		$item_fetchs=$this->Items->find()->where(['freeze'=>0,'ready_to_sale'=>'Yes']);
-		$path = 'http://app.jainthela.in'.$this->request->webroot.'img/item_images/';
+		$path = 'http://healthymaster.in/'.$this->request->webroot.'img/item_images/';
 		foreach($item_fetchs as $item_fetch){
 			$item_name=$item_fetch->name;
 			$alias_name=$item_fetch->alias_name;
@@ -215,7 +218,7 @@ class AppNotificationsController extends AppController
 		$image=$appNotifications_data->image;
 		if($screen_type=='Product Description'){
 
-			$created_link=$appNotifications_data->app_link.'?item_id='.$item_id;
+			$created_link=$appNotifications_data->app_link.'?id='.$item_id;
 			
 		}else{
 			$created_link=$appNotifications_data->app_link;
@@ -231,7 +234,7 @@ class AppNotificationsController extends AppController
 					$msg = array
 							(
 							'message'     =>$appNotifications_data->message,
-							'image'     =>'',
+							'image'     =>$appNotifications_data->image,
 							'link'    => $created_link,
 							'notification_id'    => $item_id,
 							);

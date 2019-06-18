@@ -42,11 +42,11 @@ class JainCashPointsController extends AppController
 		
 		$referral_array = $this->JainCashPoints->Customers->find()->where(['Customers.id'=>$customer_id])->first();
 		$referral_code=$referral_array->referral_code;
-		
+		$Shared_description = "Hello, i am inviting you to join Healthy Master, Order a wide assortment of dry fruits at your door step in just one click use my referral link.";
 		$status=true;
-		$error="";
-        $this->set(compact('status', 'error', 'redeemPoints','cart_count','referral_code','referral_image'));
-        $this->set('_serialize', ['status', 'error', 'redeemPoints','cart_count','referral_code','referral_image']);
+		$error="Data found successfully";
+        $this->set(compact('status', 'error', 'redeemPoints','cart_count','referral_code','referral_image','Shared_description'));
+        $this->set('_serialize', ['status', 'error', 'redeemPoints','cart_count','referral_code','referral_image','Shared_description']);
     }
 	
 	public function referralUpdate()
@@ -156,7 +156,7 @@ class JainCashPointsController extends AppController
 		else
 		{
 			$status=true;
-			$error="";
+			$error="Data found successfully";
 			$list = $jain_cash_details;
 			$this->set(compact('status', 'error','list', 'redeemPoints'));
 			$this->set('_serialize', ['status', 'error','redeemPoints','list']);

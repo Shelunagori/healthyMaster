@@ -45,6 +45,7 @@ class CustomersController extends AppController
 					$customerDetails->user_img = $img_name;
 					$this->Customers->save($customerDetails);
 					$status=true;
+					$error="Customer registration successfully.";
 				}else{
 					
 					$customerDetails = $this->Customers->find()->where(['mobile'=>$mobile_no,'status'=>'incompleted'])->first();
@@ -66,6 +67,7 @@ class CustomersController extends AppController
 						$customerDetails->user_img = $img_name;
 						$this->Customers->save($customerDetails);
 						$status=true;	
+						$error="Customer registration successfully.";
 					}
 					else{
 							$customer = $this->Customers->newEntity();
@@ -132,7 +134,7 @@ class CustomersController extends AppController
 				    $customerDetails->first_time_win_status='No';
 				    $customerDetails->new_scheme='Yes';
 				    $customerDetails->created_on=$today;
-					$customerDetails->notification_key='AAAAXmNqxY4:APA91bG0X6RHVhwJKXUQGNSSCas44hruFdR6_CFd6WHPwx9abUr-WsrfEzsFInJawElgrp24QzaE4ksfmXu6kmIL6JG3yP487fierMys5byv-I1agRtMPIoSqdgCZf8R0iqsnds-u4CU';
+					$customerDetails->notification_key='AAAA_7MR4qc:APA91bEB4PE2YzC9zlsb3qnMhTn7WzPqJhnHxqjr_--YdowERJkq2hVCCQXAMEQoHvIo22ymzuYGCJLpe1jJUDlgcPo9eCvoF4jGV92i1ldpTrYHSF7jc7QU-W1B5dhTDA1PpD9DENy7';
 					$customerDetails->referral_code=$customerDetails->id;
 					$customerDetails->user_img = $img_name;
 					$this->Customers->save($customerDetails);
@@ -280,7 +282,7 @@ class CustomersController extends AppController
 		}
 		
 		$status=true;
-		$error="";
+		$error="Profile Updated Successfully";
         $this->set(compact('status', 'error','jain_cash_points','wallet_balance','profiles'));
         $this->set('_serialize', ['status', 'error','jain_cash_points','wallet_balance','profiles']);
 		}
@@ -366,7 +368,7 @@ class CustomersController extends AppController
 		}
 		}
 		$status=true;
-		$error="";
+		$error="Data found successfully";
         $this->set(compact('status', 'error','jain_cash_points','wallet_balance','profiles'));
         $this->set('_serialize', ['status', 'error','jain_cash_points','wallet_balance','profiles']);
     }

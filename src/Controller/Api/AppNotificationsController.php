@@ -12,7 +12,7 @@ class AppNotificationsController extends AppController
 		if(!empty($list->toArray()))
 		{
 			$success = true;
-			$message = '';			
+			$message = 'List found successfully';			
 		}else{
 			$success = false;
 			$message = 'No Data Found';			

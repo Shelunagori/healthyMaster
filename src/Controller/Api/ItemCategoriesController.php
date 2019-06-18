@@ -18,7 +18,7 @@ class ItemCategoriesController extends AppController
 		
 		array_push($dynamic,$Category);
 		
-	    $banners = $this->ItemCategories->Banners->find('All')->where(['link_name'=>'offer', 'Banners.status'=>'Active']);
+	    $banners = $this->ItemCategories->Banners->find('All')->where(['Banners.status'=>'Active']);
 		$banners->select(['image_url' => $banners->func()->concat(['http://healthymaster.in'.$this->request->webroot.'banners/','image' => 'identifier' ])])->autoFields(true);
 
 		$query=$this->ItemCategories->Items->ItemLedgers->find();
@@ -89,7 +89,7 @@ class ItemCategoriesController extends AppController
 				$cart_count = $this->ItemCategories->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();						
 
 		$status=true;
-		$error="";
+		$error="Data found successfully";
         $this->set(compact('status', 'error', 'dynamic', 'banners','cart_count'));
         $this->set('_serialize', ['status', 'error','cart_count','banners','dynamic']);
     }
@@ -102,7 +102,7 @@ class ItemCategoriesController extends AppController
 		
 		$cart_count = $this->ItemCategories->Carts->find('All')->where(['Carts.customer_id'=>$customer_id])->count();	
 		$status=true;
-		$error="";
+		$error="Category List Successfully";
         $this->set(compact('status', 'error', 'categoryList','cart_count'));
         $this->set('_serialize', ['status', 'error', 'categoryList','cart_count']);		
 	}

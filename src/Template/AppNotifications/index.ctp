@@ -11,7 +11,7 @@
 						</p>
 					</div>
 				</div>','/AppNotifications/home?page=home',['escape'=>false]) ?>
-				
+			<!--	
 				<?php echo $this->Html->link('<div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
 					<div class="dashboard-stat" style="background-color:#888888;height:40px">
 						
@@ -24,7 +24,7 @@
 				</div>','/AppNotifications/home?page=bulkbooking',['escape'=>false]) ?>
 				
 				
-				<!--<?php echo $this->Html->link('
+				<?php echo $this->Html->link('
 				<div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
 					<div class="dashboard-stat  red-intense" style="height:40px">
 						
@@ -35,7 +35,7 @@
 					</div>
 				</div>
 				</a>
-				</div>','/AppNotifications/home?page=referfriend',['escape'=>false]) ?>-->
+				</div>','/AppNotifications/home?page=referfriend',['escape'=>false]) ?>
 				
 				
 				<?php echo $this->Html->link('
@@ -74,7 +74,7 @@
 						</p>
 					</div>
 				</div>	','/AppNotifications/home?page=specialoffers',['escape'=>false]) ?>
-				
+				-->
 				<?php echo $this->Html->link('
 				<div class="col-lg-2 col-md-2 col-sm-3 col-xs-6">
 					<div class="dashboard-stat red-intense" style="height:40px">

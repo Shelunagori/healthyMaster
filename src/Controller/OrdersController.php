@@ -643,7 +643,7 @@ class OrdersController extends AppController
 					'message'     => 'Thank you, Your order has been successfully placed.',
 					'image'     => '',
 					'button_text'    => 'Track Your Order',
-					'link' => 'jainthela://track_order?id='.$send_data,
+					'link' => 'jainthela://order?id='.$send_data,
 					'notification_id'    => 1,
 					);
 
@@ -859,7 +859,7 @@ class OrdersController extends AppController
 					'message'     => 'Thank you, Your order has been successfully placed.',
 					'image'     => '',
 					'button_text'    => 'Track Your Order',
-					'link' => 'jainthela://track_order?id='.$send_data,
+					'link' => 'jainthela://order?id='.$send_data,
 					'notification_id'    => 1,
 					);
 					
@@ -968,7 +968,7 @@ class OrdersController extends AppController
 		
         $bulk_Details = $this->BulkBookingLeads->find()->where(['id' => $bulkorder_id])->toArray();
 		$warehouses = $this->Orders->Warehouses->find('list')->where(['jain_thela_admin_id' => $jain_thela_admin_id]);
-		$item = $this->Orders->items->find('list');
+		$item = $this->Orders->items->find('list')->where(['Items.freeze'=>0]);
         $this->set(compact('order', 'customers', 'items', 'order_type', 'bulk_Details', 'bulkorder_id','deliverytime_fetchs','tax', 'warehouses','item'));
         $this->set('_serialize', ['order', 'warehouses']);
     }
