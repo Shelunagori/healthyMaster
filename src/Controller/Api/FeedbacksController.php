@@ -3,9 +3,9 @@ namespace App\Controller\Api;
 use App\Controller\Api\AppController;
 class FeedbacksController extends AppController
 {
-    public function FeedbackForm()
+    public function feedbackform()
     {
-		$jain_thela_admin_id=$this->request->data('jain_thela_admin_id');
+		$jain_thela_admin_id=1;
 		$customer_id=$this->request->data('customer_id');
 		$name=$this->request->data('name');
 		$mobile=$this->request->data('mobile');
