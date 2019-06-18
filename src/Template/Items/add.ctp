@@ -45,23 +45,9 @@
 						<input type="hidden" name="is_virtual" value="real">
 					</div>
 				</div>
-					<!-- <div class="col-md-3">
-								<div class="form-group">
-									 <div class="radio-list">
-										<div class="radio-inline" style="padding-left: 0px;">
-											<?php echo $this->Form->radio(
-											'is_virtual',
-											[
-												['value' => 'no', 'text' => 'Real','class' => 'radio-task virt','checked' => 'checked'],
-												['value' => 'yes', 'text' => 'Virtual','class' => 'radio-task virt']
-											]
-											); ?>
-										</div>
-                                    </div>
-								</div>
-					</div> -->	
+					
 				<div class="row">
-                        <div class="col-md-12" style="height: 200px; overflow-y: scroll; margin-top: 10px;">
+                        <div class="col-md-12" style="margin-top: 10px;">
                               <table class="table table-striped table-bordered">
                                   <thead>
                                       <tr>
@@ -98,14 +84,14 @@
                     	<?php echo $this->Form->control('item_variations.0.minimum_stock',['class'=>'form-control minimum_stock','placeholder'=>'Minimum Stock','label'=>false]); ?>
                     </td>
                     <td style="vertical-align: bottom;"> <?php echo $this->Form->control('item_variations.0.minimum_quantity_purchase',['class'=>'form-control minimum_quantity_purchase  order_limit','placeholder'=>'Maximum Order Limit', 'label'=>false]); ?></td>
-                    <td><div class="myRadio" style="padding-right: 5px;">
-									<!-- <?php echo $this->Form->radio(
+                    <td><div class="radio-inline" style="padding-right: 5px;">
+									<?php echo $this->Form->radio(
 									'item_variations.0.ready_to_sale',
 									[
 										['value' => 'no', 'text' => 'Yes','class' => 'radio-task ready'],
 										['value' => 'yes', 'text' => 'No','class' => 'radio-task ready','checked' => 'checked']
 									]
-									); ?> -->
+									); ?>
 								</div></td>
                     <td style="vertical-align: bottom;"> <button type="button" id="plus" class="btn btn-sm green"><i class="fa fa-plus"></i></button>
                       <button type="button" id="minus" class="btn btn-sm red"><i class="fa fa-minus"></i></button></td>
@@ -118,9 +104,9 @@
 $(document).ready(function() {
 	add_row();
 
-	 var radio = "<label class='radio-inline'><input type='radio' name='crate' class='quantities' value='Crate' checked>CRT </label><label class='radio-inline'><input type='radio' name='box' class='quantities' value='Box >Box </label>";
+	 // var radio = "<label class='radio-inline'><input type='radio' name='crate' class='quantities' value='Crate' checked>CRT </label><label class='radio-inline'><input type='radio' name='box' class='quantities' value='Box >Box </label>";
 
-    $('.myRadio').html(radio);
+  //   $('.myRadio').html(radio);
 
 	 $(document).on('click','#plus',function(){
            add_row();

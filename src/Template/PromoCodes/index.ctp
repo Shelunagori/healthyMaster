@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="col-md-5 col-sm-5">
+	<div class="col-md-12">
 		<div class="portlet light bordered">
 			<div class="portlet-title">
 				<div class="caption">
@@ -11,156 +11,131 @@
 			</div>
 			<div class="portlet-body">
 				<?= $this->Form->create($promoCode,['id'=>'form_sample_3']) ?>
-				<div class="row">
-					<div class="col-md-10">
-						<label class=" control-label">Promo Code Type <span class="required" aria-required="true">*</span></label>
-						<select name="promo_code_type" class="form-control select2me" required>
-							<option value=""> Select Promo Code Type </option>
-							<option value="Item Wise"> Item Wise </option>
-							<option value="Category Wise"> Category Wise </option>
-							<option value="Free Shipping"> Free Shipping </option>
-							<option value="On Cart Value"> On Cart Value </option>
-						</select>
+			<div class="row">
+				<div class="col-md-3">
+					<label class=" control-label">Promo Code Type <span class="required" aria-required="true">*</span></label>
+					<select name="promo_code_type" class="select2me" required>
+						<option value=""> Select Promo Code Type </option>
+						<option value="Item Wise"> Item Wise </option>
+						<option value="Category Wise"> Category Wise </option>
+						<option value="Free Shipping"> Free Shipping </option>
+						<option value="On Cart Value"> On Cart Value </option>
+					</select>
+				</div>
+				<div class="col-md-3">
+					<label class=" control-label">Promo Code Name <span class="required" aria-required="true">*</span></label>
+					<?php echo $this->Form->control('code',['placeholder'=>'Promo Code Name','class'=>'form-control input-sm','label'=>false]); ?>
+				</div>
+				<div class="col-md-3">
+					<label class=" control-label">Title<span class="required" aria-required="true">*</span></label>
+					<?php echo $this->Form->control('title',['placeholder'=>'Title','class'=>'form-control input-sm','label'=>false]); ?>
+				</div>
+				<div class="col-md-3">
+					<div class="radio-list">
+						<label>Type</label>
+						<div class="radio-inline form-control input-sm" style="padding-right: 1px;">
+							<input type="hidden" name="cash_back_flag" value=""><label for="cash-back-flag-no"><input type="radio" name="amount_type" value="percent" class="radio-task" checked="checked">Percent</label><label for="cash-back-flag-yes"><input type="radio" name="amount_type" value="amount" class="radio-task" checked="checked" >Amount</label>
+						</div>
 					</div>
 				</div>
-			</br>
-				<div class="row">
-					<div class="col-md-10">
-						<label class=" control-label">Promo Code Name <span class="required" aria-required="true">*</span></label>
-						<?php echo $this->Form->control('code',['placeholder'=>'Promo Code Name','class'=>'form-control input-sm','label'=>false]); ?>
-					</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<label class=" control-label">Discount</label>
+					<?php echo $this->Form->control('discount_per',['placeholder'=>'Discount','class'=>'form-control input-sm','label'=>false]); ?>
 				</div>
-			</br>
-				<div class="row">
-					<div class="col-md-10">
-						<label class=" control-label">Title<span class="required" aria-required="true">*</span></label>
-						<?php echo $this->Form->control('title',['placeholder'=>'Title','class'=>'form-control input-sm','label'=>false]); ?>
-					</div>
+				<div class="col-md-3">
+					<?php echo $this->Form->control('item_category_id', ['empty'=>'-- select --','options' => $itemCategories,'class'=>'form-control input-sm select select2me select2']); ?>
 				</div>
-			</br>
-				<div class="row">
-					<div class="col-md-10">
-						<div class="radio-list">
-							<label>Type</label>
-								<div class="radio-inline form-control input-sm" style="padding-right: 1px;">
-									<input type="hidden" name="cash_back_flag" value=""><label for="cash-back-flag-no"><input type="radio" name="amount_type" value="percent" class="radio-task" checked="checked">Percent</label><label for="cash-back-flag-yes"><input type="radio" name="amount_type" value="amount" class="radio-task" checked="checked" >Amount</label>								</div>
-							</div>
-					</div>
-				</div>
-			</br>
-				<div class="row">
-					<div class="col-md-10">
-						<label class=" control-label">Discount</label>
-						<?php echo $this->Form->control('discount_per',['placeholder'=>'Discount','class'=>'form-control input-sm','label'=>false]); ?>
-					</div>
-				</div>
-			</br>
-				<div class="row">
-					<div class="col-md-10">
-						<?php echo $this->Form->control('item_category_id', ['empty'=>'-- select --','options' => $itemCategories,'class'=>'form-control input-sm select select2me select2']); ?>
-					</div>
-				</div>
-			</br>
-				<div class="row">
-					<div class="col-md-10">
-						<label class=" control-label">Item<span class="required" aria-required="true">*</span></label>
-						<?php echo $this->Form->control('item_id',['empty'=>'--Select Item--','options' => $items,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','label'=>false]); ?>
+				<div class="col-md-3">
+					<label class=" control-label">Item<span class="required" aria-required="true">*</span></label>
+					<?php echo $this->Form->control('item_id',['empty'=>'--Select Item--','options' => $items,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','label'=>false]); ?>
 
-					</div>
 				</div>
-			</br>
-				<div class="row">
-					<div class="col-md-10">
-						<?php echo $this->Form->input('is_freeship', array('type'=>'checkbox', 'label'=>'Is Free Ship','id'=>'freeship'));
-						?>
-					</div>
+				<div class="col-md-3">
+					<?php echo $this->Form->input('is_freeship', array('type'=>'checkbox', 'label'=>'Is Free Ship','id'=>'freeship'));
+					?>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<label class=" control-label">Cart Value <span class="required" aria-required="true">*</span></label>
+					<?php echo $this->Form->control('cart_value',['placeholder'=>'Cart Value','class'=>'form-control input-sm','label'=>false]); ?>
+				</div>
+				
+				<div class="col-md-4">
+					<label class=" control-label">Valid From</label>
+					<?php echo $this->Form->control('valid_from',['readonly','placeholder'=>'Valid From','class'=>'form-control date-time-range-picker select2','label'=>false]); ?>
+				</div>
+				<div class="col-md-4">
+					<label class=" control-label">Valid To</label>
+					
+					<?php echo $this->Form->control('valid_to',['readonly','placeholder'=>'Valid From','class'=>'form-control date-time-range-picker select2','label'=>false]); ?>
 					
 				</div>
-			</br>
-				<div class="row">
-					<div class="col-md-10">
-						<label class=" control-label">Cart Value <span class="required" aria-required="true">*</span></label>
-						<?php echo $this->Form->control('cart_value',['placeholder'=>'Cart Value','class'=>'form-control input-sm','label'=>false]); ?>
-					</div>
+			</div>
+			<div class="row">
+				<div class="col-md-10">
+					<label class=" control-label">Description<span class="required" aria-required="true">*</span></label>
+					<textarea name="description" class="form-control"></textarea>
 				</div>
-			</br>
-				<div class="row">
-					<div class="col-md-10">
-						<label class=" control-label">Description<span class="required" aria-required="true">*</span></label>
-						<textarea name="description" class="form-control"></textarea>
-					</div>
-				</div>
-			</br>
-				<div class="row">
-					<div class="col-md-10">
-						<label class=" control-label">Valid From</label>
-						<?php echo $this->Form->control('valid_from',['readonly','placeholder'=>'Valid From','class'=>'form-control input-sm date-time-range-picker select2','label'=>false]); ?>
-					</div>
-				</div>
-			</br>
-				<div class="row">
-					<div class="col-md-10">
-						<label class=" control-label">Valid To</label>
-						
-						<?php echo $this->Form->control('valid_to',['readonly','placeholder'=>'Valid From','class'=>'form-control input-sm date-time-range-picker select2','label'=>false]); ?>
-						
-					</div>
-				</div>
-				<br/>
+			</div>
 				<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']) . __(' Submit'),['class'=>'btn btn-success']); ?>
 				<?= $this->Form->end() ?>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-7 col-sm-7">
-		<div class="portlet light bordered">
-			<div class="portlet-title">
-				<div class="caption">
-					<i class=" fa fa-gift"></i>
-					<span class="caption-subject">Codes</span>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="portlet light bordered">
+				<div class="portlet-title">
+					<div class="caption">
+						<i class=" fa fa-gift"></i>
+						<span class="caption-subject">Codes</span>
+					</div>
+					<div class="actions">
+						<input type="text" class="form-control input-sm pull-right" placeholder="Search..." id="search3"  style="width: 200px;">
+					</div>
 				</div>
-				<div class="actions">
-					<input type="text" class="form-control input-sm pull-right" placeholder="Search..." id="search3"  style="width: 200px;">
-				</div>
-			</div>
-			<div class="portlet-body">
-				<div style="overflow-y: scroll;height: 400px;">
-					<table class="table table-condensed table-hover table-bordered" id="main_tble">
-					<thead>
-						<tr>
-							<th>Sr</th>
-							<th>Code Name</th>
-							<th>Discount</th>
-							<th>Item Category</th>
-							<th>Valid From</th>
-							<th>Valid To</th>
-							<th>Status</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php
-						$i=0;
-						foreach ($promoCodes as $promoCode):
-						$i++;
+				<div class="portlet-body">
+					<div style="overflow-y: scroll;height: 400px;">
+						<table class="table table-condensed table-hover table-bordered" id="main_tble">
+						<thead>
+							<tr>
+								<th>Sr</th>
+								<th>Code Name</th>
+								<th>Discount</th>
+								<th>Item Category</th>
+								<th>Valid From</th>
+								<th>Valid To</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+							$i=0;
+							foreach ($promoCodes as $promoCode):
+							$i++;
 
-						?>
-						<tr>
-							<td><?= $i ?></td>
-							<td><?= h(@$promoCode->code) ?></td>
-							<td><?= h(@$promoCode->discount_per) ?></td>
-							<td><?= h(@$promoCode->item_category->name) ?></td>
-							<td><?= h(@$promoCode->valid_from) ?>
-							<td><?= h(@$promoCode->valid_to) ?>
-							<span id="status_id" style="display:none;"><?php echo $promoCode->id; ?></span>
-							</td>
-							<td>
-							<?php echo  $this->Form->control('status',['class'=>'form-control input-sm input-small status','options'=>['Active'=>'Active','Deactive'=>'Deactive'], 'value'=>$promoCode->status,'label'=>false]); ?>
-							</td>
-							
-						</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
+							?>
+							<tr>
+								<td><?= $i ?></td>
+								<td><?= h(@$promoCode->code) ?></td>
+								<td><?= h(@$promoCode->discount_per) ?></td>
+								<td><?= h(@$promoCode->item_category->name) ?></td>
+								<td><?= h(@$promoCode->valid_from) ?>
+								<td><?= h(@$promoCode->valid_to) ?>
+								<span id="status_id" style="display:none;"><?php echo $promoCode->id; ?></span>
+								</td>
+								<td>
+								<?php echo  $this->Form->control('status',['class'=>'form-control input-sm input-small status','options'=>['Active'=>'Active','Deactive'=>'Deactive'], 'value'=>$promoCode->status,'label'=>false]); ?>
+								</td>
+								
+							</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+					</div>
 				</div>
 			</div>
 		</div>

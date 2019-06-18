@@ -44,6 +44,16 @@ class OrdersController extends AppController
         exit;  
     }
 
+    public function usedPromoCodeReport()
+    {
+    	$this->viewBuilder()->layout('index_layout');
+    	$used_promo=$this->Orders->find()
+    	->where(['promo_code_id >'=>0])
+    	->contain(['PromoCodes','Customers']);
+    	//pr($used_promo->toArray());exit;
+    	$this->set(compact(['used_promo']));
+    }
+
 
 	public function beforeFilter(Event $event)
     {
