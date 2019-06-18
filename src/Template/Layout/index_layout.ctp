@@ -197,7 +197,7 @@
 									<?php echo $this->Html->link('<i class="fa  fa-file"></i> Promo Code Report','/PromoCodes/promo_code_report',['escape'=>false]) ?>
 								</li>
 								<li>
-									<?php echo $this->Html->link('<i class="fa  fa-file"></i> Promo Code Report','/Orders/used_promo_code_report',['escape'=>false]) ?>
+									<?php echo $this->Html->link('<i class="fa  fa-file"></i>Used Promo Code','/Orders/used_promo_code_report',['escape'=>false]) ?>
 								</li>
 								<!-- <li>
 									<?php echo $this->Html->link('<i class="fa fa-database"></i> Product Report','/itemLedgers/driver_report',['escape'=>false]) ?>

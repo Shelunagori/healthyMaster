@@ -637,6 +637,22 @@ class ItemLedgersController extends AppController
 
 		$this->set(compact('itemLedgers','url'));
 	}
+
+
+	public function itemWise($id=null)
+	{
+		$this->viewBuilder()->layout('index_layout');
+        $order = $this->ItemLedgers->get($id, [
+            'contain' => ['Customers', 'PromoCodes', 'OrderDetails'=>['Items'=>['Units']], 'CustomerAddresses']
+        ]);
+
+        $item_wise=$this->ItemLedgers->find()
+        ->where(['item_id'=>$id])
+        ->contain(['ItemVariations','Units','Items']);
+		
+        $this->set('item_wise', $item_wise);
+        $this->set('_serialize', ['item_wise']);
+	}
 	
 	public function itemStockUpdate()
     {

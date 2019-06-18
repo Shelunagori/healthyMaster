@@ -68,7 +68,7 @@
 						<tr>
 							<td><?= h(++$page_no) ?></td>
 							<td>
-								<?= h($itemLedger->name).'('.$itemLedger->alias_name.')' .')' ?>
+								<?php echo $this->Html->link(h($itemLedger->name).'('.$itemLedger->alias_name.')' .')',['controller'=>'ItemLedgers','action' => 'itemWise', $itemLedger->id, 'print'],['target'=>'_blank']); ?>
 							</td>
 							<?php if(!empty(@$walkins_sales[$itemLedger->id])){ ?>
 							<td>
