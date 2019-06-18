@@ -36,7 +36,7 @@
 				
 				</div>
 			<div class="portlet-body">
-			<?php if($status=='') { ?>
+			<?php if($status==''||$status=='process') { ?>
 			<form method="GET" >
 				<table width="50%" class="table table-condensed">
 					<tbody>

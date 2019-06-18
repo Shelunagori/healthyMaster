@@ -32,9 +32,6 @@
 										<label>Variation<label>
 									</th>
 									<th width="20%">
-										<label>Warehouse Stock<label>
-									</th>
-									<th width="20%">
 										<label>Current Stock<label>
 									</th>
 								</tr>
@@ -60,9 +57,7 @@
 										<td>
 											<?= $itemLedger->item_variation->quantity_variation.' '.$itemLedger->item_variation->unit->shortname ?>
 										</td>
-										<td>
-											<?= $warehouse_stock.' '.$itemLedger->item_variation->unit->shortname ?>
-										</td>
+										
 										<td>
 											<?= number_format($warehouse_stock, 2).' '.$itemLedger->item_variation->unit->shortname ?>
 										</td>

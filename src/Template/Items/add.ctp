@@ -69,7 +69,7 @@
                                           <th>Quantity Variation</th>
                                           <th>Unit</th>
                                           <th>Minimum Stock</th>
-                                          <th>Minimum Purchase</th>
+                                          <th>Maximum Order Limit</th>
                                           <th>Ready To Sale</th>
                                           <th>Actions</th>
                                       </tr>
@@ -98,14 +98,14 @@
                     	<?php echo $this->Form->control('item_variations.0.minimum_stock',['class'=>'form-control minimum_stock','placeholder'=>'Minimum Stock','label'=>false]); ?>
                     </td>
                     <td style="vertical-align: bottom;"> <?php echo $this->Form->control('item_variations.0.minimum_quantity_purchase',['class'=>'form-control minimum_quantity_purchase  order_limit','placeholder'=>'Maximum Order Limit', 'label'=>false]); ?></td>
-                    <td><div class="radio-inline" style="padding-right: 5px;">
-									<?php echo $this->Form->radio(
+                    <td><div class="myRadio" style="padding-right: 5px;">
+									<!-- <?php echo $this->Form->radio(
 									'item_variations.0.ready_to_sale',
 									[
 										['value' => 'no', 'text' => 'Yes','class' => 'radio-task ready'],
 										['value' => 'yes', 'text' => 'No','class' => 'radio-task ready','checked' => 'checked']
 									]
-									); ?>
+									); ?> -->
 								</div></td>
                     <td style="vertical-align: bottom;"> <button type="button" id="plus" class="btn btn-sm green"><i class="fa fa-plus"></i></button>
                       <button type="button" id="minus" class="btn btn-sm red"><i class="fa fa-minus"></i></button></td>
@@ -118,7 +118,9 @@
 $(document).ready(function() {
 	add_row();
 
-	
+	 var radio = "<label class='radio-inline'><input type='radio' name='crate' class='quantities' value='Crate' checked>CRT </label><label class='radio-inline'><input type='radio' name='box' class='quantities' value='Box >Box </label>";
+
+    $('.myRadio').html(radio);
 
 	 $(document).on('click','#plus',function(){
            add_row();
@@ -149,16 +151,18 @@ $(document).ready(function() {
    function rename_row()
       {
         var i=0;
+        var a=1;
         $('#main-tbody').find('tr').each(function()
         {
             
-            $(this).find('.index').html(i);
+            $(this).find('.index').html(a);
             $(this).find('.quantity_variation').attr('name','item_variations['+i+'][quantity_variation]');
             $(this).find('.unit').attr('name','item_variations['+i+'][unit_id]');
             $(this).find('.ready').attr('name','item_variations['+i+'][ready_to_sale]');
             $(this).find('.minimum_stock').attr('name','item_variations['+i+'][minimum_stock]');
             $(this).find('.minimum_quantity_purchase').attr('name','item_variations['+i+'][minimum_quantity_purchase]');
 			i++;
+			a++
           });
           
        }

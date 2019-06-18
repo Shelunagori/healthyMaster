@@ -252,6 +252,7 @@ class OrdersController extends AppController
         ];
 		
 		if($status == 'process'){ 
+							
 							$where['Orders.status']='In Process';
 							$cur_date = date('d-m-Y');
 							$orders =$this->paginate($this->Orders->find('all')

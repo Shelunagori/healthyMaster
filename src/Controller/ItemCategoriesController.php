@@ -37,9 +37,23 @@ class ItemCategoriesController extends AppController
 
             $city = $this->ItemCategories->patchEntity($itemCategory, $data);
             $itemCategory->city_id=$city_id;
+            $file = $this->request->data['image'];
+            //pr($file);exit;
+            $file_name=$file;           
+            $ext = substr(strtolower(strrchr($file, '.')), 1); //get the extension
+            $arr_ext = array('jpg', 'jpeg', 'png'); //set allowed extensions
+            $setNewFileName = uniqid();
+            $img_name= $setNewFileName.'.'.$ext;
+            if(!empty($file_name)){
+                $itemCategory->image=$img_name;
+            }if(empty($file_name)){
+                
+            }
 			if ($this->ItemCategories->save($itemCategory)) {
                 $this->Flash->success(__('The Item Category has been saved.'));
-
+                 if (in_array($ext, $arr_ext)) {
+                    move_uploaded_file($file, WWW_ROOT . 'itemcategories/'.$img_name);
+                  }
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The Item Category could not be saved. Please, try again.'));
