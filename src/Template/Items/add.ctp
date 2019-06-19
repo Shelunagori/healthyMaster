@@ -92,7 +92,7 @@
                     	<?php echo $this->Form->control('item_variations.0.minimum_stock',['class'=>'form-control minimum_stock','placeholder'=>'Minimum Stock','label'=>false]); ?>
                     </td>
                     <td style="vertical-align: bottom;"> <?php echo $this->Form->control('item_variations.0.minimum_quantity_purchase',['class'=>'form-control minimum_quantity_purchase  order_limit','placeholder'=>'Maximum Order Limit', 'label'=>false]); ?></td>
-                    <td><div class="myRadio radio-list" style="display: inline-block; float: left; padding-right: 15px;"></div></td>
+                    <td><div class="myRadio" style="display: inline-block;"></div></td>
                     <td style="vertical-align: bottom;"> <button type="button" id="plus" class="btn btn-sm green"><i class="fa fa-plus"></i></button>
                       <button type="button" id="minus" class="btn btn-sm red"><i class="fa fa-minus"></i></button></td>
                 </tr>
@@ -105,12 +105,13 @@ $(document).ready(function() {
 
 	 var radio = "<label class='radio-inline'><input type='radio' name='item_variations.0.ready_to_sale' class='ready' value='yes'>Yes </label><label class='radio-inline'><input type='radio' name='item_variations.0.ready_to_sale' class='ready' value='no' checked>No </label>";
 
-   $('.myRadio').html(radio);
+   
 
-
+	 $('.myRadio').html(radio);
 	add_row();
 
 	 $(document).on('click','#plus',function(){
+
            add_row();
       });
        $(document).on('click','#minus',function(){
@@ -122,18 +123,12 @@ $(document).ready(function() {
             }
         });
 
-	    function add_row()
+	function add_row()
     {
 
       var tr = $('#sub-body>tr:last').clone();
-
       $('#main-tbody').append(tr);
-
-           $('#main-tbody').find('tr').each(function()
-        {
-            $(this).find('.product_id').attr('autofocus','autofocus');
-
-        });
+      $('#main-tbody>tr:last').find('.myRadio').html(radio); 
       rename_row();
     }
    function rename_row()

@@ -105,7 +105,7 @@ class ItemsController extends AppController
         if ($this->request->is('post')) {
 			
         	$data=$this->request->getData();
-            pr($data);exit;
+            //pr($data);exit;
 			$item = $this->Items->patchEntity($item,$data,['associated'=>['ItemVariations']]);
 			$file = $this->request->data['image'];
 			$file_name=$file['name'];			
@@ -152,9 +152,7 @@ class ItemsController extends AppController
     {
 		$this->viewBuilder()->layout('index_layout');
 		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
-        $item = $this->Items->get($id, [
-            'contain' => ['Units']
-        ]);
+        $item = $this->Items->get($id);
 		$old_image_name=$item->image;
         if ($this->request->is(['patch', 'post', 'put'])) {
 			
@@ -169,36 +167,36 @@ class ItemsController extends AppController
 			}if(empty($file_name)){
 				$this->request->data['image']=$old_image_name;
 			}
-			$unit_id=$this->request->data['unit_id'];
-			$units_fetch_datas = $this->Items->Units->find()->where(['id'=>$unit_id]);
-			foreach($units_fetch_datas as $units_fetch_data){
-				$unit_shortname=$units_fetch_data->shortname;
-				$unit_name=$units_fetch_data->unit_name;	
-			}
+			// $unit_id=$this->request->data['unit_id'];
+			// $units_fetch_datas = $this->Items->ItemVariations->Units->find()->where(['id'=>$unit_id]);
+			// foreach($units_fetch_datas as $units_fetch_data){
+			// 	$unit_shortname=$units_fetch_data->shortname;
+			// 	$unit_name=$units_fetch_data->unit_name;	
+			// }
             $item = $this->Items->patchEntity($item, $this->request->getData());
             $item->jain_thela_admin_id=$jain_thela_admin_id;
-			if($unit_name=='kg'){
-				$minimum_quantity_factor=$this->request->data['minimum_quantity_factor'];
-				if($minimum_quantity_factor==0.10){	
-					$item->print_quantity='100 gm';
-					$item->minimum_quantity_factor=$minimum_quantity_factor;	
-				}
-				if($minimum_quantity_factor==0.25){	
-					$item->print_quantity='250 gm';
-					$item->minimum_quantity_factor=$minimum_quantity_factor;	
-				}
-				if($minimum_quantity_factor==0.50){	
-					$item->print_quantity='500 gm';
-					$item->minimum_quantity_factor=$minimum_quantity_factor;	
-				}
-				if($minimum_quantity_factor==1){
-					$item->print_quantity='1 '.$unit_shortname;
-					$item->minimum_quantity_factor=$minimum_quantity_factor;
-				}
-			}else{		
-					$item->print_quantity='1 '.$unit_shortname;
-					$item->minimum_quantity_factor=1;
-			}
+			// if($unit_name=='kg'){
+			// 	$minimum_quantity_factor=$this->request->data['minimum_quantity_factor'];
+			// 	if($minimum_quantity_factor==0.10){	
+			// 		$item->print_quantity='100 gm';
+			// 		$item->minimum_quantity_factor=$minimum_quantity_factor;	
+			// 	}
+			// 	if($minimum_quantity_factor==0.25){	
+			// 		$item->print_quantity='250 gm';
+			// 		$item->minimum_quantity_factor=$minimum_quantity_factor;	
+			// 	}
+			// 	if($minimum_quantity_factor==0.50){	
+			// 		$item->print_quantity='500 gm';
+			// 		$item->minimum_quantity_factor=$minimum_quantity_factor;	
+			// 	}
+			// 	if($minimum_quantity_factor==1){
+			// 		$item->print_quantity='1 '.$unit_shortname;
+			// 		$item->minimum_quantity_factor=$minimum_quantity_factor;
+			// 	}
+			// }else{		
+			// 		$item->print_quantity='1 '.$unit_shortname;
+			// 		$item->minimum_quantity_factor=1;
+			// }
 			if ($this->Items->save($item)) {
 				if(!empty($file_name)){
 					if (in_array($ext, $arr_ext)) {
@@ -211,7 +209,7 @@ class ItemsController extends AppController
             $this->Flash->error(__('The item could not be saved. Please, try again.'));
         }
 		$itemCategories = $this->Items->ItemCategories->find('list', ['limit' => 200]);
-		$units = $this->Items->Units->find()->where(['is_deleted'=>0]);
+		$units = $this->Items->ItemVariations->Units->find()->where(['is_deleted'=>0]);
 		$item_fetchs = $this->Items->find('list')->where(['is_virtual'=> 'no','freeze'=>0]);
 		foreach($units as $unit_data){
 			$unit_name=$unit_data->unit_name;
