@@ -26,6 +26,14 @@
 					<div class="col-md-3">
 						<?php echo $this->Form->control('item_category_id', ['empty'=>'--select--','options' => $itemCategories,'class'=>'form-control input-sm','required']); ?>
 					</div>
+					<div class="col-md-3">
+						<div class="radio-list">
+						<label>Ready To Sale</label>
+						<div class="form-control input-sm" style="padding-right: 1px;">
+							<label class='radio-inline'><input type='radio' name='ready_to_sale' value='yes' >Yes </label><label class='radio-inline'><input type='radio' name='ready_to_sale' value='no' checked="checked">No </label>
+						</div>
+					</div>
+					</div>
 
 				</div><br/>
 				<div class="row">
@@ -84,15 +92,7 @@
                     	<?php echo $this->Form->control('item_variations.0.minimum_stock',['class'=>'form-control minimum_stock','placeholder'=>'Minimum Stock','label'=>false]); ?>
                     </td>
                     <td style="vertical-align: bottom;"> <?php echo $this->Form->control('item_variations.0.minimum_quantity_purchase',['class'=>'form-control minimum_quantity_purchase  order_limit','placeholder'=>'Maximum Order Limit', 'label'=>false]); ?></td>
-                    <td><div class="radio-inline" style="padding-right: 5px;">
-									<?php echo $this->Form->radio(
-									'item_variations.0.ready_to_sale',
-									[
-										['value' => 'no', 'text' => 'Yes','class' => 'radio-task ready'],
-										['value' => 'yes', 'text' => 'No','class' => 'radio-task ready','checked' => 'checked']
-									]
-									); ?>
-								</div></td>
+                    <td><div class="myRadio radio-list" style="display: inline-block; float: left; padding-right: 15px;"></div></td>
                     <td style="vertical-align: bottom;"> <button type="button" id="plus" class="btn btn-sm green"><i class="fa fa-plus"></i></button>
                       <button type="button" id="minus" class="btn btn-sm red"><i class="fa fa-minus"></i></button></td>
                 </tr>
@@ -102,11 +102,13 @@
 
 <script>
 $(document).ready(function() {
+
+	 var radio = "<label class='radio-inline'><input type='radio' name='item_variations.0.ready_to_sale' class='ready' value='yes'>Yes </label><label class='radio-inline'><input type='radio' name='item_variations.0.ready_to_sale' class='ready' value='no' checked>No </label>";
+
+   $('.myRadio').html(radio);
+
+
 	add_row();
-
-	 // var radio = "<label class='radio-inline'><input type='radio' name='crate' class='quantities' value='Crate' checked>CRT </label><label class='radio-inline'><input type='radio' name='box' class='quantities' value='Box >Box </label>";
-
-  //   $('.myRadio').html(radio);
 
 	 $(document).on('click','#plus',function(){
            add_row();

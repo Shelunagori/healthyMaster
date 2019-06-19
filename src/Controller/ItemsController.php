@@ -105,7 +105,7 @@ class ItemsController extends AppController
         if ($this->request->is('post')) {
 			
         	$data=$this->request->getData();
-            //pr($data);
+            pr($data);exit;
 			$item = $this->Items->patchEntity($item,$data,['associated'=>['ItemVariations']]);
 			$file = $this->request->data['image'];
 			$file_name=$file['name'];			
