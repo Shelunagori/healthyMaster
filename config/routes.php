@@ -408,8 +408,8 @@ Router::prefix('api', function ($routes) {
 	$routes->resources(
 		'Feedbacks', [
 		   'map' => [
-			   'feedback_form' => [
-				   'action' => 'feedback_form',
+			   'feedbackform' => [
+				   'action' => 'feedbackform',
 				   'method' => 'POST'
 			   ]
 		   ]
