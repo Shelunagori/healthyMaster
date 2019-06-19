@@ -1,4 +1,7 @@
-<?php $url_excel="/?".$url; ?>
+<?php $url_excel="/?".$url; 
+//pr($url);exit;
+?>
+
 <div class="row">
 	<div class="col-md-12">
 		<div class="portlet light">
@@ -10,7 +13,9 @@
 					</span>
 				</div>
 				<div class="actions"> 
-					<?php echo $this->Html->link( '<i class="fa fa-file-excel-o"></i> Excel', '/ItemLedgers/Export-Excel-Stock/'.@$url_excel.'',['class' =>'btn btn-sm green tooltips pull-right','target'=>'_blank','escape'=>false,'data-original-title'=>'Download as excel']); ?>
+					<?php echo $this->Html->link( '<i class="fa fa-file-excel-o"></i> Excel', '/ItemLedgers/Export-Excel-Stk/'.@$url_excel.'',['class' =>'btn btn-sm green tooltips pull-right','target'=>'_blank','escape'=>false,'data-original-title'=>'Download as excel']); ?>
+
+
 					<input type="text" class="form-control input-sm pull-right" placeholder="Search..." id="search3"  style="width: 200px;margin-right: 5px;">
 					
 				</div>

@@ -1,4 +1,7 @@
-<?php $url_excel="/?".$url; ?>
+<?php $url_excel="/?".$url; 
+//pr($url_excel);exit;
+?>
+
 <div class="portlet light bordered">
 	<div class="portlet-title">
 		<div class="caption">
