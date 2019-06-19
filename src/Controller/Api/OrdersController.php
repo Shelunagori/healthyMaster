@@ -111,7 +111,7 @@ class OrdersController extends AppController
 		$customer_id=$this->request->query('customer_id');
 		
 		$orders_data = $this->Orders->find()
-		->where(['customer_id' => $customer_id, 'jain_thela_admin_id' => $jain_thela_admin_id, 'status IN' => ['Delivered','Cancel','In Process'] ])
+		->where(['customer_id' => $customer_id, 'jain_thela_admin_id' => $jain_thela_admin_id, 'status IN' => ['Delivered','Cancel','In Process','Placed'] ])
 		->order(['order_date' => 'DESC'])
 		->contain(['OrderDetails'=>function($q){
 				return $q->contain(['ItemVariations' =>['Items','Units']]);
@@ -152,6 +152,7 @@ class OrdersController extends AppController
 		$customer_id=$this->request->query('customer_id');
 		$order_id=$this->request->query('order_id');
 		@$cancel_id=$this->request->query('cancel_id');
+		@$other_comment=$this->request->query('other_comment');
  		
 		if(empty($cancel_id))
 		{
@@ -172,7 +173,7 @@ class OrdersController extends AppController
 		$order_cancel = $this->Orders->query();
 		$result = $order_cancel->update()
 			->set(['status' => 'Cancel',
-			'cancel_id' => $cancel_id, 'order_date' => $o_date])
+			'cancel_id' => $cancel_id, 'order_date' => $o_date,'other_comment' => $other_comment])
 			->where(['id' => $order_id])
 			->execute();
 						
