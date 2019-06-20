@@ -105,8 +105,10 @@ class ItemsController extends AppController
         if ($this->request->is('post')) {
 			
         	$data=$this->request->getData();
-            //pr($data);exit;
+            pr($data);
 			$item = $this->Items->patchEntity($item,$data,['associated'=>['ItemVariations']]);
+            pr($item->toArray());exit;
+
 			$file = $this->request->data['image'];
 			$file_name=$file['name'];			
 			$ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
@@ -215,7 +217,8 @@ class ItemsController extends AppController
 			$unit_name=$unit_data->unit_name;
 			$unit_option[]= ['value'=>$unit_data->id,'text'=>$unit_data->shortname,'unit_name'=>$unit_name];
 		}
-        $this->set(compact('item', 'itemCategories', 'units', 'unit_option', 'item_fetchs'));
+        $variations = $this->Items->ItemVariations->find()->where(['item_id'=>$id])->contain(['Units','Items']);
+        $this->set(compact('item', 'itemCategories', 'units', 'unit_option', 'item_fetchs','variations'));
         $this->set('_serialize', ['item']);
     }
 
