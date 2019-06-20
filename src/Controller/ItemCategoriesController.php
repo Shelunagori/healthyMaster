@@ -35,12 +35,13 @@ class ItemCategoriesController extends AppController
             $data['jain_thela_admin_id']=$this->Auth->user('id');
             //pr($data);exit;
 
-            $city = $this->ItemCategories->patchEntity($itemCategory, $data);
+            $itemCategory = $this->ItemCategories->patchEntity($itemCategory, $data);
             $itemCategory->city_id=$city_id;
+
             $file = $this->request->data['image'];
             //pr($file);exit;
-            $file_name=$file;           
-            $ext = substr(strtolower(strrchr($file, '.')), 1); //get the extension
+            $file_name=$file['name'];           
+            $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
             $arr_ext = array('jpg', 'jpeg', 'png'); //set allowed extensions
             $setNewFileName = uniqid();
             $img_name= $setNewFileName.'.'.$ext;
@@ -49,10 +50,12 @@ class ItemCategoriesController extends AppController
             }if(empty($file_name)){
                 
             }
-			if ($this->ItemCategories->save($itemCategory)) {
-                $this->Flash->success(__('The Item Category has been saved.'));
-                 if (in_array($ext, $arr_ext)) {
-                    move_uploaded_file($file, WWW_ROOT . 'itemcategories/'.$img_name);
+            //pr($item);exit;
+            if ($this->ItemCategories->save($itemCategory)) {
+                //pr($item);exit;
+                $this->Flash->success(__('The item has been saved.'));
+                  if (in_array($ext, $arr_ext)) {
+                    move_uploaded_file($file['tmp_name'], WWW_ROOT . 'itemcategories/'.$img_name);
                   }
                 return $this->redirect(['action' => 'index']);
             }

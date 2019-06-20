@@ -20,14 +20,14 @@
 				</div>
 			</div>
 			<div class="portlet-body">
-				<?= $this->Form->create($itemCategory,['id'=>'form_sample_3']) ?>
+				<?= $this->Form->create($itemCategory,['type'=>'file','id'=>'form_sample_3']) ?>
 				<div class="row">
 					<div class="col-md-8">
 						<label class=" control-label">Item Category <span class="required" aria-required="true">*</span></label>
 						<?php echo $this->Form->control('name',['placeholder'=>'Item Category name','class'=>'form-control input-sm','label'=>false]); ?>
 					</div>
 					<div class="col-md-8" style="margin-top: 10px;">
-						 <?= $this->Form->input('image',['class'=>'form-control','type'=>'File']) ?>
+						 <?= $this->Form->input('image',['class'=>'form-control','type'=>'file']) ?>
 					</div>
 				</div>
 				<br/>

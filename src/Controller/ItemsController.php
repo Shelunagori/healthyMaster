@@ -105,12 +105,14 @@ class ItemsController extends AppController
         if ($this->request->is('post')) {
 			
         	$data=$this->request->getData();
-            pr($data);
+            //pr($data);
 			$item = $this->Items->patchEntity($item,$data,['associated'=>['ItemVariations']]);
-            pr($item->toArray());exit;
+            //pr($item->toArray());exit;
 
 			$file = $this->request->data['image'];
-			$file_name=$file['name'];			
+            //pr($file);
+			$file_name=$file['name'];		
+            //pr($file_name);exit;	
 			$ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
             $arr_ext = array('jpg', 'jpeg', 'png'); //set allowed extensions
             $setNewFileName = uniqid();
