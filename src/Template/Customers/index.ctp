@@ -44,7 +44,7 @@
 						?>
 						<tr>
 							<td><?= $i ?></td>
-							<td><?= h($show_name) ?></td>
+							<td><?php echo $this->Html->link($show_name,['controller'=>'Customers','action' => 'customerLedger', $customer->id, 'print'],['target'=>'_blank']); ?></td>
 							<td><?= h($customer->email) ?></td>
 							<td><?= h($customer->address) ?></td>
 							<td><?= h($customer->bulk_booking_discount_percent) ?></td>

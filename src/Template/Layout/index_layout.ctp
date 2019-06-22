@@ -312,6 +312,9 @@
 								<?php echo $this->Html->link('<i class="fa fa-reorder"></i> <span>Manage Orders</span>',array('controller'=>'Orders','action'=>'index?status=process'),['escape'=>false]); ?>
 							</li>
 							<li>
+								<?php echo $this->Html->link('<i class="fa fa-reorder"></i> <span>Order List</span>',array('controller'=>'Orders','action'=>'orderList?status=process'),['escape'=>false]); ?>
+							</li>
+							<li>
 								<?php echo $this->Html->link('<i class="fa fa-bell"></i> <span>Push Notification</span>',array('controller'=>'AppNotifications','action'=>'index'),['escape'=>false]); ?>
 							</li>
 							<li>

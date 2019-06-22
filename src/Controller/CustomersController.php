@@ -27,6 +27,28 @@ class CustomersController extends AppController
         $this->set('_serialize', ['customers']);
     }
 
+    public function customerLedger($id=null)
+    {
+    	$this->viewBuilder()->layout('index_layout');
+    	$customers = $this->Customers->get($id, [
+            'contain' => ['JainCashPoints'=>function($query){
+				return $query->select([
+					'total_point' => $query->func()->sum('point'),
+					'total_used_point' => $query->func()->sum('used_point'),'customer_id'
+				]);
+			}
+		]
+	]);
+    	$orders = $this->Customers->Orders->find()->where(['Orders.customer_id'=>$id])
+    	->contain(['CustomerAddresses','OrderDetails'=>['Items','ItemVariations'=>['Units']]]);
+
+    	$carts=$this->Customers->Carts->find()->where(['Carts.customer_id'=>$id])->contain(['Items','ItemVariations']);
+    	$wishlists=$this->Customers->Wishlists->find()->where(['Wishlists.customer_id'=>$id])->contain(['Items','ItemVariations']);
+    	//pr($id);
+    	//pr($wishlists->toArray());exit;
+    	 $this->set(compact('customers','orders','carts','wishlists'));
+    }
+
     /**
      * View method
      *

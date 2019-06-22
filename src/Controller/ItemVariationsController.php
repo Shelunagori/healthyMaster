@@ -26,8 +26,8 @@ class ItemVariationsController extends AppController
         $itemvariation = $this->ItemVariations->newEntity();
         
         if ($this->request->is(['post', 'put'])) {
-            $item_variation=$this->request->getData('itemVariations');
-          //  pr($item_variation);exit;
+            $item_variation=$this->request->getData();
+           pr($item_variation);exit;
             
             foreach($item_variation as $itemVariations){
                 //pr($itemVariations['print_rate']);exit;

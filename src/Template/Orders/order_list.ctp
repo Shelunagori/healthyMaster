@@ -25,17 +25,22 @@
 						$class1="btn btn-xs blue";
 						$class2="btn btn-default";
 					}else {
-						$class1="btn btn-default";
+						$class1="btn btn-xs blue";
 						$class2="btn btn-xs blue";
 					}
 					 ?> 
-					<?php echo $this->Html->link('Pending',['controller'=>'Orders','action' => 'orderList?status=process'],['escape'=>false,'class'=>$class1]); ?>
+					<?php echo $this->Html->link('Placed',['controller'=>'Orders','action' => 'orderList?status=process'],['escape'=>false,'class'=>$class1]); ?>
+					<?php echo $this->Html->link('Packed',['controller'=>'Orders','action' => 'orderList?status=packed'],['escape'=>false,'class'=>$class1]); ?>
+
+					<?php echo $this->Html->link('Dispatch',['controller'=>'Orders','action' => 'orderList?status=dispatch'],['escape'=>false,'class'=>$class1]); ?>
+					<?php echo $this->Html->link('Delivered',['controller'=>'Orders','action' => 'orderList?status=delivered'],['escape'=>false,'class'=>$class1]); ?>
 				</div>
+			<?= $this->Form->create($order,['id'=>'form_sample_3']) ?>
 			<?php $page_no=$this->Paginator->current('Orders'); $page_no=($page_no-1)*20; ?>
 				<table class="table table-condensed table-hover table-bordered" id="main_tble">
 					<thead>
 						<tr>
-							<th scope="col">Sr. No.</th>
+							<th scope="col"></th>
 							<th scope="col">Order No.</th>
 							<th scope="col">Customer Name</th>
 							<!--<th scope="col">wallet Amount</th>-->
@@ -46,11 +51,19 @@
 							<th scope="col">Delivery Date</th>
 							
 							<th scope="col">Status</th>
-							<th scope="col" class="actions"><?= __('Actions') ?></th>
 							<th scope="col">Edit</th>
 						</tr>
 					</thead>
 					<tbody>
+						<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-4">
+								<h3 style="color:#000; font-size:15px; font-family:georgia">
+								<label><input type="checkbox" class="checkAll" name="" value="" id="checkAll"> Check All</label>
+								</h3>
+							</div>
+						</div>
+					</div>
 						<?php
 						$sr_no=0; foreach ($orders as $order): 
 						$delivery_date=date('d-m-Y', strtotime($order->delivery_date));
@@ -66,11 +79,13 @@
 						$status=$order->status;
 						?>
 						<tr <?php if(($status=='In Process') || ($status=='In process')){ ?>style="background-color:#ffe4e4; "<?php } ?> >
-							<td><?php echo $this->Form->input('checkbox', array(
-                                  'type'=>'checkbox', 
-                                  'label'=>false) ); ?></td>
 							<td>
-							<?php echo $this->Html->link($order->order_no,['controller'=>'Orders','action' => 'view', $order->id, 'print'],['target'=>'_blank']); ?>
+								<input type="hidden" name="temporary_orders[status]" value="<?= $cur_status ?>"><input class="checkbox" id="check" type="checkbox" name="temporary_orders[<?= $sr_no?>][order_id]" value="<?= $order->id ?>">
+								</td>
+							<td>
+
+							<?php $sr_no++;
+								echo $this->Html->link($order->order_no,['controller'=>'Orders','action' => 'view', $order->id, 'print'],['target'=>'_blank']); ?>
 						</td>
 							<td>
 							<?php
@@ -92,11 +107,7 @@
 							<td><span style="font-size:11px;"><?= h($date_show) ?></span></td>
 							<td><?= h($status) ?></td>
 							
-							<td class="actions">
-								<div class="display-none">
-									<a class="btn blue btn-xs dlvr placed" order_id="<?php echo $order->id; ?>" > <i class="fa fa-shopping-cart"></i>Packed</a>
-								</div>
-							</td>
+							
 							<?php  if(($status=='In Process') || ($status=='In process')){ 
 							if(( $order_date == $current_date ) || ($order_date == $prev_date  )){?>
 								<td>
@@ -111,8 +122,15 @@
 							
 						</tr>
 						<?php endforeach; ?>
+						
 					</tbody>
 				</table>
+				<?php if($cur_status != "Delivered"){?>
+					<div class="col-md-4">
+								<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']) . __(' Submit'),['class'=>'btn btn-success']); ?>
+					</div>
+				<?php }?>
+			<?= $this->Form->end() ?>
 				<div class="paginator">
 					<ul class="pagination">
 						<?= $this->Paginator->first('<< ' . __('first')) ?>
@@ -146,18 +164,10 @@ var $rows = $('#main_tble tbody tr');
 		}
 	});
 </script>
+
 <script>
 $(document).ready(function() {
 	
-	$('input[type="checkbox"]').click(function(){
-            if($(this).prop("checked") == true){
-                $('.placed').show();
-            }
-            else if($(this).prop("checked") == false){
-                $('.placed').hide();
-            }
-        });
-
 	var form3 = $('#content');
 	var error3 = $('.alert-danger', form3);
 	var success3 = $('.alert-success', form3);
@@ -390,6 +400,19 @@ $(document).ready(function() {
 	////
 
 });
+</script>
+<script type="text/javascript">
+        $('.checkAll').on('change', function() {   
+                $('.checkbox').prop('checked', $(this).prop("checked"));              
+        });
+        //deselect "checked all", if one of the listed checkbox product is unchecked amd select "checked all" if all of the listed checkbox product is checked
+        $('.checkbox').change(function(){ //".checkbox" change 
+            if($('.checkbox:checked').length == $('.checkbox').length){
+                   $('.checked_all').prop('checked',true);
+            }else{
+                   $('.checked_all').prop('checked',false);
+            }
+        });
 </script>
 <div  class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3" aria-hidden="false" style="display: none;border:0px;" id="popup">
 <div class="modal-backdrop fade in" ></div>
