@@ -110,6 +110,7 @@
 
 <script>
 $(document).ready(function() {
+<<<<<<< HEAD
 /* 
 $('.gst').on('change',function(){
 	var gst_apply=$(this).val();
@@ -121,6 +122,11 @@ $('.gst').on('change',function(){
 }); */
 	 var radio = "<label class='radio-inline'><input type='radio' name='item_variations.0.ready_to_sale' class='ready' value='yes'>Yes </label><label class='radio-inline'><input type='radio' name='item_variations.0.ready_to_sale' class='ready' value='no' checked>No </label>";
 
+=======
+
+	 var radio = "<label class='radio-inline'><input type='radio' name='item_variations.0.ready_to_sale' class='ready' value='yes'>Yes </label><label class='radio-inline'><input type='radio' name='item_variations.0.ready_to_sale' class='ready' value='no' checked>No </label>";
+
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
    
 
 	 $('.myRadio').html(radio);

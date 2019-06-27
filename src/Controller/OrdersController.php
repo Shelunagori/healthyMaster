@@ -483,10 +483,21 @@ class OrdersController extends AppController
 			//pr(sizeof($dd));exit;
 			if($stats == "In Process")
 			{
+<<<<<<< HEAD
 				$temp=$this->Orders->TemporaryOrders->newEntities($dd);
 						
 	            if($this->Orders->TemporaryOrders->saveMany($temp))
 	            	$x=1;
+=======
+				foreach ($dd as $data)
+				{
+
+					$order=$this->Orders->TemporaryOrders->newEntity();
+					$temp = $this->Orders->TemporaryOrders->patchEntity($order,$this->request->getData('temporary_orders'));
+	            	$this->Orders->TemporaryOrders->save($temp);
+	            	$x=1;
+	            }
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
 	        }
 	        if($stats == "Packed")
 	        {

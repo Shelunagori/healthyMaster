@@ -42,6 +42,7 @@
                 <div class="row Yesbox display-none">
                     <div class="col-md-3">
                         <label>Amount</label>
+<<<<<<< HEAD
                         <input type="text" name="amount" class="form-control input-sm" value="0">
                     </div>
                     <div class="col-md-3">
@@ -51,6 +52,17 @@
                     <div class="col-md-3">
                         <label>Type</label>
                         <input type="text" name="type" class="form-control input-sm" value="0">
+=======
+                        <input type="text" name="delivery_charges[amount]" class="form-control input-sm" value="0">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Delivery Charge</label>
+                        <input type="text" name="delivery_charges[delivery_charge]" class="form-control input-sm" value="0">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Type</label>
+                        <input type="text" name="delivery_charges[type]" class="form-control input-sm" value="0">
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
                     </div>
                 </div>
                 <br/>

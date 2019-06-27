@@ -56,8 +56,14 @@ class PincodesController extends AppController
         $DeliveryCharges = $this->Pincodes->DeliveryCharges->newEntity();
         if ($this->request->is('post')) {
             $data=$this->request->getData();
+<<<<<<< HEAD
             pr($data);
             $pincode = $this->Pincodes->patchEntity($pincode,$data);
+=======
+            //pr($data);
+            $pincode = $this->Pincodes->patchEntity($pincode,$data,['associated'=>['DeliveryCharges']]);
+            //pr($pincode);exit;
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
             if ($this->Pincodes->save($pincode)) {
                 if($data['we_deliver']=="Yes")
                 {

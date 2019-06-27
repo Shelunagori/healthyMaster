@@ -2251,9 +2251,7 @@ Form Layouts
 .radio-list > label.radio-inline {
   display: inline-block;
 }
-.radio-list > label.radio-inline:first-child {
-  padding-left: 0;
-}
+
 
 /* Radio buttons in horizontal forms */
 .form-horizontal .radio-list .radio {

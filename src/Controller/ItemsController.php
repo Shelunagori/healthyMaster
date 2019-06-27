@@ -166,9 +166,13 @@ class ItemsController extends AppController
     {
 		$this->viewBuilder()->layout('index_layout');
 		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
+<<<<<<< HEAD
         $item = $this->Items->get($id,  [
             'contain' => ['ItemVariations']]
         );
+=======
+        $item = $this->Items->get($id);
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
 		$old_image_name=$item->image;
         if ($this->request->is(['patch', 'post', 'put'])) {
 			
@@ -189,6 +193,7 @@ class ItemsController extends AppController
 			// 	$unit_shortname=$units_fetch_data->shortname;
 			// 	$unit_name=$units_fetch_data->unit_name;	
 			// }
+<<<<<<< HEAD
 
             ///pr($this->request->getData());
             $items = $this->Items->get($id,  [
@@ -196,6 +201,9 @@ class ItemsController extends AppController
         );
             $item = $this->Items->patchEntity($items, $this->request->getData());
             //pr($item->toArray());exit;
+=======
+            $item = $this->Items->patchEntity($item, $this->request->getData());
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
             $item->jain_thela_admin_id=$jain_thela_admin_id;
 			// if($unit_name=='kg'){
 			// 	$minimum_quantity_factor=$this->request->data['minimum_quantity_factor'];
@@ -241,6 +249,7 @@ class ItemsController extends AppController
             $this->Flash->error(__('The item could not be saved. Please, try again.'));
         }
 		$itemCategories = $this->Items->ItemCategories->find('list', ['limit' => 200]);
+<<<<<<< HEAD
 		$units = $this->Items->ItemVariations->Units->find('list')->where(['is_deleted'=>0]);
 		$item_fetchs = $this->Items->find('list')->where(['is_virtual'=> 'no','freeze'=>0]);
 		// foreach($units as $unit_data){
@@ -249,6 +258,16 @@ class ItemsController extends AppController
 		// }
         $variations = $this->Items->ItemVariations->find()->where(['item_id'=>$id])->contain(['Units','Items']);
         $this->set(compact('item', 'itemCategories', 'units','item_fetchs','variations'));
+=======
+		$units = $this->Items->ItemVariations->Units->find()->where(['is_deleted'=>0]);
+		$item_fetchs = $this->Items->find('list')->where(['is_virtual'=> 'no','freeze'=>0]);
+		foreach($units as $unit_data){
+			$unit_name=$unit_data->unit_name;
+			$unit_option[]= ['value'=>$unit_data->id,'text'=>$unit_data->shortname,'unit_name'=>$unit_name];
+		}
+        $variations = $this->Items->ItemVariations->find()->where(['item_id'=>$id])->contain(['Units','Items']);
+        $this->set(compact('item', 'itemCategories', 'units', 'unit_option', 'item_fetchs','variations'));
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
         $this->set('_serialize', ['item']);
     }
 

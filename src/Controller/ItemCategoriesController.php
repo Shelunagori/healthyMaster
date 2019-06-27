@@ -79,6 +79,7 @@ class ItemCategoriesController extends AppController
                 //pr($item);exit;
                 $this->Flash->success(__('The item has been saved.'));
                   if (in_array($ext, $arr_ext)) {
+<<<<<<< HEAD
                          $destination_url = WWW_ROOT . 'img/temp/'.$img_name;
                         if($ext=='png'){
                         $image = imagecreatefrompng($file['tmp_name']);
@@ -90,6 +91,9 @@ class ItemCategoriesController extends AppController
                         $this->AwsFile->putObjectFile($keyname1,$destination_url,$file['type']);
             
                     //move_uploaded_file($file['tmp_name'], WWW_ROOT . 'img/item_images/'.$img_name);
+=======
+                    move_uploaded_file($file['tmp_name'], WWW_ROOT . 'itemcategories/'.$img_name);
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
                   }
                 return $this->redirect(['action' => 'index']);
             }

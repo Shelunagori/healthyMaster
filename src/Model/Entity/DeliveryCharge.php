@@ -33,6 +33,12 @@ class DeliveryCharge extends Entity
         'charge' => true,
         'type' => true,
         'created_on' => true,
+<<<<<<< HEAD
         'pincode_id' => true
+=======
+        'promo_code_id' => true,
+        'promo_code' => true,
+        'orders' => true
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
     ];
 }

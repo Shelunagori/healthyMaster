@@ -35,8 +35,13 @@ class DeliveryChargesTable extends Table
 
         $this->setTable('delivery_charges');
 
+<<<<<<< HEAD
         $this->belongsTo('Pincodes', [
             'foreignKey' => 'pincode_id',
+=======
+        $this->belongsTo('PromoCodes', [
+            'foreignKey' => 'promo_code_id',
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
             'joinType' => 'INNER'
         ]);
         $this->hasMany('Orders', [
@@ -52,7 +57,35 @@ class DeliveryChargesTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
+<<<<<<< HEAD
        
+=======
+        $validator
+            ->integer('id')
+            ->requirePresence('id', 'create')
+            ->allowEmptyString('id', false);
+
+        $validator
+            ->decimal('amount')
+            ->requirePresence('amount', 'create')
+            ->allowEmptyString('amount', false);
+
+        $validator
+            ->decimal('charge')
+            ->requirePresence('charge', 'create')
+            ->allowEmptyString('charge', false);
+
+        $validator
+            ->scalar('type')
+            ->maxLength('type', 100)
+            ->requirePresence('type', 'create')
+            ->allowEmptyString('type', false);
+
+        $validator
+            ->dateTime('created_on')
+            ->allowEmptyDateTime('created_on', false);
+
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
         return $validator;
     }
 
@@ -65,7 +98,11 @@ class DeliveryChargesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
+<<<<<<< HEAD
         $rules->add($rules->existsIn(['pincode_id'], 'Pincodes'));
+=======
+        $rules->add($rules->existsIn(['promo_code_id'], 'PromoCodes'));
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
 
         return $rules;
     }

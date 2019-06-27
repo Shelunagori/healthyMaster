@@ -44,6 +44,7 @@
 						<?php echo $this->Form->control('minimum_quantity_purchase',['class'=>'form-control input-sm order_limit','placeholder'=>'Maximum Order Limit', 'label'=>false]); ?>
 						<span id="msg2"></span>
 					</div> -->
+<<<<<<< HEAD
 					<!--<div class="col-md-3">
 						<?php
 						$gst['Yes']='Yes';
@@ -61,6 +62,17 @@
 						<?php echo $this->Form->control('description', ['class'=>'form-control input-sm','placeholder'=>'Description']); ?>
 						<input type="hidden" name="is_virtual" value="real">
 					</div>
+=======
+
+
+					<div class="col-md-3">
+						 <?= $this->Form->input('image',['class'=>'form-control','type'=>'File']) ?>
+					</div>
+					<div class="col-md-6">
+						<?php echo $this->Form->control('description', ['class'=>'form-control input-sm','placeholder'=>'Description']); ?>
+						<input type="hidden" name="is_virtual" value="real">
+					</div>
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
 				</div>
 					
 				<div class="row">
@@ -81,6 +93,7 @@
                                   	<?php
                                   	$i=0;
 								foreach($variations as $variation){
+<<<<<<< HEAD
 									$unit=$variation->unit->id;
 									$variation_id=$variation->id;
 									?>
@@ -101,6 +114,23 @@
 					                    <td><div class="myRadio" style="display: inline-block;"></div></td>
 					                    <td style="vertical-align: bottom;"> <button type="button" id="plus" class="btn btn-sm green"><i class="fa fa-plus"></i></button>
 					                      <button type="button" id="minus" class="btn btn-sm red" row_id="<?= $variation_id?>"><i class="fa fa-minus"></i></button></td>
+=======
+									$i++;
+									$unit=$variation->unit->short_name?>
+                                  	<tr>
+					                    <td style="vertical-align: bottom;" class="index"><?= $i ?> </td>
+					                    <td style="vertical-align: bottom;"> <?php echo $this->Form->control('quantity_variation',['class'=>'form-control quantity_variation','id'=>false,'label'=>false,'required','value'=>$variation->quantity_variation]); ?></td>
+					                    <td style="vertical-align: bottom;">
+					                    <?php echo $this->Form->control('unit_id', ['empty'=>'--select--','options' => @$unit_option,'class'=>'form-control unit','label'=>false,'value'=>$unit]); ?>
+					                    </td>
+					                    <td style="vertical-align: bottom;"> 
+					                    	<?php echo $this->Form->control('minimum_stock',['class'=>'form-control minimum_stock','placeholder'=>'Minimum Stock','label'=>false,'value'=>$variation->minimum_stock]); ?>
+					                    </td>
+					                    <td style="vertical-align: bottom;"> <?php echo $this->Form->control('minimum_quantity_purchase',['class'=>'form-control minimum_quantity_purchase  order_limit','placeholder'=>'Maximum Order Limit', 'label'=>false,'value'=>$variation->minimum_quantity_purchase]); ?></td>
+					                    <td><div class="myRadio" style="display: inline-block;"></div></td>
+					                    <td style="vertical-align: bottom;"> <button type="button" id="plus" class="btn btn-sm green"><i class="fa fa-plus"></i></button>
+					                      <button type="button" id="minus" class="btn btn-sm red"><i class="fa fa-minus"></i></button></td>
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
 					                </tr>
 					            <?php } ?>
 					                                  </tbody>
@@ -136,6 +166,7 @@
 
 <script>
 $(document).ready(function() {
+<<<<<<< HEAD
 	/* var gst_apply = $('.gst').val();
 	if(gst_apply=='Yes'){
 		$('.gst_show').show();
@@ -156,6 +187,10 @@ $('.gst').on('change',function(){
 	rename_row();
 
 	 var radio = "<label class='radio-inline'><input type='radio' name='item_variations[0][ready_to_sale]' class='ready' value='yes'>Yes </label><label class='radio-inline'><input type='radio' name='item_variations[0][ready_to_sale]' class='ready' value='no' checked>No </label>";
+=======
+
+	 var radio = "<label class='radio-inline'><input type='radio' name='item_variations.0.ready_to_sale' class='ready' value='yes'>Yes </label><label class='radio-inline'><input type='radio' name='item_variations.0.ready_to_sale' class='ready' value='no' checked>No </label>";
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
 
    
 
@@ -164,6 +199,7 @@ $('.gst').on('change',function(){
 
            add_row();
       });
+<<<<<<< HEAD
         $(document).on('click','#minus',function(){
 
            var count=$('#main-tbody').children().length;
@@ -202,6 +238,17 @@ $('.gst').on('change',function(){
                 }
             }
         }); 
+=======
+       $(document).on('click','#minus',function(){
+           var count=$('#main-tbody').children().length;
+            if(count >= 2)
+            {
+              $(this).parent().parent().remove();
+              rename_row();
+            }
+        });
+
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
 	function add_row()
     {
 

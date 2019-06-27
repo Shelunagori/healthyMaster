@@ -27,7 +27,11 @@ class ItemVariationsController extends AppController
         
         if ($this->request->is(['post', 'put'])) {
             $item_variation=$this->request->getData();
+<<<<<<< HEAD
             pr($item_variation);
+=======
+           pr($item_variation);exit;
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
             
             foreach($item_variation as $itemVariations){
                 //pr($itemVariations['print_rate']);exit;

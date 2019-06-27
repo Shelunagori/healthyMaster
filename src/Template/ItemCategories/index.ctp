@@ -65,7 +65,11 @@
 							<tr>
 								<td><?= h($k) ?></td>
 								<td><?= h($itemCategory->name) ?></td>
+<<<<<<< HEAD
 								<td><img style="height:2%;" src="/healthyMaster/webroot/img/itemcategories/<?= $itemCategory->image ?>" ></td>
+=======
+								<td><img style="height:2%;" src="/healthyMaster/webroot/itemcategories/<?= $itemCategory->image ?>" ></td>
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
 								<td class="actions">
 								<?php echo $this->Html->link('<i class="fa fa-pencil-square-o"></i>',['action' => 'index', $itemCategory->id],['escape'=>false,'class'=>'btn btn-xs blue']); ?>
 								<?= $this->Form->postLink('<i class="fa fa-trash"></i> ',

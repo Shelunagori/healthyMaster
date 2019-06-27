@@ -39,6 +39,7 @@ class CustomersController extends AppController
 			}
 		]
 	]);
+<<<<<<< HEAD
     	$customer_address=$this->Customers->CustomerAddresses->find()->where(['CustomerAddresses.customer_id'=>$id]);
     	$orders = $this->Customers->Orders->find()->where(['Orders.customer_id'=>$id])
     	->contain(['OrderDetails']);
@@ -51,6 +52,16 @@ class CustomersController extends AppController
     	//pr($id);
     	//pr($points->toArray());exit;
     	 $this->set(compact('customers','orders','carts','wishlists','customer_address','points'));
+=======
+    	$orders = $this->Customers->Orders->find()->where(['Orders.customer_id'=>$id])
+    	->contain(['CustomerAddresses','OrderDetails'=>['Items','ItemVariations'=>['Units']]]);
+
+    	$carts=$this->Customers->Carts->find()->where(['Carts.customer_id'=>$id])->contain(['Items','ItemVariations']);
+    	$wishlists=$this->Customers->Wishlists->find()->where(['Wishlists.customer_id'=>$id])->contain(['Items','ItemVariations']);
+    	//pr($id);
+    	//pr($wishlists->toArray());exit;
+    	 $this->set(compact('customers','orders','carts','wishlists'));
+>>>>>>> b8f8edbeb3246e856a6bf1ab0d2440e9eecc57ff
     }
 
     /**
