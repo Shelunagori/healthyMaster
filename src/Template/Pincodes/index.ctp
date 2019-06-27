@@ -9,8 +9,7 @@
             <div class="portlet-title">
                 <div class="caption">
                     <i class="font-purple-intense"></i>
-                    <span class="caption-subject font-purple-intense ">
-                        <i class="fa fa-plus"></i> PinCode
+                    <span class="caption-subject font-purple-intense ">PINCODE
                     </span>
                 </div>
                 <div class="actions">
@@ -26,6 +25,8 @@
                             <th>State</th>
                             <th>City</th>
                             <th>PinCode</th>
+                            <th>Amount</th>
+                            <th>Charge</th>
                             <th scope="col" class="actions"><?= __('Actions') ?></th>
                         </tr>
                     </thead>
@@ -39,6 +40,21 @@
                             <td><?= h($pincode->state->name) ?></td>
                             <td><?= h($pincode->city->name) ?></td>
                             <td><?= h($pincode->pincode) ?></td>
+                            <td><?php
+                                if($pincode->we_deliver == "Yes")
+                                {
+                                    echo $pincode->delivery_charge->amount;
+                                }
+                                else{ echo"-";}
+                                ?>
+                            </td>
+                            <td><?php
+                                if($pincode->we_deliver == "Yes")
+                                {
+                                    echo $pincode->delivery_charge->charge;
+                                }
+                                else{ echo"-";}
+                                ?></td>
                             <td class="actions">
                                 <?= $this->Html->link(__('<span class="fa fa-pencil"></span>'), ['action' => 'edit', $pincode->id],['class'=>'btn btn-primary  btn-condensed btn-sm','escape'=>false]) ?>
                             </td>

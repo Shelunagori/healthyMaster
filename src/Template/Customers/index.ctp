@@ -9,8 +9,7 @@
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="font-purple-intense"></i>
-					<span class="caption-subject font-purple-intense ">
-						<i class="fa fa-plus"></i> Customers
+					<span class="caption-subject font-purple-intense "></i> CUSTOMERS
 					</span>
 				</div>
 				<div class="actions">
@@ -44,13 +43,13 @@
 						?>
 						<tr>
 							<td><?= $i ?></td>
-							<td><?= h($show_name) ?></td>
+							<td><?php echo $this->Html->link($show_name,['controller'=>'Customers','action' => 'customerLedger', $customer->id, 'print'],['target'=>'_blank']); ?></td>
 							<td><?= h($customer->email) ?></td>
 							<td><?= h($customer->address) ?></td>
 							<td><?= h($customer->bulk_booking_discount_percent) ?></td>
 							<td class="actions">
 								<?= $this->Html->link(__('Edit'), ['action' => 'edit', $customer->id]) ?>
-								<?= $this->Html->link(__('View'), ['action' => 'view', $customer->id ]) ?>
+								<!-- <?= $this->Html->link(__('View'), ['action' => 'view', $customer->id ]) ?> -->
 								<?= $this->Html->link(__('Address'), ['controller'=>'CustomerAddresses', 'action' => 'index', $customer->id ]) ?>
 							</td>
 						</tr>

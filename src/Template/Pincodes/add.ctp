@@ -1,12 +1,10 @@
 <div class="row">
-    <div class="col-md-9">
+    <div class="col-md-10">
         <div class="portlet light bordered">
             <div class="portlet-title">
                 <div class="caption">
                     <i class="font-purple-intense"></i>
-                    <span class="caption-subject font-purple-intense ">
-                        
-                            <i class="fa fa-plus"></i> Add Pincode
+                    <span class="caption-subject font-purple-intense ">ADD PINCODE
                         
                     </span>
                 </div>
@@ -16,6 +14,7 @@
                 <?= $this->Form->create($pincode,['id'=>'form_sample_3']) ?>
                 <div class="row">
                     <div class="col-md-3">
+                        <?= $this->Form->control('id',['type'=>'hidden']); ?>
                         <?php echo $this->Form->control('state_id', ['empty'=>'-- select --','options' => $states,'class'=>'form-control input-sm select select2me select2','required']); ?>
                     </div>
                     <div class="col-md-3">
@@ -25,9 +24,37 @@
                         <label class=" control-label">Pincode </label>
                         <?php echo $this->Form->control('pincode',['placeholder'=>'Pincode','class'=>'form-control input-sm','label'=>false]); ?>
                     </div>
+                    <div class="col-md-3">
+                        <label>We Deliver</label>
+                        <select name="we_deliver" class="form-control input-sm wedeliver">
+                            <option value="">--Select--</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                </div><br>
+                <div class="row delivery_reason display-none">
+                    <div class="col-md-10">
+                        <label>Delivery Reason</label>
+                        <textarea name="delivery_reason" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="row Yesbox display-none">
+                    <div class="col-md-3">
+                        <label>Amount</label>
+                        <input type="text" name="amount" class="form-control input-sm" value="0">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Delivery Charge</label>
+                        <input type="text" name="charge" class="form-control input-sm" value="0">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Type</label>
+                        <input type="text" name="type" class="form-control input-sm" value="0">
+                    </div>
                 </div>
                 <br/>
-                <?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']) . __(' Submit'),['class'=>'btn btn-success']); ?>
+                <?= $this->Form->button($this->Html->tag('i', '') . __(' Submit'),['class'=>'btn btn-success']); ?>
                 <?= $this->Form->end() ?>
             </div>
         </div>
@@ -37,6 +64,21 @@
 <?php echo $this->Html->script('/assets/global/plugins/jquery.min.js'); ?>
 <script>
 $(document).ready(function() {
+
+
+    $('.wedeliver').on('change',function(){
+       var deliver_value=$(this).val();
+       if(deliver_value == "No")
+       {
+            $('.delivery_reason').show();
+            $('.Yesbox').hide();
+       }
+       if(deliver_value == "Yes")
+       {
+            $('.delivery_reason').hide();
+            $('.Yesbox').show();
+       }
+    });
     
   //--------- FORM VALIDATION
     var form3 = $('#form_sample_3');

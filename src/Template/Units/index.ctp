@@ -6,10 +6,8 @@
 					<i class="font-purple-intense"></i>
 					<span class="caption-subject font-purple-intense ">
 						<?php 
-						if(!empty($unit->id)){ ?>
-							<i class="fa fa-pencil-square-o"></i> Edit Unit
-						<?php }else{ ?>
-							<i class="fa fa-plus"></i> Add Unit
+						if(!empty($unit->id)){ ?>EDIT UNIT
+						<?php }else{ ?> ADD UNIT
 						<?php } ?>
 					</span>
 				</div>
@@ -28,13 +26,13 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-8" style="margin-top: 10px;">
 						<label class=" control-label">Short Name <span class="required" aria-required="true">*</span></label>
 						<?php echo $this->Form->control('shortname',['placeholder'=>'Short Name','class'=>'form-control input-sm','label'=>false]); ?>
 					</div>
 				</div>
 				<br/>
-				<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']) . __(' Submit'),['class'=>'btn btn-success']); ?>
+				<?= $this->Form->button($this->Html->tag('i', '') . __(' Submit'),['class'=>'btn btn-success']); ?>
 				<?= $this->Form->end() ?>
 			</div>
 		</div>
@@ -44,7 +42,7 @@
 			<div class="portlet-title">
 				<div class="caption">
 					<i class=" fa fa-gift"></i>
-					<span class="caption-subject">Units</span>
+					<span class="caption-subject">UNITS</span>
 				</div>
 				<div class="actions">
 					<input type="text" class="form-control input-sm pull-right" placeholder="Search..." id="search3"  style="width: 200px;">
@@ -72,11 +70,11 @@
 								<td><?= h($unit->longname) ?></td>
 								<td><?= h($unit->shortname) ?></td>
 								<td class="actions">
-								<?php echo $this->Html->link('<i class="fa fa-pencil-square-o"></i>',['action' => 'index', $unit->id],['escape'=>false,'class'=>'btn btn-xs blue']); ?>
+								<?php echo $this->Html->link('<i class="fa fa-pencil"></i>',['action' => 'index', $unit->id],['escape'=>false,'class'=>'btn btn-sm blue']); ?>
 								
 								<?php echo $this->Form->PostLink('<i class="fa fa-trash"></i>',['action' => 'delete', $unit->id],[
 								'escape'=>false,
-								'class'=>'btn btn-xs red',
+								'class'=>'btn btn-sm red',
 								'confirm'=> __ ('Are yousue youwant to delete this unit?',$unit->id)]
 								)
 								?>

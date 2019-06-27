@@ -137,7 +137,7 @@
 				<!-- BEGIN LOGO -->
 				<div class="page-logo" style="padding-top:2px;padding-bottom:2px; width: auto;">
 					<!-- <?php echo $this->Html->image('/img/jainthela.png', ['height' => '40px']); ?> -->
-					<span><?php echo $this->Html->image('/img/healthy.png', ['height' => '40px']); ?></span>
+					<span><?php echo $this->Html->image('/img/login_logo.png', ['height' => '40px']); ?></span>
 				</div>
 				<!-- End LOGO -->
 				<div class="hor-menu hidden-sm hidden-xs">
@@ -146,7 +146,7 @@
 						
 						<li class="classic-menu-dropdown" >
 							<a data-toggle="dropdown" href="javascript:;" aria-expanded="false">
-							Masters & Setup <i class="fa fa-angle-down"></i>
+								Masters & Setup <i class="fa fa-angle-down"></i>
 							</a>
 							<ul class="dropdown-menu" >
 								<li>
@@ -185,6 +185,9 @@
 									<?php echo $this->Html->link('<i class="fa  fa-file"></i> Stock Report','/itemLedgers/report_show',['escape'=>false]) ?>
 								</li>
 								<li>
+									<?php echo $this->Html->link('<i class="fa  fa-file"></i> Top Selling Item Report','/ItemCategories/top_selling',['escape'=>false]) ?>
+								</li>
+								<li>
 									<?php echo $this->Html->link('<i class="fa  fa-file"></i> WishList Report','/Wishlists/wishlist_report',['escape'=>false]) ?>
 								</li>
 								<li>
@@ -195,6 +198,9 @@
 								</li>
 								<li>
 									<?php echo $this->Html->link('<i class="fa  fa-file"></i> Promo Code Report','/PromoCodes/promo_code_report',['escape'=>false]) ?>
+								</li>
+								<li>
+									<?php echo $this->Html->link('<i class="fa  fa-file"></i>Used Promo Code','/Orders/used_promo_code_report',['escape'=>false]) ?>
 								</li>
 								<!-- <li>
 									<?php echo $this->Html->link('<i class="fa fa-database"></i> Product Report','/itemLedgers/driver_report',['escape'=>false]) ?>
@@ -305,8 +311,43 @@
 							<li>
 								<?php echo $this->Html->link('<i class="fa fa-dashboard" ></i> <span >Dashboard</span>',array('controller'=>'Orders','action'=>'dashboard'),['escape'=>false]); ?>
 							</li>
+							<li class="classic-menu-dropdown" >
+								<a data-toggle="dropdown" href="javascript:;" aria-expanded="false">
+									<i class="fa fa-reorder" ></i>Masters & Setup <i class="fa fa-angle-down"></i>
+								</a>
+								<ul class="sub-menu" >
+									<li>
+									<?php echo $this->Html->link('<i class="fa fa-user"></i> Customers','/Customers',['escape'=>false]) ?>
+									</li>
+									<li>
+									<?php echo $this->Html->link('<i class="fa fa-user"></i> FAQ','/Faqs',['escape'=>false]) ?>
+									</li>
+									<li>
+									<?php echo $this->Html->link('<i class="fa fa-user"></i> Pincodes','/Pincodes',['escape'=>false]) ?>
+									</li>
+									<li>
+										<?php echo $this->Html->link('<i class="fa fa-users"></i> Vendors','/Vendors',['escape'=>false]) ?>
+									</li>
+									<li>
+									<?php echo $this->Html->link('<i class="fa fa-magnet"></i> Units','/Units',['escape'=>false]) ?>
+									</li>
+									<li>
+										<?php echo $this->Html->link('<i class="fa fa-sitemap"></i> Item Categories','/Item-Categories',['escape'=>false]) ?>
+									</li>
+									<li>
+										<?php echo $this->Html->link('<i class="fa fa-info"></i> Items','/Items',['escape'=>false]) ?>
+									</li>
+									<li>
+										<?php echo $this->Html->link('<i class="fa fa-cubes"></i> Sales Rate Update','/ItemVariations/define_sale_rate',['escape'=>false]) ?>
+									</li>
+									
+								</ul>
+							</li>
 							<li>
 								<?php echo $this->Html->link('<i class="fa fa-reorder"></i> <span>Manage Orders</span>',array('controller'=>'Orders','action'=>'index?status=process'),['escape'=>false]); ?>
+							</li>
+							<li>
+								<?php echo $this->Html->link('<i class="fa fa-reorder"></i> <span>Order List</span>',array('controller'=>'Orders','action'=>'orderList?status=process'),['escape'=>false]); ?>
 							</li>
 							<li>
 								<?php echo $this->Html->link('<i class="fa fa-bell"></i> <span>Push Notification</span>',array('controller'=>'AppNotifications','action'=>'index'),['escape'=>false]); ?>
@@ -340,7 +381,7 @@
 								<?php echo $this->Html->link('<i class="fa fa-retweet"></i> Stock Return','/itemLedgers/stock_return',['escape'=>false]) ?>
 							</li> -->
 							<li>
-								<?php echo $this->Html->link('<i class="fa fa-asterisk"></i> Online Order','/Orders/add/Offline',['escape'=>false]) ?>
+								<?php echo $this->Html->link('<i class="fa fa-asterisk"></i> WalkinbSales','/Orders/add/Offline',['escape'=>false]) ?>
 							</li>
 							<!--<li>
 								<?php echo $this->Html->link('<i class="fa fa-tasks"></i> Bulk Order','/Orders/add/Bulkorder',['escape'=>false]) ?>

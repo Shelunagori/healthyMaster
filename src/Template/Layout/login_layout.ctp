@@ -66,7 +66,7 @@ body
 <!-- BEGIN LOGO -->
 <div class="logo">
 </span><span class="title-main" style="color:#0ECCEE !important;">
-<?php echo $this->Html->image('/img/login.png', ['height' => '180', 'width' => '180']); ?>
+<?php echo $this->Html->image('/img/portal_logo.png', ['height' => '180', 'width' => '180']); ?>
 </span>
 </div>
 <!-- END LOGO -->

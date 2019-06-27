@@ -6,10 +6,8 @@
 					<i class="font-purple-intense"></i>
 					<span class="caption-subject font-purple-intense ">
 						<?php 
-						if(!empty($itemCategory->id)){ ?>
-							<i class="fa fa-pencil-square-o"></i> Edit Item Category
-						<?php }else{ ?>
-							<i class="fa fa-plus"></i> Add Item Category
+						if(!empty($itemCategory->id)){ ?> EDIT ITEM CATEGORY
+						<?php }else{ ?>ADD ITEM CATEGORY
 						<?php } ?>
 					</span>
 				</div>
@@ -20,15 +18,18 @@
 				</div>
 			</div>
 			<div class="portlet-body">
-				<?= $this->Form->create($itemCategory,['id'=>'form_sample_3']) ?>
+				<?= $this->Form->create($itemCategory,['type'=>'file','id'=>'form_sample_3']) ?>
 				<div class="row">
 					<div class="col-md-8">
 						<label class=" control-label">Item Category <span class="required" aria-required="true">*</span></label>
 						<?php echo $this->Form->control('name',['placeholder'=>'Item Category name','class'=>'form-control input-sm','label'=>false]); ?>
 					</div>
+					<div class="col-md-8" style="margin-top: 10px;">
+						 <?= $this->Form->input('image',['class'=>'form-control','type'=>'file']) ?>
+					</div>
 				</div>
 				<br/>
-				<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']) . __(' Submit'),['class'=>'btn btn-success']); ?>
+				<?= $this->Form->button($this->Html->tag('i', '') . __(' Submit'),['class'=>'btn btn-success']); ?>
 				<?= $this->Form->end() ?>
 			</div>
 		</div>
@@ -51,6 +52,7 @@
 							<tr>
 								<th><?=  h('Sr.no') ?></th>
 								<th><?=  h('Category Name') ?></th>
+								<th><?=  h('Image') ?></th>
 								<th class="actions"><?= __('Actions') ?></th>
 							</tr>
 						</thead>
@@ -63,6 +65,7 @@
 							<tr>
 								<td><?= h($k) ?></td>
 								<td><?= h($itemCategory->name) ?></td>
+								<td><img style="height:2%;" src="/healthyMaster/webroot/img/itemcategories/<?= $itemCategory->image ?>" ></td>
 								<td class="actions">
 								<?php echo $this->Html->link('<i class="fa fa-pencil-square-o"></i>',['action' => 'index', $itemCategory->id],['escape'=>false,'class'=>'btn btn-xs blue']); ?>
 								<?= $this->Form->postLink('<i class="fa fa-trash"></i> ',

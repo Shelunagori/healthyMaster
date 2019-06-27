@@ -27,6 +27,32 @@ class CustomersController extends AppController
         $this->set('_serialize', ['customers']);
     }
 
+    public function customerLedger($id=null)
+    {
+    	$this->viewBuilder()->layout('index_layout');
+    	$customers = $this->Customers->get($id, [
+            'contain' => ['JainCashPoints'=>function($query){
+				return $query->select([
+					'total_point' => $query->func()->sum('point'),
+					'total_used_point' => $query->func()->sum('used_point'),'customer_id'
+				]);
+			}
+		]
+	]);
+    	$customer_address=$this->Customers->CustomerAddresses->find()->where(['CustomerAddresses.customer_id'=>$id]);
+    	$orders = $this->Customers->Orders->find()->where(['Orders.customer_id'=>$id])
+    	->contain(['OrderDetails']);
+    	foreach ($orders as $order) {
+    		$order_id=$order->id;
+    		$points=$this->Customers->JainCashPoints->find()->where(['order_id'=>$order_id]);
+    	}
+    	$carts=$this->Customers->Carts->find()->where(['Carts.customer_id'=>$id])->contain(['Items','ItemVariations'=>['Units']]);
+    	$wishlists=$this->Customers->Wishlists->find()->where(['Wishlists.customer_id'=>$id])->contain(['Items','ItemVariations'=>['Units']]);
+    	//pr($id);
+    	//pr($points->toArray());exit;
+    	 $this->set(compact('customers','orders','carts','wishlists','customer_address','points'));
+    }
+
     /**
      * View method
      *
@@ -239,7 +265,7 @@ class CustomersController extends AppController
 	public function defaultAddress($id = null)
     { 
 		$this->viewBuilder()->layout('');
-		
+		//pr($id);exit;
 		if(empty($id)){
 			echo ''; exit;
 		}
@@ -255,7 +281,7 @@ class CustomersController extends AppController
 	public function defaultAddress1($id = null)
     { 
 		$this->viewBuilder()->layout('');
-		
+		//pr($id);
 		if(empty($id)){
 			echo ''; exit;
 		}

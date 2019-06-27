@@ -111,7 +111,7 @@ class OrdersController extends AppController
 		$customer_id=$this->request->query('customer_id');
 		
 		$orders_data = $this->Orders->find()
-		->where(['customer_id' => $customer_id, 'jain_thela_admin_id' => $jain_thela_admin_id, 'status IN' => ['Delivered','Cancel','In Process'] ])
+		->where(['customer_id' => $customer_id, 'jain_thela_admin_id' => $jain_thela_admin_id, 'status IN' => ['Delivered','Cancel','In Process','Placed'] ])
 		->order(['order_date' => 'DESC'])
 		->contain(['OrderDetails'=>function($q){
 				return $q->contain(['ItemVariations' =>['Items','Units']]);
@@ -152,48 +152,56 @@ class OrdersController extends AppController
 		$customer_id=$this->request->query('customer_id');
 		$order_id=$this->request->query('order_id');
 		@$cancel_id=$this->request->query('cancel_id');
+		@$other_comment=$this->request->query('other_comment');
  		
-   
-				$odrer_datas=$this->Orders->get($order_id);
- 				$o_date=$odrer_datas->order_date;
- 				//$amount_from_wallet=$odrer_datas->amount_from_wallet;
-				$amount_from_wallet = 0;
- 				$amount_from_jain_cash=$odrer_datas->amount_from_jain_cash;
- 				$amount_from_promo_code=$odrer_datas->amount_from_promo_code;
- 				$online_amount=$odrer_datas->online_amount;
-				$return_amount=$amount_from_wallet+$amount_from_jain_cash+$amount_from_promo_code+$online_amount;
+		if(empty($cancel_id))
+		{
+			$cancel_id = 3;
+		}
+		
+		
+		$odrer_datas=$this->Orders->get($order_id);
+		$o_date=$odrer_datas->order_date;
+		//$amount_from_wallet=$odrer_datas->amount_from_wallet;
+		$amount_from_wallet = 0;
+		$amount_from_jain_cash=$odrer_datas->amount_from_jain_cash;
+		$amount_from_promo_code=$odrer_datas->amount_from_promo_code;
+		$online_amount=$odrer_datas->online_amount;
+		
+		//$return_amount=$amount_from_wallet + $amount_from_jain_cash + $amount_from_promo_code+$online_amount;
 				
-				$order_cancel = $this->Orders->query();
-					$result = $order_cancel->update()
-						->set(['status' => 'Cancel',
-						'cancel_id' => $cancel_id, 'order_date' => $o_date])
-						->where(['id' => $order_id])
-						->execute();
+		$order_cancel = $this->Orders->query();
+		$result = $order_cancel->update()
+			->set(['status' => 'Cancel',
+			'cancel_id' => $cancel_id, 'order_date' => $o_date,'other_comment' => $other_comment])
+			->where(['id' => $order_id])
+			->execute();
 						
 						
-					$query = $this->Orders->Wallets->query();
-					$query->insert(['customer_id', 'advance', 'narration', 'return_order_id'])
-							->values([
-							'customer_id' => $customer_id,
-							'advance' => $return_amount,
-							'narration' => 'Amount Return form Order',
-							'return_order_id' => $order_id
-							])
-					->execute();
-//end tis code///		
+		$query = $this->Orders->JainCashPoints->query();
+		$query->insert(['customer_id', 'point','is_refered','order_id','narration'])
+				->values([
+				'customer_id' => $customer_id,
+				'point' => $amount_from_jain_cash,
+				'is_refered' => 'Yes',
+				'order_id' => $order_id,
+				'narration' => 'Amount Return form Order'				
+				])
+		->execute();
+
+		//end this code///		
 
 		
-			$customer_details=$this->Orders->Customers->find()
-			->where(['Customers.id' => $customer_id])->first();
-			$mobile=$customer_details->mobile;
+		$customer_details=$this->Orders->Customers->find()
+		->where(['Customers.id' => $customer_id])->first();
+		$mobile=$customer_details->mobile;
 
-			$sms=str_replace(' ', '+', 'Your order has been cancelled.' );
-			$working_key='A7a76ea72525fc05bbe9963267b48dd96';
-			$sms_sender='JAINTE';
-			$sms=str_replace(' ', '+', $sms);
-			/* file_get_contents('http://alerts.sinfini.com/api/web2sms.php?workingkey='.$working_key.'&sender='.$sms_sender.'&to='.$mobile.'&message='.$sms.''); */
-		
-		file_get_contents('http://103.39.134.40/api/mt/SendSMS?user=phppoetsit&password=9829041695&senderid='.$sms_sender.'&channel=Trans&DCS=0&flashsms=0&number='.$mobile.'&text='.$sms.'&route=7');
+		$sms=str_replace(' ', '+', 'Your order has been cancelled.' );
+		$working_key='A7a76ea72525fc05bbe9963267b48dd96';
+		$sms_sender='JAINTE';
+		$sms=str_replace(' ', '+', $sms);
+				
+		//file_get_contents('http://103.39.134.40/api/mt/SendSMS?user=phppoetsit&password=9829041695&senderid='.$sms_sender.'&channel=Trans&DCS=0&flashsms=0&number='.$mobile.'&text='.$sms.'&route=7');
 		
 		$status=true;
 		$error="Thank you, your order has been cancelled.";
@@ -603,6 +611,8 @@ curl_close($ch);
 						$this->request->data['order_details'][$i]['rate']=$carts_data_fetch->item_variation->sales_rate;
 						$this->request->data['order_details'][$i]['amount']=$amount;
 						$this->request->data['order_details'][$i]['is_combo']=$carts_data_fetch->is_combo;
+						
+						$this->request->data['order_details'][$i]['status']='Placed';
 						$i++;
 					}
 					
@@ -637,7 +647,7 @@ curl_close($ch);
 					$order->promo_code_id=$promo_code_id;
 					$order->order_type=$order_type;
 					//$order->discount_percent=$discount_percent;
-					$order->status='In Process';
+					$order->status='Placed';
 					$order->curent_date=$curent_date;
 					$order->get_auto_no=$get_auto_no;
 					$order->delivery_date=$deliverydate;
@@ -975,27 +985,38 @@ curl_close($ch);
 	public function itemCancel()
     {
 		//$jain_thela_admin_id=$this->request->query('jain_thela_admin_id');
-		$mainid=$this->request->query('id');
+		$mainid=$this->request->query('order_detail_id');
 		$order_id=$this->request->query('order_id');
-		    
+		$customer_id=$this->request->query('customer_id');    			
+        $detail_amount=$this->Orders->OrderDetails->find()->where(['id' => $mainid])->first();
+		$amount=$detail_amount->amount;			
+		$query = $this->Orders->OrderDetails->query();
+		$result = $query->update()
+			->set(['status' => 'Cancel'])
+			->where(['id' => $mainid])
+			->execute();
 			
-            $detail_amount=$this->Orders->OrderDetails->find()
-			->where(['id' => $mainid])->first();
-			$amount=$detail_amount->amount;
-				$query = $this->Orders->OrderDetails->query();
-				$result = $query->delete()
-					->where(['id' => $mainid])
-					->execute(); 			
-					
-			$order_data=$this->Orders->find()
-			->where(['id' => $order_id])->first();
+		$order_data=$this->Orders->find()
+				->where(['id' => $order_id,'customer_id' =>$customer_id])
+				->first();
 			
-			$total_amount=$order_data->total_amount-$amount;
-            $grand_total=$total_amount+$order_data->delivery_charge;
-			$pay_amount=($grand_total) - (($order_data->amount_from_wallet) + ($order_data->amount_from_jain_cash) + ($order_data->amount_from_promo_code) + ($order_data->online_amount));
-			
-			if($pay_amount>=0)
-			{
+		$total_amount=$order_data->total_amount-$amount;
+        $grand_total=$total_amount+$order_data->delivery_charge;
+		$pay_amount = ($grand_total) - (($order_data->amount_from_wallet) + ($order_data->amount_from_jain_cash) + ($order_data->amount_from_promo_code) + ($order_data->online_amount));
+
+		$orderItems = $this->Orders->find()->contain(['OrderDetails' => function ($q) {
+			return $q->where(['OrderDetails.status !=' => 'Cancel']);
+		}])->where(['Orders.id' => $order_id,'Orders.customer_id' => $customer_id])->first();
+
+		$totalItem = sizeof($orderItems->order_details);
+
+		if($totalItem == 0)
+		{
+			$cancel_id = 1;
+			$this->cancelOrder();
+		}
+		else if($pay_amount>=0)
+		{
 			$paid_amount=$pay_amount;
 			//update order amount in order//
 			$querys = $this->Orders->query();
@@ -1004,150 +1025,8 @@ curl_close($ch);
 						'grand_total'=>$grand_total, 'pay_amount'=>$paid_amount])
 						->where(['id' => $order_id])
 						->execute();
-			}
-			else{
-				$paid_amount=0;
-				$add_amount=str_replace('-','',$pay_amount);
-				if($order_data->amount_from_wallet>0 && $order_data->online_amount==0)
-				{
-					$minus_from_wallet=$order_data->amount_from_wallet-$add_amount;
-					if($minus_from_wallet>=0)
-					{
-						$add_from_wallet=$minus_from_wallet;  
-						//update wallet amount in order - $add_from_wallet//
-						//update wallet amount in wallet - $add_from_wallet//
-						 $querys = $this->Orders->query();
-						 $results = $querys->update()
-						->set(['amount_from_wallet' => $add_from_wallet, 'total_amount'=>$total_amount, 
-						'grand_total'=>$grand_total, 'pay_amount'=>$paid_amount])
-						->where(['id' => $order_id])
-						->execute();
-						
-						if($add_from_wallet>0)
-						{
-						$wallet_query = $this->Orders->Wallets->query();
-						$result_1 = $wallet_query->update()
-						->set(['consumed' => $add_from_wallet])
-						->where(['Wallets.order_id' => $order_id])
-						->execute();	
-						}
-						else{
-							$wallet_query = $this->Orders->Wallets->query();
-						$result_1 = $wallet_query->delete()
-						->where(['Wallets.order_id' => $order_id])
-						->execute();
-						}
-
-					}
-					else{
-					$add_from_wallet=0;
-					//update wallet amount in order - $add_from_wallet//
-					$querys = $this->Orders->query();
-						 $results = $querys->update()
-						->set(['amount_from_wallet' => $add_from_wallet, 'total_amount'=>$total_amount, 
-						'grand_total'=>$grand_total, 'pay_amount'=>$paid_amount])
-						->where(['id' => $order_id])
-						->execute();
-					
-					$new_add_from_wallet=str_replace('-','',$minus_from_wallet);
-					
-					//delete wallet entry amount in wallet - via order_id//	
-                       $wallet_query = $this->Orders->Wallets->query();
-						$result_1 = $wallet_query->delete()
-						->where(['Wallets.order_id' => $order_id])
-						->execute();					
-					}
-				}
-				else if($order_data->amount_from_wallet==0 && $order_data->online_amount>0)
-				{
-					$add_from_online=$order_data->online_amount-$add_amount;
-					//update online amount in order - $add_from_online//
-					$querys = $this->Orders->query();
-						 $results = $querys->update()
-						->set(['total_amount'=>$total_amount, 
-						'grand_total'=>$grand_total, 'pay_amount'=>$paid_amount, 'online_amount'=>$add_from_online])
-						->where(['id' => $order_id])
-						->execute();
-					
-					//insert wallet amount in wallet - $add_amount//
-					
-					$wallet_query = $this->Orders->Wallets->query();
-					$wallet_query->insert(['plan_id', 'advance', 'customer_id','cancel_to_wallet_online'])
-							->values([
-							'plan_id' => 19,
-							'advance' => $add_amount,
-							'customer_id' => $order_data->customer_id,
-							'cancel_to_wallet_online'=> 'added',
-							])
-					->execute();
-				}
-				else if($order_data->amount_from_wallet>0 && $order_data->online_amount>0)
-				{
-					$minus_from_wallet=$order_data->amount_from_wallet-$add_amount;
-					if($minus_from_wallet>=0)
-					{
-					$add_from_wallet=$minus_from_wallet;  
-					//update wallet amount in order - $add_from_wallet//
-					//update wallet amount in wallet - $add_from_wallet//
-					
-					
-					 $querys = $this->Orders->query();
-						 $results = $querys->update()
-						->set(['amount_from_wallet' => $add_from_wallet, 'total_amount'=>$total_amount, 
-						'grand_total'=>$grand_total, 'pay_amount'=>$paid_amount])
-						->where(['id' => $order_id])
-						->execute();
-						
-						if($add_from_wallet>0)
-						{
-						$wallet_query = $this->Orders->Wallets->query();
-						$result_1 = $wallet_query->update()
-						->set(['consumed' => $add_from_wallet])
-						->where(['Wallets.order_id' => $order_id])
-						->execute();	
-						}
-						else{
-							$wallet_query = $this->Orders->Wallets->query();
-						$result_1 = $wallet_query->delete()
-						->where(['Wallets.order_id' => $order_id])
-						->execute();
-						}					
-					}
-					else{
-					$add_from_wallet=0;
-					//update wallet amount in order - $add_from_wallet//
-					$new_add_from_wallet=str_replace('-','',$minus_from_wallet);
-					$add_from_online=$order_data->online_amount-$new_add_from_wallet;
-					//update online amount in order - $add_from_online//
-					
-					     $querys = $this->Orders->query();
-						 $results = $querys->update()
-						->set(['amount_from_wallet' => $add_from_wallet, 'total_amount'=>$total_amount, 
-						'grand_total'=>$grand_total, 'pay_amount'=>$paid_amount, 'online_amount'=>$add_from_online])
-						->where(['id' => $order_id])
-						->execute();
-
-                        //delete wallet entry amount in wallet - via order_id//							
-						$wallet_query = $this->Orders->Wallets->query();
-						$result_1 = $wallet_query->delete()
-						->where(['Wallets.order_id' => $order_id])
-						->execute();
-						
-					//insert wallet amount in wallet - $new_add_from_wallet//
-					$wallet_query = $this->Orders->Wallets->query();
-					$wallet_query->insert(['plan_id', 'advance', 'customer_id','cancel_to_wallet_online'])
-							->values([
-							'plan_id' => 19,
-							'advance' => $new_add_from_wallet,
-							'customer_id' => $order_data->customer_id,
-							'cancel_to_wallet_online'=> 'added',
-							])
-					->execute();
-									
-					}
-				}
-			}
-			
+		}
+		
 		$status=true;
 		$error="Item Cancelled.";
         $this->set(compact('status', 'error'));

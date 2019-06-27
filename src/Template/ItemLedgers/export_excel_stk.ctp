@@ -19,8 +19,7 @@
 						<tr>
 							<th>Sr</th>
 							<th>Item</th>
-							<th>Driver Stock</th>
-							<th>Warehouse Stock</th>
+							<th>Variation</th>
 							<th>Current Stock</th>
 						</tr>
 					</thead>
@@ -41,10 +40,7 @@
 											<a href="#" role="button" class="stock_show" itm="<?= $itemLedger->item_id ?>"><?= $itemLedger->item->name ?></a>	
 										</td>
 										<td>
-											<?= $driver_stock.' '.$itemLedger->item_variation->unit->shortname ?>
-										</td>
-										<td>
-											<?= $warehouse_stock.' '.$itemLedger->item_variation->unit->shortname ?>
+											<?= $itemLedger->item_variation->quantity_variation.' '.$itemLedger->item_variation->unit->shortname ?>
 										</td>
 										<td>
 											<?= $driver_stock+$warehouse_stock.' '.$itemLedger->item_variation->unit->shortname ?>

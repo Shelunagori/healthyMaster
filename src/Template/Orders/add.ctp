@@ -34,8 +34,7 @@ background-color: #fff;}
 					?>
 				<div class="row">
 					<div class="col-md-3">
-						<label class=" control-label">Customer <span class="required" aria-required="true">*</span></label><!-- 
-						<?php echo $this->Form->control('customer_id',['empty'=>'--Select Customer--','options' => $customers,'class'=>'form-control input-sm select2me customer_id cstmr chosen-select','id'=>'customer_id','label'=>false]); ?> -->
+						<label class=" control-label">Customer <span class="required" aria-required="true">*</span></label>
 						<input type="text" name="customer" class="form-control input-sm selectedAutoCompleted autocompleted customer_id cstmr chosen-select" valueType="item_name" >
 						<input type="hidden" name="customer_id" id="customer_id">
 						
@@ -551,16 +550,37 @@ $(document).ready(function() {
 	});
 
 	$(".quant").die().live('keyup',function(){
+		//alert();
 		var quant = parseFloat($(this).val());
-		if(!quant){ quant=0; }
+		var master=$(this)
 		var minimum_quantity_factor = parseFloat($(this).attr('minimum_quantity_factor'));
-		if(!minimum_quantity_factor){ minimum_quantity_factor=0; }
-		var unit_name = $(this).attr('unit_name');
-		if(!unit_name){ unit_name=0; }
-		var g_total = quant*minimum_quantity_factor;
-		$(this).closest('tr').find('.msg_shw2').html(g_total.toFixed(2)+" "+unit_name);
-		//$(this).closest('tr').find('.mains').val(g_total.toFixed(2));
-		$(this).closest('tr').find('.mainss').val(g_total.toFixed(2));
+		var item_id =$(this).closest('tr').find('td:nth-child(2) select').val();
+		var variation_id =$(this).closest('tr').find('td:nth-child(3) select').val();
+        $.ajax({
+            url: "<?php echo $this->Url->build(["controller" => "ItemLedgers", "action" => "ajaxQuantity"]); ?>",
+            type: 'post',
+            data: {item_id: item_id,variation_id:variation_id},
+           success: function(data)   // A function to be called if request succeeds
+					{
+						//alert(data);
+						master.closest('tr').find('span.total').html(data);
+						if(quant > data)
+						{
+							master.closest('tr').find('.show_quantity').val('');
+						}
+					}	
+            });
+
+
+
+	// 	if(!minimum_quantity_factor){ minimum_quantity_factor=0; }
+	// 	var unit_name = $(this).attr('unit_name');
+	//  if(!unit_name){ unit_name=0; }
+	// var g_total = quant*minimum_quantity_factor;
+	// alert(g_total);
+ // $(this).closest('tr').find('.msg_shw2').html(g_total.toFixed(2));
+		// //$(this).closest('tr').find('.mains').val(g_total.toFixed(2));
+		// $(this).closest('tr').find('.mainss').val(g_total.toFixed(2));
 		calculate_total();
 	});
 	
@@ -637,6 +657,7 @@ $(document).ready(function() {
 						$.ajax({
 							url: url,
 						}).done(function(response) { 
+							//alert(respose);
 							$('textarea[name="customer_address"]').val(response);
 							var customer_id=$('#customer_id').val();
 							var url="<?php echo $this->Url->build(['controller'=>'Customers','action'=>'defaultAddress1']); ?>";
@@ -675,7 +696,7 @@ $(document).ready(function() {
 		$('textarea[name="customer_address"]').val(addr);
 		$('input[name="customer_address_id"]').val(addr_id);
 		$("#myModal1").hide();
-		var customer_id=$('select[name="customer_id"] option:selected').val();
+		var customer_id=$('#customer_id').val();
 		var url="<?php echo $this->Url->build(['controller'=>'CustomerAddresses','action'=>'adddefaultAddress']); ?>";
 		url=url+'/'+customer_id+'/'+addr_id,
 		$.ajax({
@@ -685,15 +706,17 @@ $(document).ready(function() {
     });
 	
 	
-	$('.customer_id').on("change",function() {
-		var customer_id=$('select[name="customer_id"] option:selected').val();
-		
+	$('textarea[name="customer_address"]').on("focus",function() {
+		//alert();
+		var customer_id=$('#customer_id').val();
+		//alert(customer_id);
 		var url="<?php echo $this->Url->build(['controller'=>'Customers','action'=>'defaultAddress']); ?>";
 		url=url+'/'+customer_id,
 		
 		$.ajax({
 			url: url,
 		}).done(function(response) { 
+			//alert(response);
 			if(response == ' '){
 				$('#address').modal({ keyboard: false, backdrop: 'static'}).show();
 				var validator = $( "#myForm1" ).validate();
@@ -706,27 +729,27 @@ $(document).ready(function() {
 			}
 		});
 	});
-	$('.customer_id').on("change",function() {
-		var customer_id=$('#customer_id').val();
+	// $('.customer_id').on("change",function() {
+	// 	var customer_id=$('#customer_id').val();
 		
-		var url="<?php echo $this->Url->build(['controller'=>'Customers','action'=>'defaultAddress1']); ?>";
-		url=url+'/'+customer_id,
+	// 	var url="<?php echo $this->Url->build(['controller'=>'Customers','action'=>'defaultAddress1']); ?>";
+	// 	url=url+'/'+customer_id,
 		
-		$.ajax({
-			url: url,
-		}).done(function(response) { 
-			if(response == ' '){
-				$('#address').modal({ keyboard: false, backdrop: 'static'}).show();
-				var validator = $( "#myForm1" ).validate();
-			$('#form1')[0].reset();
-			$("label.error").hide();
-			$(".error").removeClass("error");
-			validator.reset();
- 			}else{	
- 				$('input[name="customer_address_id"]').val(response);
-			}
-		});
-	});
+	// 	$.ajax({
+	// 		url: url,
+	// 	}).done(function(response) { 
+	// 		if(response == ' '){
+	// 			$('#address').modal({ keyboard: false, backdrop: 'static'}).show();
+	// 			var validator = $( "#myForm1" ).validate();
+	// 		$('#form1')[0].reset();
+	// 		$("label.error").hide();
+	// 		$(".error").removeClass("error");
+	// 		validator.reset();
+ // 			}else{	
+ // 				$('input[name="customer_address_id"]').val(response);
+	// 		}
+	// 	});
+	// });
 	///wallet
 	$('.cstmr').on("click",function() {
 		var customer_id=$('customer_id').val();
@@ -774,7 +797,7 @@ function selectAutoCompleted1(value) {
 					<td>
 						<?php echo $this->Form->input('show_quantity', ['label' => false,'class' => 'form-control input-sm number cal_amount quant show_quantity','placeholder'=>'Quantity']); ?>
 						
-						<span class="msg_shw2" style="color:blue;font-size:12px;"></span>
+						<span class="msg_shw2 total"  style="color:blue;font-size:12px;"></span>
 							<?php echo $this->Form->input('quantity', ['label' => false,'class' => 'form-control input-sm number mains quantity','value'=>0, 'type'=>'hidden']); ?>
 							<?php echo $this->Form->input('actual_quantity', ['label' => false,'class' => 'form-control input-sm number mainss actual_quantity','value'=>0, 'type'=>'hidden']); ?>
 					</td>

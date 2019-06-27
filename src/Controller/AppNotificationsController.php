@@ -72,27 +72,38 @@ class AppNotificationsController extends AppController
 				$file = $this->request->data['image'];
 				$file_name=$file['name'];
 				
-				if(!empty($file_name))
-				{
+			if(!empty($file_name))
+			{
 				$ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
 				$arr_ext = array('jpg', 'jpeg', 'png'); //set allowed extensions
 				$setNewFileName = uniqid();
 				$appNotification->image = 'http://healthymaster.in'.$this->request->webroot.'Notify_images/'.$setNewFileName . '.' .$ext;
+				$img_name= $setNewFileName.'.'.$ext;
 				
-				if (in_array($ext, $arr_ext))
-				{
-					 
-						move_uploaded_file($file['tmp_name'], WWW_ROOT . '/Notify_images/' . $setNewFileName . '.' . $ext);
-				}
+				if (in_array($ext, $arr_ext)) {
+                         $destination_url = WWW_ROOT . 'Notify_images/'.$img_name;
+                        if($ext=='png'){
+                        $image = imagecreatefrompng($file['tmp_name']);
+                        }else{
+                        $image = imagecreatefromjpeg($file['tmp_name']);
+                        }
+                        imagejpeg($image, $destination_url, 10);
+                        $keyname1 = 'Notify_images/'.$img_name;
+                        $this->AwsFile->putObjectFile($keyname1,$destination_url,$file['type']);
+            
+                    //move_uploaded_file($file['tmp_name'], WWW_ROOT . 'img/item_images/'.$img_name);
+                  }
 			}
 
 			else{
 					$appNotification->image = 'http://healthymaster.in'.$this->request->webroot.'Notify_images/healthy.png';
 			}
 			
-
-			$appNotification->app_link = $deepLinks->link_url;
-			$appNotification->screen_type = $deepLinks->link_name; 
+			if($deepLinks!=null)
+			{
+				$appNotification->app_link = $deepLinks->link_url;
+				$appNotification->screen_type = $deepLinks->link_name; 
+			}
 			
 			//pr($appNotification);exit;
 			

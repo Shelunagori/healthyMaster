@@ -22,6 +22,30 @@ class ItemLedgersController extends AppController
      *
      * @return \Cake\Http\Response|null
      */
+
+    public function ajaxQuantity()
+    {
+    	$item_id=$this->request->getData('item_id');
+    	$variation_id=$this->request->getData('variation_id');
+
+    	$item_ledgers=$this->ItemLedgers->find()
+    	->select(['total'=>'SUM(quantity)'])
+    	->where(['item_id'=>$item_id,'item_variation_id'=>$variation_id,'status'=>'In']);
+
+    	$item_ledgers_out=$this->ItemLedgers->find()
+    	->select(['total_out'=>'SUM(quantity)'])
+    	->where(['item_id'=>$item_id,'item_variation_id'=>$variation_id,'status'=>'out']);
+
+    		foreach ($item_ledgers as $item_ledger) {
+    			$total_in=$item_ledger->total;
+    			foreach ($item_ledgers_out as $out) {
+    				$total_out=$out->total_out;
+    				echo $total_in - $total_out;
+    			}
+    		}
+    	exit;
+    }
+
     public function index()
     {
         $this->paginate = [
@@ -527,7 +551,7 @@ class ItemLedgersController extends AppController
 			$this->ItemLedgers->find()
 			->where($where)
 			->order(['transaction_date'=> 'DESC'])
-			->contain(['Drivers', 'Items'=>['Units','itemCategories']]
+			->contain(['Drivers', 'ItemVariations'=>['Units','itemCategories','Items']]
 		);
 		$drivers=$this->ItemLedgers->Drivers->find('list');
 		
@@ -592,7 +616,7 @@ class ItemLedgersController extends AppController
 		$this->set(compact('itemLedgers','url'));
     }
 
-	public function exportExcelStock(){
+	public function exportExcelStk(){
 		$this->viewBuilder()->layout(''); 
 		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id'); 
 		
@@ -629,13 +653,30 @@ class ItemLedgersController extends AppController
 			'totalOutDriver' => $query->func()->sum($totalOutDriverCase),'id','item_id'
 		])
 		->where(['ItemLedgers.jain_thela_admin_id'=>$jain_thela_admin_id])
-		->group('item_id')
+		->group('ItemLedgers.item_id')
 		->autoFields(true)
-		->contain(['ItemVariations'=>['Units','itemCategories','Items']])->order(['Items.name' => 'ASC']);
+		->contain(['ItemVariations'=>['Units'],'Items'=>['itemCategories']])->order(['Items.name' => 'ASC']);
 
 		$itemLedgers=$query;
+		//pr($itemLedgers->toArray());exit;
 
 		$this->set(compact('itemLedgers','url'));
+	}
+
+
+	public function itemWise($id=null)
+	{
+		$this->viewBuilder()->layout('index_layout');
+        $order = $this->ItemLedgers->get($id, [
+            'contain' => ['Customers', 'PromoCodes', 'OrderDetails'=>['Items'=>['Units']], 'CustomerAddresses']
+        ]);
+
+        $item_wise=$this->ItemLedgers->find()
+        ->where(['item_id'=>$id])
+        ->contain(['ItemVariations','Units','Items']);
+		
+        $this->set('item_wise', $item_wise);
+        $this->set('_serialize', ['item_wise']);
 	}
 	
 	public function itemStockUpdate()
@@ -846,7 +887,7 @@ class ItemLedgersController extends AppController
 		->where($where)
 		->group('item_id')
 		->autoFields(true)
-		->contain(['Items'=>['Units']])->order(['Items.name' => 'ASC']);
+		->contain(['ItemVariations'=>['Items','Units']])->order(['Items.name' => 'ASC']);
         $details = ($query);
 		//pr($details->toArray());
 		///////////////////////////////////////////////////////////
@@ -1025,7 +1066,7 @@ class ItemLedgersController extends AppController
 		->where($where)
 		->group('item_id')
 		->autoFields(true)
-		->contain(['Items'=>['Units']])->order(['Items.name' => 'ASC']);
+		->contain(['ItemVariations'=>['Items','Units']])->order(['Items.name' => 'ASC']);
         $details = ($query);
 		//pr($details->toArray());
 		///////////////////////////////////////////////////////////
@@ -1146,13 +1187,13 @@ class ItemLedgersController extends AppController
 			$where1['ItemLedgers.transaction_date <=']=$to_date;
 		}
 		if(!empty($where)){
-			$itemLedgers = $this->ItemLedgers->find()->contain(['Items'=> function ($q) {
-				return $q->where(['is_combo'=>'no','is_virtual'=>'no','freeze'=>0])->contain(['Units'])->order(['Items.name'=>'ASC']);
-			}])->where(['ItemLedgers.jain_thela_admin_id'=>$jain_thela_admin_id])->where($where);
+			$itemLedgers = $this->ItemLedgers->find()->contain(['ItemVariations'=>['Items'=> function ($q) {
+				return $q->where(['is_combo'=>'no','is_virtual'=>'no','freeze'=>0])->order(['Items.name'=>'ASC']);
+			},'Units']])->where(['ItemLedgers.jain_thela_admin_id'=>$jain_thela_admin_id])->where($where);
 		}else{
-			$itemLedgers = $this->ItemLedgers->find()->contain(['Items'=> function ($q) {
-				return $q->where(['is_combo'=>'no','is_virtual'=>'no','freeze'=>0])->contain(['Units'])->order(['Items.name'=>'ASC']);
-			}])->where(['ItemLedgers.jain_thela_admin_id'=>$jain_thela_admin_id])->where($where1);
+			$itemLedgers = $this->ItemLedgers->find()->contain(['ItemVariations'=>['Items'=> function ($q) {
+				return $q->where(['is_combo'=>'no','is_virtual'=>'no','freeze'=>0])->order(['Items.name'=>'ASC']);
+			},'Units']])->where(['ItemLedgers.jain_thela_admin_id'=>$jain_thela_admin_id])->where($where1);
 		}	
 		$order_online = []; $order_online_name=[]; $order_bulk = []; $walkins_sales = []; $order_online_rate = [];
 		$order_bulk_rate = []; $walkins_sales_rate = []; $Itemsexists=[]; $qty=0; $units=[];

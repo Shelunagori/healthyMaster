@@ -26,8 +26,8 @@ class ItemVariationsController extends AppController
         $itemvariation = $this->ItemVariations->newEntity();
         
         if ($this->request->is(['post', 'put'])) {
-            $item_variation=$this->request->getData('itemVariations');
-          //  pr($item_variation);exit;
+            $item_variation=$this->request->getData();
+            pr($item_variation);
             
             foreach($item_variation as $itemVariations){
                 //pr($itemVariations['print_rate']);exit;
@@ -45,7 +45,7 @@ class ItemVariationsController extends AppController
                     ->execute();
             }
 
-            //pr($query->toArray());exit;
+            pr($query->toArray());exit;
             $this->Flash->success(__('Item rates have updated successfully.'));
          }
         $item_variations = $this->ItemVariations->find()
@@ -136,16 +136,32 @@ class ItemVariationsController extends AppController
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $itemVariation = $this->ItemVariations->get($id);
-        if ($this->ItemVariations->delete($itemVariation)) {
-            $this->Flash->success(__('The item variation has been deleted.'));
-        } else {
-            $this->Flash->error(__('The item variation could not be deleted. Please, try again.'));
-        }
+    // public function delete($id = null)
+    // {
+    //     $this->request->allowMethod(['post', 'delete']);
+    //     $itemVariation = $this->ItemVariations->get($id);
+    //     if ($this->ItemVariations->delete($itemVariation)) {
+    //         $this->Flash->success(__('The item variation has been deleted.'));
+    //     } else {
+    //         $this->Flash->error(__('The item variation could not be deleted. Please, try again.'));
+    //     }
 
-        return $this->redirect(['action' => 'index']);
+    //     return $this->redirect(['action' => 'index']);
+    // }
+    public function delete()
+    {
+        //pr("fdvfv");exit;
+        if($this->request->is(['post']))
+        {
+            $success = 0;
+            $id = $this->request->getData('id');
+            pr($id);exit;
+            $itemVariation = $this->ItemVariations->get($id);
+            if ($this->ItemVariations->delete($itemVariation)) {
+               $success = 1;
+            }
+        }
+        $this->set(compact('success','response'));
+        $this->set('_serialize',['success','response']);
     }
 }

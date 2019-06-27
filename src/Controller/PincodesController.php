@@ -21,7 +21,7 @@ class PincodesController extends AppController
     {
         $this->viewBuilder()->layout('index_layout');
         $this->paginate = [
-            'contain' => ['States', 'Cities']
+            'contain' => ['States','Cities','DeliveryCharges']
         ];
         $pincodes = $this->paginate($this->Pincodes);
 
@@ -53,11 +53,26 @@ class PincodesController extends AppController
     {
         $this->viewBuilder()->layout('index_layout');
         $pincode = $this->Pincodes->newEntity();
+        $DeliveryCharges = $this->Pincodes->DeliveryCharges->newEntity();
         if ($this->request->is('post')) {
-            $pincode = $this->Pincodes->patchEntity($pincode, $this->request->getData());
+            $data=$this->request->getData();
+            pr($data);
+            $pincode = $this->Pincodes->patchEntity($pincode,$data);
             if ($this->Pincodes->save($pincode)) {
+                if($data['we_deliver']=="Yes")
+                {
+                    $DeliveryCharges->amount=$this->request->getData('amount');
+                    $DeliveryCharges->charge=$this->request->getData('charge');
+                    $DeliveryCharges->type=$this->request->getData('type');
+                    $DeliveryCharges->pincode_id=$pincode->id;
+                    //pr($DeliveryCharges);
+                    if($this->Pincodes->DeliveryCharges->save($DeliveryCharges))
+                    {
+                        $this->Flash->success(__('The pincode has been saved.'));
+                        return $this->redirect(['action' => 'index']);
+                    }
+                }
                 $this->Flash->success(__('The pincode has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The pincode could not be saved. Please, try again.'));

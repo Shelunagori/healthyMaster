@@ -40,6 +40,14 @@ class VendorsTable extends Table
             'foreignKey' => 'franchise_id',
             'joinType' => 'INNER'
         ]);
+        $this->belongsTo('States', [
+            'foreignKey' => 'state_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('Cities', [
+            'foreignKey' => 'city_id',
+            'joinType' => 'INNER'
+        ]);
 		
 		$this->hasOne('LedgerAccounts', [
             'foreignKey' => 'vendor_id'

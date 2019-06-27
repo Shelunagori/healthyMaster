@@ -26,6 +26,14 @@
 					<div class="col-md-3">
 						<?php echo $this->Form->control('item_category_id', ['empty'=>'--select--','options' => $itemCategories,'class'=>'form-control input-sm','required']); ?>
 					</div>
+					<div class="col-md-3">
+						<div class="radio-list">
+						<label>Ready To Sale</label>
+						<div class="form-control input-sm" style="padding-right: 1px;">
+							<label class='radio-inline'><input type='radio' name='ready_to_sale' value='yes' >Yes </label><label class='radio-inline'><input type='radio' name='ready_to_sale' value='no' checked="checked">No </label>
+						</div>
+					</div>
+					</div>
 
 				</div><br/>
 				<div class="row">
@@ -35,33 +43,27 @@
 						<?php echo $this->Form->control('minimum_quantity_purchase',['class'=>'form-control input-sm order_limit','placeholder'=>'Maximum Order Limit', 'label'=>false]); ?>
 						<span id="msg2"></span>
 					</div> -->
-
+					<!--<div class="col-md-3">
+						<?php
+						$gst['Yes']='Yes';
+						$gst['No']='No';
+						//echo $this->Form->control('gst_apply', ['empty'=>'--select--','options' => $gst,'class'=>'form-control input-sm attribute gst','value'=>'No']); ?> 
+					</div>-->
+					<div class="col-md-3 gst_show">
+						<?php echo $this->Form->control('gst_figure_id', ['empty'=>'--select--','options' => $GstFigures,'class'=>'form-control input-sm attribute']); ?>
+					</div>
 
 					<div class="col-md-3">
 						 <?= $this->Form->input('image',['class'=>'form-control','type'=>'File']) ?>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-3">
 						<?php echo $this->Form->control('description', ['class'=>'form-control input-sm','placeholder'=>'Description']); ?>
 						<input type="hidden" name="is_virtual" value="real">
 					</div>
 				</div>
-					<!-- <div class="col-md-3">
-								<div class="form-group">
-									 <div class="radio-list">
-										<div class="radio-inline" style="padding-left: 0px;">
-											<?php echo $this->Form->radio(
-											'is_virtual',
-											[
-												['value' => 'no', 'text' => 'Real','class' => 'radio-task virt','checked' => 'checked'],
-												['value' => 'yes', 'text' => 'Virtual','class' => 'radio-task virt']
-											]
-											); ?>
-										</div>
-                                    </div>
-								</div>
-					</div> -->	
+					
 				<div class="row">
-                        <div class="col-md-12" style="height: 200px; overflow-y: scroll; margin-top: 10px;">
+                        <div class="col-md-12" style="margin-top: 10px;">
                               <table class="table table-striped table-bordered">
                                   <thead>
                                       <tr>
@@ -69,7 +71,7 @@
                                           <th>Quantity Variation</th>
                                           <th>Unit</th>
                                           <th>Minimum Stock</th>
-                                          <th>Minimum Purchase</th>
+                                          <th>Maximum Order Limit</th>
                                           <th>Ready To Sale</th>
                                           <th>Actions</th>
                                       </tr>
@@ -98,15 +100,7 @@
                     	<?php echo $this->Form->control('item_variations.0.minimum_stock',['class'=>'form-control minimum_stock','placeholder'=>'Minimum Stock','label'=>false]); ?>
                     </td>
                     <td style="vertical-align: bottom;"> <?php echo $this->Form->control('item_variations.0.minimum_quantity_purchase',['class'=>'form-control minimum_quantity_purchase  order_limit','placeholder'=>'Maximum Order Limit', 'label'=>false]); ?></td>
-                    <td><div class="radio-inline" style="padding-right: 5px;">
-									<?php echo $this->Form->radio(
-									'item_variations.0.ready_to_sale',
-									[
-										['value' => 'no', 'text' => 'Yes','class' => 'radio-task ready'],
-										['value' => 'yes', 'text' => 'No','class' => 'radio-task ready','checked' => 'checked']
-									]
-									); ?>
-								</div></td>
+                    <td><div class="myRadio" style="display: inline-block;"></div></td>
                     <td style="vertical-align: bottom;"> <button type="button" id="plus" class="btn btn-sm green"><i class="fa fa-plus"></i></button>
                       <button type="button" id="minus" class="btn btn-sm red"><i class="fa fa-minus"></i></button></td>
                 </tr>
@@ -116,11 +110,24 @@
 
 <script>
 $(document).ready(function() {
+/* 
+$('.gst').on('change',function(){
+	var gst_apply=$(this).val();
+	if(gst_apply=='Yes'){
+		$('.gst_show').show();
+	}else{
+		$('.gst_show').hide();
+	}
+}); */
+	 var radio = "<label class='radio-inline'><input type='radio' name='item_variations.0.ready_to_sale' class='ready' value='yes'>Yes </label><label class='radio-inline'><input type='radio' name='item_variations.0.ready_to_sale' class='ready' value='no' checked>No </label>";
+
+   
+
+	 $('.myRadio').html(radio);
 	add_row();
 
-	
-
 	 $(document).on('click','#plus',function(){
+
            add_row();
       });
        $(document).on('click','#minus',function(){
@@ -132,33 +139,29 @@ $(document).ready(function() {
             }
         });
 
-	    function add_row()
+	function add_row()
     {
 
       var tr = $('#sub-body>tr:last').clone();
-
       $('#main-tbody').append(tr);
-
-           $('#main-tbody').find('tr').each(function()
-        {
-            $(this).find('.product_id').attr('autofocus','autofocus');
-
-        });
+      $('#main-tbody>tr:last').find('.myRadio').html(radio); 
       rename_row();
     }
    function rename_row()
       {
         var i=0;
+        var a=1;
         $('#main-tbody').find('tr').each(function()
         {
             
-            $(this).find('.index').html(i);
+            $(this).find('.index').html(a);
             $(this).find('.quantity_variation').attr('name','item_variations['+i+'][quantity_variation]');
             $(this).find('.unit').attr('name','item_variations['+i+'][unit_id]');
             $(this).find('.ready').attr('name','item_variations['+i+'][ready_to_sale]');
             $(this).find('.minimum_stock').attr('name','item_variations['+i+'][minimum_stock]');
             $(this).find('.minimum_quantity_purchase').attr('name','item_variations['+i+'][minimum_quantity_purchase]');
 			i++;
+			a++
           });
           
        }

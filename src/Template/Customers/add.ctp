@@ -4,9 +4,7 @@
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="font-purple-intense"></i>
-					<span class="caption-subject font-purple-intense ">
-						
-							<i class="fa fa-plus"></i> Add Customer
+					<span class="caption-subject font-purple-intense ">ADD CUSTOMER
 						
 					</span>
 				</div>
@@ -33,7 +31,7 @@
 					</div>
 				</div>
 				<br/>
-				<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']) . __(' Submit'),['class'=>'btn btn-success']); ?>
+				<?= $this->Form->button($this->Html->tag('i', '') . __(' Submit'),['class'=>'btn btn-success']); ?>
 				<?= $this->Form->end() ?>
 			</div>
 		</div>

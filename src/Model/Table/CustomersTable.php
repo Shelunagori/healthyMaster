@@ -54,6 +54,15 @@ class CustomersTable extends Table
         ]);
 		$this->belongsTo('Drivers');
         $this->belongsTo('Warehouses');
+        $this->hasMany('Carts', [
+            'foreignKey' => 'customer_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->hasMany('Wishlists', [
+            'foreignKey' => 'customer_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->hasMany('Orders');
 
     }
 

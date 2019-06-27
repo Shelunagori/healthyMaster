@@ -6,10 +6,8 @@
 					<i class="font-purple-intense"></i>
 					<span class="caption-subject font-purple-intense ">
 						  <?php 
-						if(!empty($id)){ ?>
-							<i class="fa fa-pencil-square-o"></i> Edit Address
-						<?php }else{ ?>
-							<i class="fa fa-plus"></i> Add Address
+						if(!empty($id)){ ?> EDIT ADDRESS
+						<?php }else{ ?> ADD ADDRESS
 						<?php } ?>
 					</span>
 				</div>
@@ -72,7 +70,7 @@
 						</div>
 							
 				<br/>
-				<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']) . __(' Submit'),['class'=>'btn btn-success']); ?>
+				<?= $this->Form->button($this->Html->tag('i', '') . __(' Submit'),['class'=>'btn btn-success']); ?>
 				<?= $this->Form->end() ?>
 			</div>
 		</div>
@@ -82,7 +80,7 @@
 			<div class="portlet-title">
 				<div class="caption">
 					<i class=" fa fa-gift"></i>
-					<span class="caption-subject">Addresses</span>
+					<span class="caption-subject">ADDRESSES</span>
 				</div>
 				<div class="actions">
 					<input type="text" class="form-control input-sm pull-right" placeholder="Search..." id="search3"  style="width: 200px;">
@@ -127,7 +125,7 @@
 									<?= h($show_default) ?>
 								</td>
 								<td class="actions">
-								<?php echo $this->Html->link('<i class="fa fa-pencil-square-o"></i>',['action' => 'index', $customer_details->customer->id, $customer_details->id],['escape'=>false,'class'=>'btn btn-xs blue']); ?>
+								<?php echo $this->Html->link('<i class="fa fa-pencil"></i>',['action' => 'index', $customer_details->customer->id, $customer_details->id],['escape'=>false,'class'=>'btn btn-xs blue']); ?>
 								
 								<?php echo $this->Form->PostLink('<i class="fa fa-trash"></i>',['action' => 'delete', $customer_details->customer->id, $customer_details->id],[
 								'escape'=>false,

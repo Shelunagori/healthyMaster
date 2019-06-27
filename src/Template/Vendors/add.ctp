@@ -4,9 +4,7 @@
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="font-purple-intense"></i>
-					<span class="caption-subject font-purple-intense ">
-						
-							<i class="fa fa-plus"></i> Add Vendor
+					<span class="caption-subject font-purple-intense ">ADD VENDOR
 						
 					</span>
 				</div>
@@ -28,14 +26,27 @@
 						<?php echo $this->Form->control('email',['placeholder'=>'Email','class'=>'form-control input-sm','label'=>false]); ?>
 					</div>
 				</div>
-				<div class="row">
+				<div class="row" style="margin-top: 12px;">
+					<div class="col-md-4">
+						<label class=" control-label">GST No. </label>
+						<?php echo $this->Form->control('gst_no',['placeholder'=>'GST No.','class'=>'form-control input-sm','label'=>false]); ?>
+					</div>
+					<div class="col-md-4">
+                        <?= $this->Form->control('id',['type'=>'hidden']); ?>
+                        <?php echo $this->Form->control('state_id', ['empty'=>'-- select --','options' => $states,'class'=>'form-control input-sm select select2me select2','required']); ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?php echo $this->Form->control('city_id', ['empty'=>'-- select --','options' => $cities,'class'=>'form-control input-sm select select2me select2','required']); ?>
+                    </div>
+				</div>
+				<div class="row" style="margin-top: 12px;">
 					<div class="col-md-6">
 						<label class=" control-label">Address </label>
 						<?php echo $this->Form->control('address',['placeholder'=>'Address','class'=>'form-control input-sm','label'=>false, 'rows'=>'2']); ?>
 					</div>
 				</div>
 				<br/>
-				<?= $this->Form->button($this->Html->tag('i', '', ['class'=>'fa fa-plus']) . __(' Submit'),['class'=>'btn btn-success']); ?>
+				<?= $this->Form->button($this->Html->tag('i', '') . __(' Submit'),['class'=>'btn btn-success']); ?>
 				<?= $this->Form->end() ?>
 			</div>
 		</div>

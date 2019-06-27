@@ -44,6 +44,34 @@ class OrdersController extends AppController
         exit;  
     }
 
+    public function readyPacked($id=null,$temp_id=null)
+    {
+    	//$this->viewBuilder()->layout('index_layout');
+    	$order = $this->Orders->get($id);
+         $order->status="Packed";
+         $temporaryOrder = $this->Orders->TemporaryOrders->get($temp_id);
+         //pr($temporaryOrder);exit;
+         $this->Orders->TemporaryOrders->delete($temporaryOrder);
+
+
+        $x=$this->Orders->save($order);
+         if ($x) {
+                $this->Flash->success(__('The order has been packed.'));
+                 return $this->redirect(['controller' => 'TemporaryOrders', 'action' => 'index']);
+                }
+	
+
+    }
+    public function usedPromoCodeReport()
+    {
+    	$this->viewBuilder()->layout('index_layout');
+    	$used_promo=$this->Orders->find()
+    	->where(['promo_code_id >'=>0])
+    	->contain(['PromoCodes','Customers']);
+    	//pr($used_promo->toArray());exit;
+    	$this->set(compact(['used_promo']));
+    }
+
 
 	public function beforeFilter(Event $event)
     {
@@ -210,6 +238,8 @@ class OrdersController extends AppController
         
         exit;  
     }
+
+    
 	
     public function index($status=null,$type=null)
     {
@@ -252,6 +282,7 @@ class OrdersController extends AppController
         ];
 		
 		if($status == 'process'){ 
+							
 							$where['Orders.status']='In Process';
 							$cur_date = date('d-m-Y');
 							$orders =$this->paginate($this->Orders->find('all')
@@ -324,6 +355,201 @@ class OrdersController extends AppController
 		$OrderStatus=[];
 		$OrderStatus=[['text'=>'Cancel','value'=>'Cancel'],['text'=>'Delivered','value'=>'Delivered'],['text'=>'In Process','value'=>'In Process']];
         $this->set(compact('orders','Customer_data','order_type','OrderStatus','order_no','customer_id','order_types','orderstatus','from_date','to_date','status'));
+        $this->set('_serialize', ['orders']);
+    }
+
+     public function orderList($status=null,$type=null)
+    {
+    	$order=$this->Orders->newEntity();
+		$this->viewBuilder()->layout('index_layout');
+		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
+		$curent_date=date('Y-m-d');
+		$status = $this->request->query('status');
+		//pr($status);exit;
+		$type = $this->request->query('type');
+		$order_no = $this->request->query('order_no');
+		$customer_id = $this->request->query('customer');
+		$order_types = $this->request->query('order_type');
+		$orderstatus = $this->request->query('orderstatus');
+		$from_date = $this->request->query('From');
+		$to_date = $this->request->query('To');
+		$where =[];
+		
+		if(!empty($order_no)){
+			$where['Orders.order_no Like']='%'.$order_no.'%';
+		}
+		if(!empty($customer_id)){
+			$where['Orders.customer_id']=$customer_id;
+			
+		}
+		if(!empty($order_types)){
+			$where['Orders.order_type']=$order_types;
+		}
+		if(!empty($orderstatus)){
+			$where['Orders.status']=$orderstatus;
+		}
+		if(!empty($from_date)){ 
+			$where['Orders.curent_date >=']=date('Y-m-d',strtotime($from_date));
+		}
+		if(!empty($to_date)){
+			$where['Orders.curent_date <=']=date('Y-m-d',strtotime($to_date));
+		}
+		//pr($where); exit;
+		//pr($where);exit;
+		 $this->paginate = [
+            'contain' => ['Customers']
+        ];
+		
+		if($status == 'process'){ 
+							
+							$where['Orders.status']='In Process';
+							$cur_date = date('d-m-Y');
+							$orders =$this->paginate($this->Orders->find('all')
+							->where($where)
+							->order(['Orders.id'=>'DESC'])
+							->where(['jain_thela_admin_id'=>$jain_thela_admin_id])
+							->contain(['CustomerAddresses']));
+							$cur_status = 'In Process';
+							 $this->set(compact('orders','cur_status','cur_date','status'));
+		}else if($status =='packed'){
+							$where['Orders.status']='Packed';
+							$cur_date = date('d-m-Y');
+							$orders =$this->paginate($this->Orders->find('all')
+							->where($where)
+							->order(['Orders.id'=>'DESC'])
+							->where(['jain_thela_admin_id'=>$jain_thela_admin_id])
+							->contain(['CustomerAddresses']));
+							$cur_status = 'Packed';
+							
+							 $this->set(compact('orders','cur_status','cur_date','status'));
+		}else
+			 if($status == 'cancel'){
+							$where['Orders.status']='Cancel';
+							$cur_date = date('d-m-Y');
+							$orders =$this->paginate($this->Orders->find('all')
+							->where($where)
+							->order(['Orders.id'=>'DESC'])
+							->where(['jain_thela_admin_id'=>$jain_thela_admin_id,'Orders.curent_date'=>$cur_date])
+							->contain(['CustomerAddresses']));
+							$cur_status = 'Cancel';
+			
+							$this->set(compact('orders','cur_status','cur_date','status'));
+		}else if($status == 'delivered'){ 
+							$where['Orders.status']='Delivered';
+							$cur_date = date('d-m-Y');
+							$orders =$this->paginate($this->Orders->find('all')
+							->where($where)
+							->order(['Orders.id'=>'DESC'])
+							->where(['jain_thela_admin_id'=>$jain_thela_admin_id])
+							->contain(['CustomerAddresses']));
+							$cur_status = 'Delivered';
+							
+							 $this->set(compact('orders','cur_date','cur_status'));
+		}else if($status == 'dispatch'){
+							$cur_date = date('d-m-Y');
+							$where['Orders.status']='Dispatch';
+							$orders =$this->paginate($this->Orders->find('all')
+							->where($where)
+							->order(['Orders.id'=>'DESC'])
+							->where(['jain_thela_admin_id'=>$jain_thela_admin_id])
+							->contain(['CustomerAddresses']));
+							$cur_status = 'Dispatch';
+							$this->set(compact('orders','cur_date','cur_status'));
+		}else{
+							
+							$orders =$this->paginate($this->Orders->find()
+							->where($where)
+							->order(['Orders.id'=>'DESC'])
+							->where(['jain_thela_admin_id'=>$jain_thela_admin_id])
+							->contain(['CustomerAddresses']));
+		}
+       
+		//pr($orders->toArray()); exit;
+		$Customers = $this->Orders->Customers->find();
+		$Customer_data=[];
+		foreach($Customers as $Customer){
+			$Customer_data[$Customer->id]= $Customer->name.'('.$Customer->mobile.')';
+		}
+		$order_type=[];
+		$order_type=[['text'=>'Bulkorder','value'=>'Bulkorder'],['text'=>'Cod','value'=>'Cod'],['text'=>'Offline','value'=>'Offline'],['text'=>'Online','value'=>'Online'],['text'=>'Wallet','value'=>'Wallet']];
+		
+		$OrderStatus=[];
+		$OrderStatus=[['text'=>'Cancel','value'=>'Cancel'],['text'=>'Delivered','value'=>'Delivered'],['text'=>'In Process','value'=>'In Process']];
+
+		if ($this->request->is(['post', 'put'])) {
+			$x=0;
+			$dd=$this->request->getData('temporary_orders');
+			$stats=$dd['status'];
+			//pr(sizeof($dd));exit;
+			if($stats == "In Process")
+			{
+				$temp=$this->Orders->TemporaryOrders->newEntities($dd);
+						
+	            if($this->Orders->TemporaryOrders->saveMany($temp))
+	            	$x=1;
+	        }
+	        if($stats == "Packed")
+	        {
+	        	$i=0;
+	        	$size=sizeof($dd);
+	        	if($i != $size)
+	        	{
+		        	foreach ($dd as $datas)
+					{
+
+						
+						$order_id=$this->request->getData('temporary_orders.'.$i.'.order_id');
+						
+						$i++;
+						$order=$this->Orders->find()->where(['id'=>$order_id]);
+						foreach ($order as $order) {
+							//pr($order->status);
+							$order->status="Dispatch";
+						//pr($order->toArray());exit;
+						if($this->Orders->save($order))
+							$x=1;
+						}
+							
+					}
+				}
+	        }
+
+	        if($stats == "Dispatch")
+	        {
+	        	//pr("fdvdf");exit;
+	        	$i=0;
+	        	$size=sizeof($dd);
+	        	if($i != $size)
+	        	{
+		        	foreach ($dd as $data)
+					{
+						//pr($dd);exit;
+						
+						$order_id=$this->request->getData('temporary_orders.'.$i.'.order_id');
+						//pr($order_id);
+						$i++;
+						$order=$this->Orders->find()->where(['id'=>$order_id]);
+						//pr($order->toArray());exit;
+						foreach ($order as $order) {
+						//pr($order->status);
+							$order->status="Delivered";
+						//pr($order->toArray());exit;
+						if($this->Orders->save($order))
+							$x=1;
+						}
+							
+					}
+				}
+	        }
+            //pr($order_id);exit;
+            if ($x) {
+                $this->Flash->success(__('The order has been saved.'));
+                 return $this->redirect(['controller' => 'TemporaryOrders', 'action' => 'index']);
+                }
+                $this->Flash->error(__('The order could not be saved. Please, try again.'));
+		}
+
+        $this->set(compact('orders','Customer_data','order_type','OrderStatus','order_no','customer_id','order_types','orderstatus','from_date','to_date','status','order'));
         $this->set('_serialize', ['orders']);
     }
 
@@ -988,6 +1214,22 @@ class OrdersController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
+
+    public function printList($id=null)
+    {
+    	$this->viewBuilder()->layout('index_layout');
+		$jain_thela_admin_id=$this->Auth->User('jain_thela_admin_id');
+		$curent_date=date('Y-m-d');
+		
+        $order = $this->Orders->get($id, [
+            'contain' => ['Customers'=>['CustomerAddresses']]
+        ]);
+
+        pr($order);exit;
+        $this->set(compact('order'));
+
+    }
+
     public function edit($id = null)
     {
 		$this->viewBuilder()->layout('index_layout');

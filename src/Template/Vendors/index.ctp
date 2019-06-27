@@ -9,8 +9,7 @@
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="font-purple-intense"></i>
-					<span class="caption-subject font-purple-intense ">
-						<i class="fa fa-plus"></i> Vendors
+					<span class="caption-subject font-purple-intense ">VENDORS
 					</span>
 				</div>
 				<div class="actions">
@@ -27,6 +26,9 @@
 							<th>Mobile No.</th>
 							<th>Email</th>
 							<th>Address</th>
+							<th>City</th>
+							<th>State</th>
+							<th>GST No</th>
 							<th scope="col" class="actions"><?= __('Actions') ?></th>
 						</tr>
 					</thead>
@@ -43,8 +45,11 @@
 							<td><?= h($vendor->mobile) ?></td>
 							<td><?= h($vendor->email) ?></td>
 							<td><?= h($vendor->address) ?></td>
+							<td><?= h($vendor->city->name) ?></td>
+							<td><?= h($vendor->state->name) ?></td>
+							<td><?= h($vendor->gst_no) ?></td>
 							<td class="actions">
-								<?= $this->Html->link(__('Edit'), ['action' => 'edit', $vendor->id]) ?>
+								 <?= $this->Html->link(__('<span class="fa fa-pencil"></span>'), ['action' => 'edit', $vendor->id],['class'=>'btn btn-primary  btn-condensed btn-sm','escape'=>false]) ?>
 							</td>
 						</tr>
 						<?php endforeach; ?>
